@@ -1,0 +1,38 @@
+﻿archetype (adl_version=1.5; generated)
+	openEHR-EHR-COMPOSITION.slots-filled.v1
+
+specialize
+	openEHR-EHR-COMPOSITION.slots.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+			copyright = <"Copyright (c) 2013 My Name OR Some Org">
+		>
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	COMPOSITION[at0000.1] matches {	-- With filled slot
+		content matches {
+			use_archetype EVALUATION[at0001, openEHR-EHR-EVALUATION.substance_use_summary.v1] 
+			allow_archetype EVALUATION[at0001] closed 
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			["at0000.1"] = <
+				text = <"With filled slot">
+			>
+		>
+	>

@@ -1,0 +1,71 @@
+archetype (adl_version=1.5)
+	openehr-ehr-OBSERVATION.ordered-specialized.v1
+
+specialize
+	openehr-ehr-OBSERVATION.ordered.v1
+
+language
+	original_language = <[ISO_639-1::sl]>
+description
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+			copyright = <"Copyright (c) 2013 My Name OR Some Org">
+		>
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	OBSERVATION[at0000.1] matches {	-- ordered demo
+		/data[at0001]/events matches {
+			after [at0002]
+			POINT_EVENT[at0.1] 	-- one.1
+			after [at0003]
+			POINT_EVENT[at0.2] 	-- two.1
+			before [at0004]
+			POINT_EVENT[at0.3] 	-- two.2
+			after [at0003]
+			POINT_EVENT[at0.4] 	-- two.3
+			before [at0003]
+			POINT_EVENT[at0.5] 	-- one.2
+			after [at0004]
+			POINT_EVENT[at0.6] 	-- three.1
+			before [at0002]
+			POINT_EVENT[at0.7] 	-- zero.1
+		}
+	}
+
+ontology
+	term_definitions = <
+		["sl"] = <
+			["at0000.1"] = <
+				text = <"ordered demo">
+			>
+			["at0.1"] = <
+				text = <"one.1">
+			>
+			["at0.2"] = <
+				text = <"two.1">
+			>
+			["at0.3"] = <
+				text = <"two.2">
+			>
+			["at0.4"] = <
+				text = <"two.3">
+			>
+			["at0.5"] = <
+				text = <"one.2">
+			>
+			["at0.6"] = <
+				text = <"three.1">
+			>
+			["at0.7"] = <
+				text = <"zero.1">
+			>
+		>
+	>

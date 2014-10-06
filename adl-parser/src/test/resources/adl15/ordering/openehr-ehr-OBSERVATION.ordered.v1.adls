@@ -1,0 +1,52 @@
+archetype (adl_version=1.5)
+	openehr-ehr-OBSERVATION.ordered.v1
+
+language
+	original_language = <[ISO_639-1::sl]>
+description
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+			copyright = <"Copyright (c) 2013 My Name OR Some Org">
+		>
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	OBSERVATION[at0000] matches {	-- Hello world
+		data matches {
+			HISTORY[at0001] matches {	-- item list
+				events matches {
+					POINT_EVENT[at0002] matches {*}	-- one
+					POINT_EVENT[at0003] matches {*}	-- two
+					POINT_EVENT[at0004] matches {*}	-- three
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["sl"] = <
+			["at0000"] = <
+				text = <"Hello world">
+			>
+			["at0001"] = <
+				text = <"item list">
+			>
+			["at0002"] = <
+				text = <"one">
+			>
+			["at0003"] = <
+				text = <"two">
+			>
+			["at0004"] = <
+				text = <"three">
+			>
+		>
+	>

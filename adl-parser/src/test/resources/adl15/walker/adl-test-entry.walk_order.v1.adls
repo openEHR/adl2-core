@@ -1,0 +1,63 @@
+archetype(adl_version=1.5)
+	adl-test-ENTRY.walk_order.v1
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        items cardinality matches {0..*} matches {
+            ELEMENT[at10001] matches {	-- ordinal
+                value matches {
+                    0|[local::at0003.0], 	-- capsule
+                    1|[local::at0003.1], 	-- powder
+                    2|[local::at0003.2],  	-- tablet
+                    3|[local::at0003.3],  	-- solution
+                    4|[local::at0003.4]  	-- suspension
+                }
+            }
+            ELEMENT[at10003] matches {	-- ordinal with assumed value
+                value matches {		-- any allowed
+                    C_DV_ORDINAL <
+                    >
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"domain types test">
+					description = <"domain types test">
+				>
+				["at0001"] = <
+					text = <"items">
+					description = <"items">
+				>
+				["at10002"] = <
+					text = <"c_dv_ordinal">
+					description = <"c_dv_ordinal node">
+				>
+			>
+		>
+	>
+	term_binding = <
+		["SNOMED_CT"] = <
+			items = <
+				["at0000"] = <[snomed_ct::1000339]>
+			>
+		>
+		["ICD10"] = <
+			items = <
+				["at0000"] = <[icd10::1000],[icd10::1001]>
+			>
+		>
+	>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2014 Marand
+  -->
+
+<jxb:bindings version="1.0" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance">
+    <jxb:globalBindings underscoreBinding="asWordSeparator">
+        <xjc:serializable uid="0"/>
+        <xjc:superClass name="org.openehr.rm.RmObject"/>
+    </jxb:globalBindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/BaseTypes.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='DATA_VALUE']">
+            <jxb:class name="DataValue" implClass="DataValue"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_AMOUNT']">
+            <jxb:class name="DvAmount" implClass="DvAmount"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_BOOLEAN']">
+            <jxb:class name="DvBoolean" implClass="DvBoolean"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_CODED_TEXT']">
+            <jxb:class name="DvCodedText" implClass="DvCodedText"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_COUNT']">
+            <jxb:class name="DvCount" implClass="DvCount"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DATE']">
+            <jxb:class name="DvDate" implClass="DvDate"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DATE_TIME']">
+            <jxb:class name="DvDateTime" implClass="DvDateTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DURATION']">
+            <jxb:class name="DvDuration" implClass="DvDuration"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_EHR_URI']">
+            <jxb:class name="DvEhrUri" implClass="DvEhrUri"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ENCAPSULATED']">
+            <jxb:class name="DvEncapsulated" implClass="DvEncapsulated"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_GENERAL_TIME_SPECIFICATION']">
+            <jxb:class name="DvGeneralTimeSpecification" implClass="DvGeneralTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_IDENTIFIER']">
+            <jxb:class name="DvIdentifier" implClass="DvIdentifier"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_INTERVAL']">
+            <jxb:class name="DvInterval" implClass="DvInterval"/>
+            <inheritance:implements>org.openehr.rm.RangeParameters</inheritance:implements>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_MULTIMEDIA']">
+            <jxb:class name="DvMultimedia" implClass="DvMultimedia"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ORDERED']">
+            <jxb:class name="DvOrdered" implClass="DvOrdered"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ORDINAL']">
+            <jxb:class name="DvOrdinal" implClass="DvOrdinal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PARAGRAPH']">
+            <jxb:class name="DvParagraph" implClass="DvParagraph"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PARSABLE']">
+            <jxb:class name="DvParsable" implClass="DvParsable"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PERIODIC_TIME_SPECIFICATION']">
+            <jxb:class name="DvPeriodicTimeSpecification" implClass="DvPeriodicTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PROPORTION']">
+            <jxb:class name="DvProportion" implClass="DvProportion"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_QUANTIFIED']">
+            <jxb:class name="DvQuantified" implClass="DvQuantified"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_QUANTITY']">
+            <jxb:class name="DvQuantity" implClass="DvQuantity"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_STATE']">
+            <jxb:class name="DvState" implClass="DvState"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TEMPORAL']">
+            <jxb:class name="DvTemporal" implClass="DvTemporal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TEXT']">
+            <jxb:class name="DvText" implClass="DvText"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TIME']">
+            <jxb:class name="DvTime" implClass="DvTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TIME_SPECIFICATION']">
+            <jxb:class name="DvTimeSpecification" implClass="DvTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_URI']">
+            <jxb:class name="DvUri" implClass="DvUri"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REFERENCE_RANGE']">
+            <jxb:class name="ReferenceRange" implClass="ReferenceRange"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CODE_PHRASE']">
+            <jxb:class name="CodePhrase" implClass="CodePhrase"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERM_MAPPING']">
+            <jxb:class name="TermMapping" implClass="TermMapping"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ACCESS_GROUP_REF']">
+            <jxb:class name="AccessGroupRef" implClass="AccessGroupRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_ID']">
+            <jxb:class name="ArchetypeId" implClass="ArchetypeId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ATTESTATION']">
+            <jxb:class name="Attestation" implClass="Attestation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='AUDIT_DETAILS']">
+            <jxb:class name="AuditDetails" implClass="AuditDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FEEDER_AUDIT']">
+            <jxb:class name="FeederAudit" implClass="FeederAudit"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FEEDER_AUDIT_DETAILS']">
+            <jxb:class name="FeederAuditDetails" implClass="FeederAuditDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='GENERIC_ID']">
+            <jxb:class name="GenericId" implClass="GenericId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='HIER_OBJECT_ID']">
+            <jxb:class name="HierObjectId" implClass="HierObjectId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='LOCATABLE_REF']">
+            <jxb:class name="LocatableRef" implClass="LocatableRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_ID']">
+            <jxb:class name="ObjectId" implClass="ObjectId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_REF']">
+            <jxb:class name="ObjectRef" implClass="ObjectRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_VERSION_ID']">
+            <jxb:class name="ObjectVersionId" implClass="ObjectVersionId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTICIPATION']">
+            <jxb:class name="Participation" implClass="Participation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_IDENTIFIED']">
+            <jxb:class name="PartyIdentified" implClass="PartyIdentified"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_PROXY']">
+            <jxb:class name="PartyProxy" implClass="PartyProxy"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_REF']">
+            <jxb:class name="PartyRef" implClass="PartyRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_RELATED']">
+            <jxb:class name="PartyRelated" implClass="PartyRelated"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_SELF']">
+            <jxb:class name="PartySelf" implClass="PartySelf"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REVISION_HISTORY']">
+            <jxb:class name="RevisionHistory" implClass="RevisionHistory"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REVISION_HISTORY_ITEM']">
+            <jxb:class name="RevisionHistoryItem" implClass="RevisionHistoryItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TEMPLATE_ID']">
+            <jxb:class name="TemplateId" implClass="TemplateId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERMINOLOGY_ID']">
+            <jxb:class name="TerminologyId" implClass="TerminologyId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='UID_BASED_ID']">
+            <jxb:class name="UidBasedId" implClass="UidBasedId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='Interval']">
+            <jxb:class name="Interval" implClass="Interval"/>
+            <inheritance:implements>org.openehr.rm.RangeParameters</inheritance:implements>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Structure.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='LOCATABLE']">
+            <jxb:class name="Locatable" implClass="Locatable"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPED']">
+            <jxb:class name="Archetyped" implClass="Archetyped"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='LINK']">
+            <jxb:class name="Link" implClass="Link"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FOLDER']">
+            <jxb:class name="Folder" implClass="Folder"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='HISTORY']">
+            <jxb:class name="History" implClass="History"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EVENT']">
+            <jxb:class name="Event" implClass="Event"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='POINT_EVENT']">
+            <jxb:class name="PointEvent" implClass="PointEvent"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='INTERVAL_EVENT']">
+            <jxb:class name="IntervalEvent" implClass="IntervalEvent"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM']">
+            <jxb:class name="Item" implClass="Item"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM_LIST']">
+            <jxb:class name="ItemList" implClass="ItemList"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM_SINGLE']">
+            <jxb:class name="ItemSingle" implClass="ItemSingle"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM_STRUCTURE']">
+            <jxb:class name="ItemStructure" implClass="ItemStructure"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM_TABLE']">
+            <jxb:class name="ItemTable" implClass="ItemTable"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ITEM_TREE']">
+            <jxb:class name="ItemTree" implClass="ItemTree"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CLUSTER']">
+            <jxb:class name="Cluster" implClass="Cluster"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ELEMENT']">
+            <jxb:class name="Element" implClass="Element"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Content.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='CONTENT_ITEM']">
+            <jxb:class name="ContentItem" implClass="ContentItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='SECTION']">
+            <jxb:class name="Section" implClass="Section"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='GENERIC_ENTRY']">
+            <jxb:class name="GenericEntry" implClass="GenericEntry"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ENTRY']">
+            <jxb:class name="Entry" implClass="Entry"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ADMIN_ENTRY']">
+            <jxb:class name="AdminEntry" implClass="AdminEntry"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CARE_ENTRY']">
+            <jxb:class name="CareEntry" implClass="CareEntry"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EVALUATION']">
+            <jxb:class name="Evaluation" implClass="Evaluation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBSERVATION']">
+            <jxb:class name="Observation" implClass="Observation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='INSTRUCTION']">
+            <jxb:class name="Instruction" implClass="Instruction"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ACTION']">
+            <jxb:class name="Action" implClass="Action"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ACTIVITY']">
+            <jxb:class name="Activity" implClass="Activity"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='INSTRUCTION_DETAILS']">
+            <jxb:class name="InstructionDetails" implClass="InstructionDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ISM_TRANSITION']">
+            <jxb:class name="IsmTransition" implClass="IsmTransition"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Resource.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='AUTHORED_RESOURCE']">
+            <jxb:class name="AuthoredResource" implClass="AuthoredResource"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TRANSLATION_DETAILS']">
+            <jxb:class name="TranslationDetails" implClass="TranslationDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION']">
+            <jxb:class name="ResourceDescription" implClass="ResourceDescription"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION']">
+            <jxb:class name="Annotation" implClass="Annotation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION_SET']">
+            <jxb:class name="AnnotationSet" implClass="AnnotationSet"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION_ITEM']">
+            <jxb:class name="ResourceDescriptionItem" implClass="ResourceDescriptionItem"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Version.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='VERSION']">
+            <jxb:class name="Version" implClass="Version"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ORIGINAL_VERSION']">
+            <jxb:class name="OriginalVersion" implClass="OriginalVersion"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IMPORTED_VERSION']">
+            <jxb:class name="ImportedVersion" implClass="ImportedVersion"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Composition.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='COMPOSITION']">
+            <jxb:class name="Composition" implClass="Composition"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EVENT_CONTEXT']">
+            <jxb:class name="EventContext" implClass="EventContext"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+</jxb:bindings>

@@ -1,0 +1,40 @@
+﻿archetype (adl_version=1.5)
+	openehr-ehr-EVALUATION.negated-child.v1
+
+specialize
+	openehr-ehr-EVALUATION.negated.v1
+
+language
+	original_language = <[ISO_639-1::sl]>
+description
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+			copyright = <"Copyright (c) 2013 My Name OR Some Org">
+		>
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	EVALUATION[at0000.1] 	matches {
+		/data/items[at0002]/value/defining_code ~matches {
+            [local::
+            at0004] 	-- Normal
+        }
+	}	-- -
+
+	
+
+ontology
+	term_definitions = <
+		["sl"] = <
+			["at0000.1"] = <
+				text=<"Path simple">
+			>
+		>
+	>

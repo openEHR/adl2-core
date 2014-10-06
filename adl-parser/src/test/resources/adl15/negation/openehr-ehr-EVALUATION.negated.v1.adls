@@ -1,0 +1,64 @@
+﻿archetype (adl_version=1.5)
+	openehr-ehr-EVALUATION.negated.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+			copyright = <"Copyright (c) 2013 My Name OR Some Org">
+		>
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	EVALUATION[at0000] matches {	-- Path base
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Tree
+				items matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- first
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0003, 	-- first code
+									at0004, 	-- second code
+									at0005]	-- third code
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			["at0000"] = <
+				text = <"Path base">
+			>
+			["at0001"] = <
+				text = <"Tree">
+			>
+			["at0002"] = <
+				text = <"first">
+			>
+			["at0003"] = <
+				text = <"first code">
+			>
+			["at0004"] = <
+				text = <"second code">
+			>
+			["at0005"] = <
+				text = <"third code">
+			>
+		>
+	>

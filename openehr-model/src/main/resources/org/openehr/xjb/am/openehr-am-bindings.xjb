@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2014 Marand
+  -->
+
+<jxb:bindings version="1.0" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc">
+    <jxb:globalBindings underscoreBinding="asWordSeparator">
+        <xjc:serializable uid="0"/>
+        <xjc:superClass name="org.openehr.am.AmObject"/>
+    </jxb:globalBindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/Resource.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='AUTHORED_RESOURCE']">
+            <jxb:class ref="org.openehr.jaxb.rm.AuthoredResource"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TRANSLATION_DETAILS']">
+            <jxb:class ref="org.openehr.jaxb.rm.TranslationDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION']">
+            <jxb:class ref="org.openehr.jaxb.rm.ResourceDescription"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION_ITEM']">
+            <jxb:class ref="org.openehr.jaxb.rm.ResourceDescriptionItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='StringDictionaryItem']">
+            <jxb:class ref="org.openehr.jaxb.rm.StringDictionaryItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.Annotation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION_SET']">
+            <jxb:class ref="org.openehr.jaxb.rm.AnnotationSet"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/rm/BaseTypes.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='DV_TEXT']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvText"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DATA_VALUE']">
+            <jxb:class ref="org.openehr.jaxb.rm.DataValue"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_AMOUNT']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvAmount"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_BOOLEAN']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvBoolean"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_CODED_TEXT']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvCodedText"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_COUNT']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvCount"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DATE']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvDate"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DATE_TIME']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvDateTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_DURATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvDuration"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_EHR_URI']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvEhrUri"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ENCAPSULATED']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvEncapsulated"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_GENERAL_TIME_SPECIFICATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvGeneralTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_IDENTIFIER']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvIdentifier"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_INTERVAL']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvInterval"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_MULTIMEDIA']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvMultimedia"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ORDERED']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvOrdered"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_ORDINAL']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvOrdinal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PARAGRAPH']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvParagraph"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PARSABLE']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvParsable"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PERIODIC_TIME_SPECIFICATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvPeriodicTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_PROPORTION']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvProportion"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_QUANTIFIED']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvQuantified"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_QUANTITY']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvQuantity"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_STATE']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvState"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TEMPORAL']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvTemporal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TEXT']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvText"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TIME']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_TIME_SPECIFICATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvTimeSpecification"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DV_URI']">
+            <jxb:class ref="org.openehr.jaxb.rm.DvUri"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CODE_PHRASE']">
+            <jxb:class ref="org.openehr.jaxb.rm.CodePhrase"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='AUDIT_DETAILS']">
+            <jxb:class ref="org.openehr.jaxb.rm.AuditDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ATTESTATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.Attestation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.ArchetypeId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ACCESS_GROUP_REF']">
+            <jxb:class ref="org.openehr.jaxb.rm.AccessGroupRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FEEDER_AUDIT']">
+            <jxb:class ref="org.openehr.jaxb.rm.FeederAudit"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FEEDER_AUDIT_DETAILS']">
+            <jxb:class ref="org.openehr.jaxb.rm.FeederAuditDetails"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='GENERIC_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.GenericId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='HIER_OBJECT_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.HierObjectId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='LOCATABLE_REF']">
+            <jxb:class ref="org.openehr.jaxb.rm.LocatableRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.ObjectId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_REF']">
+            <jxb:class ref="org.openehr.jaxb.rm.ObjectRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='OBJECT_VERSION_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.ObjectVersionId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTICIPATION']">
+            <jxb:class ref="org.openehr.jaxb.rm.Participation"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_IDENTIFIED']">
+            <jxb:class ref="org.openehr.jaxb.rm.PartyIdentified"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_PROXY']">
+            <jxb:class ref="org.openehr.jaxb.rm.PartyProxy"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_REF']">
+            <jxb:class ref="org.openehr.jaxb.rm.PartyRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_RELATED']">
+            <jxb:class ref="org.openehr.jaxb.rm.PartyRelated"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='PARTY_SELF']">
+            <jxb:class ref="org.openehr.jaxb.rm.PartySelf"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REFERENCE_RANGE']">
+            <jxb:class ref="org.openehr.jaxb.rm.ReferenceRange"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REVISION_HISTORY']">
+            <jxb:class ref="org.openehr.jaxb.rm.RevisionHistory"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='REVISION_HISTORY_ITEM']">
+            <jxb:class ref="org.openehr.jaxb.rm.RevisionHistoryItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TEMPLATE_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.TemplateId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERMINOLOGY_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.TerminologyId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERM_MAPPING']">
+            <jxb:class ref="org.openehr.jaxb.rm.TermMapping"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='UID_BASED_ID']">
+            <jxb:class ref="org.openehr.jaxb.rm.UidBasedId"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='Interval']">
+            <jxb:class ref="org.openehr.jaxb.rm.Interval"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfDate']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfDate"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfDateTime']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfDateTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfDuration']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfDuration"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfInteger']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfInteger"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfReal']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfReal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='IntervalOfTime']">
+            <jxb:class ref="org.openehr.jaxb.rm.IntervalOfTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='MultiplicityInterval']">
+            <jxb:class ref="org.openehr.jaxb.rm.MultiplicityInterval"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/am/Archetype.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE']">
+            <jxb:class name="Archetype" implClass="Archetype"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FLAT_ARCHETYPE']">
+            <jxb:class name="FlatArchetype" implClass="FlatArchetype"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='DIFFERENTIAL_ARCHETYPE']">
+            <jxb:class name="DifferentialArchetype" implClass="DifferentialArchetype"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_CONSTRAINT']" abstract="true">
+            <jxb:class name="ArchetypeConstraint" implClass="ArchetypeConstraint"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='SIBLING_ORDER']">
+            <jxb:class name="SiblingOrder" implClass="SiblingOrder"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_OBJECT']" abstract="true">
+            <jxb:class name="CObject" implClass="CObject"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_ATTRIBUTE']">
+            <jxb:class name="CAttribute" implClass="CAttribute"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_OBJECT_GROUP']">
+            <jxb:class name="CObjectGroup" implClass="CObjectGroup"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CARDINALITY']">
+            <jxb:class name="Cardinality" implClass="Cardinality"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_COMPLEX_OBJECT']">
+            <jxb:class name="CComplexObject" implClass="CComplexObject"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_SLOT']">
+            <jxb:class name="ArchetypeSlot" implClass="ArchetypeSlot"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CONSTRAINT_REF']">
+            <jxb:class name="ConstraintRef" implClass="ConstraintRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DEFINED_OBJECT']">
+            <jxb:class name="CDefinedObject" implClass="CDefinedObject"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_PRIMITIVE_OBJECT']" abstract="true">
+            <jxb:class name="CPrimitiveObject" implClass="CPrimitiveObject"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DOMAIN_TYPE']" abstract="true">
+            <jxb:class name="CDomainType" implClass="CDomainType"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_INTERNAL_REF']">
+            <jxb:class name="ArchetypeInternalRef" implClass="ArchetypeInternalRef"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ASSERTION']">
+            <jxb:class name="Assertion" implClass="Assertion"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EXPR_ITEM']" abstract="true">
+            <jxb:class name="ExprItem" implClass="ExprItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ASSERTION_VARIABLE']">
+            <jxb:class name="AssertionVariable" implClass="AssertionVariable"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EXPR_LEAF']">
+            <jxb:class name="ExprLeaf" implClass="ExprLeaf"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EXPR_OPERATOR']" abstract="true">
+            <jxb:class name="ExprOperator" implClass="ExprOperator"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EXPR_UNARY_OPERATOR']">
+            <jxb:class name="ExprUnaryOperator" implClass="ExprUnaryOperator"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='EXPR_BINARY_OPERATOR']">
+            <jxb:class name="ExprBinaryOperator" implClass="ExprBinaryOperator"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_BOOLEAN']">
+            <jxb:class name="CBoolean" implClass="CBoolean"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_STRING']">
+            <jxb:class name="CString" implClass="CString"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_INTEGER']">
+            <jxb:class name="CInteger" implClass="CInteger"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_REAL']">
+            <jxb:class name="CReal" implClass="CReal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DATE']">
+            <jxb:class name="CDate" implClass="CDate"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DATE_TIME']">
+            <jxb:class name="CDateTime" implClass="CDateTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_TIME']">
+            <jxb:class name="CTime" implClass="CTime"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DURATION']">
+            <jxb:class name="CDuration" implClass="CDuration"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_TERMINOLOGY_CODE']">
+            <jxb:class name="CTerminologyCode" implClass="CTerminologyCode"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_ONTOLOGY']">
+            <jxb:class name="ArchetypeOntology" implClass="ArchetypeOntology"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CodeDefinitionSet']"></jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_TERM']">
+            <jxb:class name="ArchetypeTerm" implClass="ArchetypeTerm"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TermBindingSet']"></jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERM_BINDING_ITEM']">
+            <jxb:class name="TermBindingItem" implClass="TermBindingItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='ConstraintBindingSet']"></jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='CONSTRAINT_BINDING_ITEM']">
+            <jxb:class name="ConstraintBindingItem" implClass="ConstraintBindingItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_SECOND_ORDER']">
+            <jxb:class name="CSecondOrder" implClass="CSecondOrder"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_ATTRIBUTE_TUPLE']">
+            <jxb:class name="CAttributeTuple" implClass="CAttributeTuple"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_OBJECT_TUPLE']">
+            <jxb:class name="CObjectTuple" implClass="CObjectTuple"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/am/OpenehrProfile.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='C_CODE_PHRASE']">
+            <jxb:class name="CCodePhrase" implClass="CCodePhrase"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DV_ORDINAL']">
+            <jxb:class name="CDvOrdinal" implClass="CDvOrdinal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DV_QUANTITY']">
+            <jxb:class name="CDvQuantity" implClass="CDvQuantity"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_QUANTITY_ITEM']">
+            <jxb:class name="CQuantityItem" implClass="CQuantityItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_DV_STATE']">
+            <jxb:class name="CDvState" implClass="CDvState"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='STATE_MACHINE']">
+            <jxb:class name="StateMachine" implClass="StateMachine"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='STATE']">
+            <jxb:class name="State" implClass="State"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='NON_TERMINAL_STATE']">
+            <jxb:class name="NonTerminalState" implClass="NonTerminalState"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TERMINAL_STATE']">
+            <jxb:class name="TerminalState" implClass="TerminalState"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TRANSITION']">
+            <jxb:class name="Transition" implClass="Transition"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../xsd/am/Template.xsd" node="/xsd:schema">
+        <jxb:bindings node="//xsd:complexType[@name='OPERATIONAL_TEMPLATE']">
+            <jxb:class name="Template" implClass="Template"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_ARCHETYPE_ROOT']">
+            <jxb:class name="CArchetypeRoot" implClass="CArchetypeRoot"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='T_VIEW']">
+            <jxb:class name="TView" implClass="TView"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='T_CONSTRAINT']">
+            <jxb:class name="TConstraints" implClass="TConstraints"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='T_ATTRIBUTE']">
+            <jxb:class name="TAttribute" implClass="TAttribute"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='T_COMPLEX_OBJECT']">
+            <jxb:class name="TComplexObject" implClass="TComplexObject"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_CODE_REFERENCE']">
+            <jxb:class name="CCodeReference" implClass="CCodeReference"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='FLAT_ARCHETYPE_ONTOLOGY']">
+            <jxb:class name="FlatArchetypeOntology" implClass="FlatArchetypeOntology"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+</jxb:bindings>
+

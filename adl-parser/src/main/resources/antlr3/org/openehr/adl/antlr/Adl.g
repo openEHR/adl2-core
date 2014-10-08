@@ -57,11 +57,11 @@ tokens {
 }
 
 @header {
-package com.marand.thinkehr.adl.antlr;
+package org.openehr.adl.antlr;
 }
 
 @lexer::header{
-package com.marand.thinkehr.adl.antlr;
+package org.openehr.adl.antlr;
 }
 
 

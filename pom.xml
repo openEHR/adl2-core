@@ -26,8 +26,9 @@
     </scm>
 
     <modules>
-        <module>openehr-model</module>
         <module>adl-parser</module>
+        <module>model-am</module>
+        <module>model-rm</module>
     </modules>
 
 
@@ -35,12 +36,17 @@
         <dependencies>
             <dependency>
                 <groupId>com.marand.thinkehr</groupId>
-                <artifactId>openehr-model</artifactId>
+                <artifactId>adl-parser</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.marand.thinkehr</groupId>
-                <artifactId>adl-parser</artifactId>
+                <artifactId>model-am</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.marand.thinkehr</groupId>
+                <artifactId>model-rm</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

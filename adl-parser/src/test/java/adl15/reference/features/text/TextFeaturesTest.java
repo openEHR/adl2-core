@@ -5,15 +5,15 @@
 package adl15.reference.features.text;
 
 import com.google.common.collect.ImmutableMap;
-import com.marand.thinkehr.adl.am.AmQuery;
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CString;
 import org.openehr.jaxb.am.CodeDefinitionSet;
 import org.openehr.jaxb.rm.ResourceDescriptionItem;
 import org.testng.annotations.Test;
 
-import static com.marand.thinkehr.adl.util.TestUtils.*;
+import static org.openehr.adl.util.TestUtils.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

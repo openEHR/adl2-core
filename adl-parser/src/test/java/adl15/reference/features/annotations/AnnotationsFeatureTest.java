@@ -4,7 +4,7 @@
 
 package adl15.reference.features.annotations;
 
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.rm.Annotation;
 import org.openehr.jaxb.rm.AnnotationSet;

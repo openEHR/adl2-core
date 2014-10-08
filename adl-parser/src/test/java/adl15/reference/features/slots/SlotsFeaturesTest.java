@@ -4,7 +4,7 @@
 
 package adl15.reference.features.slots;
 
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.ArchetypeSlot;
 import org.openehr.jaxb.am.Assertion;
 import org.openehr.jaxb.am.DifferentialArchetype;

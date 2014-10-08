@@ -4,16 +4,16 @@
 
 package adl15.reference.features.tuples;
 
-import com.marand.thinkehr.adl.am.AmQuery;
-import com.marand.thinkehr.adl.am.mixin.AmMixins;
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.am.mixin.AmMixins;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.IntervalOfReal;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
-import static com.marand.thinkehr.adl.rm.RmObjectFactory.newIntervalOfReal;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

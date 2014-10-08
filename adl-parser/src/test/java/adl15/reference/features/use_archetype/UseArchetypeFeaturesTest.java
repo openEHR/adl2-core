@@ -4,15 +4,15 @@
 
 package adl15.reference.features.use_archetype;
 
-import com.marand.thinkehr.adl.am.mixin.AmMixins;
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.am.mixin.AmMixins;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CArchetypeRoot;
 import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.testng.annotations.Test;
 
-import static com.marand.thinkehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
+import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

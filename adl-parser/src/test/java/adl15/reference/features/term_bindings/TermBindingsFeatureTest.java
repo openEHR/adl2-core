@@ -4,7 +4,7 @@
 
 package adl15.reference.features.term_bindings;
 
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.TermBindingItem;
 import org.openehr.jaxb.am.TermBindingSet;
@@ -12,10 +12,10 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.marand.thinkehr.adl.am.AmObjectFactory.newTermBindingItem;
-import static com.marand.thinkehr.adl.rm.RmObjectFactory.newCodePhrase;
-import static com.marand.thinkehr.adl.rm.RmObjectFactory.newTerminologyId;
-import static com.marand.thinkehr.adl.util.TestUtils.assertCodePhrase;
+import static org.openehr.adl.am.AmObjectFactory.newTermBindingItem;
+import static org.openehr.adl.rm.RmObjectFactory.newCodePhrase;
+import static org.openehr.adl.rm.RmObjectFactory.newTerminologyId;
+import static org.openehr.adl.util.TestUtils.assertCodePhrase;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

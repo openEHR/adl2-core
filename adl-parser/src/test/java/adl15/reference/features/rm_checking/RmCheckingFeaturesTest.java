@@ -4,10 +4,10 @@
 
 package adl15.reference.features.rm_checking;
 
-import com.marand.thinkehr.adl.flattener.ArchetypeFlattener;
-import com.marand.thinkehr.adl.rm.OpenEhrRmModel;
-import com.marand.thinkehr.adl.util.TestAdlParser;
-import com.marand.thinkehr.adl.validator.ArchetypeValidator;
+import org.openehr.adl.flattener.ArchetypeFlattener;
+import org.openehr.adl.rm.OpenEhrRmModel;
+import org.openehr.adl.util.TestAdlParser;
+import org.openehr.adl.validator.ArchetypeValidator;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.openehr.jaxb.am.FlatArchetype;
 import org.testng.annotations.Test;

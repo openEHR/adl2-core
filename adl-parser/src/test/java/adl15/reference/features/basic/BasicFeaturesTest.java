@@ -4,8 +4,8 @@
 
 package adl15.reference.features.basic;
 
-import com.marand.thinkehr.adl.am.AmQuery;
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
 import org.testng.annotations.Test;
 

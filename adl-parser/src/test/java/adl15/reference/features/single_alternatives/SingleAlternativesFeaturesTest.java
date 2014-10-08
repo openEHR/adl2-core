@@ -4,7 +4,7 @@
 
 package adl15.reference.features.single_alternatives;
 
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.CObject;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.testng.annotations.Test;

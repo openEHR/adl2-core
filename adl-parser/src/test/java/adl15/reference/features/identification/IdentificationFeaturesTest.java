@@ -4,7 +4,7 @@
 
 package adl15.reference.features.identification;
 
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
 

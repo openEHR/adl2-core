@@ -4,9 +4,9 @@
 
 package adl15.reference.features.use_node;
 
-import com.marand.thinkehr.adl.am.AmQuery;
-import com.marand.thinkehr.adl.am.mixin.AmMixins;
-import com.marand.thinkehr.adl.util.TestAdlParser;
+import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.am.mixin.AmMixins;
+import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.ArchetypeInternalRef;
 import org.openehr.jaxb.am.CComplexObject;

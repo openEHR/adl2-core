@@ -74,16 +74,22 @@ public class TextFeaturesTest {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/text/openEHR-TEST_PKG-ENTRY.long_lines.v1.adls");
         ResourceDescriptionItem en = archetype.getDescription().getDetails().get(0);
         assertThat(en.getPurpose()).isEqualTo("what this is for");
-        assertThat(en.getUse()).isEqualTo("this is what it is used for, this could be a really long line or even\r\n" +
-                                          "multiple lines, just like \r\n" +
-                                          "what you are reading now");
+        assertThat(normalizeLines(en.getUse())).isEqualTo(
+                "this is what it is used for, this could be a really long line or even\n" +
+                "multiple lines, just like \n" +
+                "what you are reading now");
         assertThat(en.getKeywords()).containsExactly("this", "is", "a", "list", "keywords");
-        assertThat(en.getCopyright()).isEqualTo("this is mine, mine, mine I tell you! Since 2003. \r\n" +
-                                                "And another thing.\r\n" +
-                                                "And another");
+        assertThat(normalizeLines(en.getCopyright())).isEqualTo(
+                "this is mine, mine, mine I tell you! Since 2003. \n" +
+                "And another thing.\n" +
+                "And another");
 
     }
 
+    public String normalizeLines(String str) {
+        if (str == null) return null;
+        return str.replaceAll("\r\n", "\n").replaceAll("\n\r", "\n");
+    }
 
 
 }

@@ -177,8 +177,7 @@ public class OperationalTemplateBuilder {
         // current archetype roots, including top-level archetype.
         private final Deque<FlatArchetype> archetypeRoots = new ArrayDeque<>();
         // all archetypes contained in the template
-        private final Map<String, FlatArchetype> containedArchetypes = new HashMap<>();
-
+        private final Map<String, FlatArchetype> containedArchetypes = new LinkedHashMap<>();
         public void pushArchetypeRoot(String archetypeId, FlatArchetype archetype) {
             containedArchetypes.put(archetypeId, archetype);
             archetypeRoots.push(archetype);

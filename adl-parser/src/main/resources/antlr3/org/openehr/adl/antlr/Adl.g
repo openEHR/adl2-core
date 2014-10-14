@@ -293,7 +293,7 @@ existence:
 
 	
 cardinality:
-	CARDINALITY MATCHES '{' occurrenceRange (';' (ord=ORDERED|ord=UNORDERED))? '}' -> ^(CARDINALITY occurrenceRange $ord?);
+	CARDINALITY MATCHES '{' occurrenceRange (';' (ord=ORDERED|ord=UNORDERED))? (';' (uq=UNIQUE))? '}' -> ^(CARDINALITY occurrenceRange $ord? $uq?);
 
 	
 	
@@ -429,7 +429,7 @@ keyword
 	: LANGUAGE | ARCHETYPE | ONTOLOGY | DESCRIPTION | CONCEPT | SPECIALIZE 
 	| DEFINITION | MATCHES | USE_NODE | OCCURRENCES | CARDINALITY | ORDERED
 	| UNORDERED | EXISTENCE | CLOSED | ANNOTATIONS | TEMPLATE | TEMPLATE_OVERLAY
-	| SPECIALISE
+	| SPECIALISE | UNIQUE
 	;
 
 		
@@ -549,6 +549,7 @@ ALLOW_ARCHETYPE:	'allow_archetype';
 CARDINALITY:		'cardinality';
 UNORDERED:		'unordered';
 ORDERED:		'ordered';
+UNIQUE:			'unique';
 EXISTENCE:		'existence';
 BEFORE:			'before';
 AFTER:			'after';

@@ -37,7 +37,7 @@ public class StructureTest extends ParserTestBase {
     public void testExistenceCardinalityAndOccurrences() throws Exception {
         // second attribute of root object
         CAttribute attr = definition.getAttributes().get(1);
-        Cardinality card = newCardinality(true, false, newMultiplicityInterval(0, 8));
+        Cardinality card = newCardinality(false, false, newMultiplicityInterval(0, 8));
         assertCAttribute(attr, "members", newIntervalOfInteger(0, 1), card, 2);
 
         // 1st PERSON

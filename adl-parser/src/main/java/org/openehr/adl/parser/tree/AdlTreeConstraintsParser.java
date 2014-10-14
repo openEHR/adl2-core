@@ -5,6 +5,9 @@
 package org.openehr.adl.parser.tree;
 
 
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.openehr.adl.am.OperatorKind;
 import org.openehr.adl.antlr.AdlParser;
 import org.openehr.adl.parser.RuntimeRecognitionException;
@@ -12,9 +15,6 @@ import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.adl.rm.RmTypes;
 import org.openehr.adl.util.AdlUtils;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.DvQuantity;
 import org.openehr.jaxb.rm.IntervalOfInteger;
@@ -366,10 +366,22 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         Cardinality cardinality;
         cardinality = new Cardinality();
         cardinality.setInterval(parseMultiplicityInterval(tCardinality.getChild(0)));
-        if (tCardinality.getChild(1) != null) {
-            cardinality.setIsOrdered(tCardinality.getChild(1).getType() == AdlParser.ORDERED);
-        } else {
-            cardinality.setIsOrdered(true);
+        int index = 1;
+        while (index < tCardinality.getChildCount()) {
+            switch (tCardinality.getChild(index).getType()) {
+                case AdlParser.ORDERED:
+                    cardinality.setIsOrdered(true);
+                    break;
+                case AdlParser.UNORDERED:
+                    cardinality.setIsOrdered(false);
+                    break;
+                case AdlParser.UNIQUE:
+                    cardinality.setIsUnique(true);
+                    break;
+                default:
+                    assertTokenType(tCardinality.getChild(index), AdlParser.ORDERED, AdlParser.UNORDERED, AdlParser.UNIQUE);
+            }
+            index++;
         }
         return cardinality;
     }

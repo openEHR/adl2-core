@@ -32,16 +32,17 @@ import java.util.Map;
  * @author markopi
  * @since 3.6.2013
  */
-public final class RmTypeNode {
-    private RmTypeNode parent;
-    private ImmutableList<RmTypeNode> children;
+public final class RmType {
+    private RmType parent;
+    private ImmutableList<RmType> children;
     private String rmType;
     private Class mainRmClass;
     private List<Class> rmClasses;
     private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
+    private String dataAttribute;
+    private boolean finalType;
 
-
-    public RmTypeNode(String rmType, Class rmClass, Class... otherRmClasses) {
+    public RmType(String rmType, Class rmClass, Class... otherRmClasses) {
         this.rmType = rmType;
 
         this.mainRmClass = rmClass;
@@ -53,29 +54,29 @@ public final class RmTypeNode {
         children = ImmutableList.of();
     }
 
-    void addChild(RmTypeNode child) {
-        children = new ImmutableList.Builder<RmTypeNode>()
+    void addChild(RmType child) {
+        children = new ImmutableList.Builder<RmType>()
                 .addAll(children)
                 .add(child)
                 .build();
         child.parent = this;
     }
 
-    public List<RmTypeNode> getChildren() {
+    public List<RmType> getChildren() {
         return children;
     }
 
-    private void buildDescendants(ImmutableList.Builder<RmTypeNode> result, boolean includeSelf) {
+    private void buildDescendants(ImmutableList.Builder<RmType> result, boolean includeSelf) {
         if (includeSelf) {
             result.add(this);
         }
-        for (RmTypeNode child : children) {
+        for (RmType child : children) {
             child.buildDescendants(result, true);
         }
     }
 
-    public List<RmTypeNode> getDescendants(boolean includeSelf) {
-        ImmutableList.Builder<RmTypeNode> result = new ImmutableList.Builder<>();
+    public List<RmType> getDescendants(boolean includeSelf) {
+        ImmutableList.Builder<RmType> result = new ImmutableList.Builder<>();
         buildDescendants(result, includeSelf);
         return result.build();
     }
@@ -84,7 +85,7 @@ public final class RmTypeNode {
         return mainRmClass;
     }
 
-    public RmTypeNode getParent() {
+    public RmType getParent() {
         return parent;
     }
 
@@ -100,6 +101,21 @@ public final class RmTypeNode {
         return attributesMap;
     }
 
+    public String getDataAttribute() {
+        return dataAttribute;
+    }
+
+    public void setDataAttribute(String dataAttribute) {
+        this.dataAttribute = dataAttribute;
+    }
+
+    public boolean isFinalType() {
+        return finalType;
+    }
+
+    public void setFinalType(boolean finalType) {
+        this.finalType = finalType;
+    }
 
     public Object newValueInstance() {
         try {

@@ -20,6 +20,8 @@
 
 package org.openehr.adl.rm;
 
+import org.openehr.jaxb.rm.DataValue;
+import org.openehr.jaxb.rm.Element;
 import org.openehr.rm.RmObject;
 
 import javax.xml.bind.annotation.XmlType;
@@ -35,18 +37,18 @@ import static com.google.common.base.Preconditions.checkState;
  */
 class RmTypeGraphBuilder {
 
-    private final Map<String, RmTypeNode> rmTypeMappings = new HashMap<>();
-    private final Map<Class<?>, RmTypeNode> rmClassMappings = new HashMap<>();
+    private final Map<String, RmType> rmTypeMappings = new HashMap<>();
+    private final Map<Class<?>, RmType> rmClassMappings = new HashMap<>();
     private final Set<Class> nonRmClasses = new HashSet<>();
 
 
     public RmTypeGraph build() {
 
-        Map<String, RmTypeNode> objectFactoryMappings = new HashMap<>();
+        Map<String, RmType> objectFactoryMappings = new HashMap<>();
         addObjectFactoryClasses(objectFactoryMappings, org.openehr.jaxb.rm.ObjectFactory.class);
 
 
-        for (RmTypeNode rmType : objectFactoryMappings.values()) {
+        for (RmType rmType : objectFactoryMappings.values()) {
             checkState(!rmTypeMappings.containsKey(rmType.getRmType()));
             rmTypeMappings.put(rmType.getRmType(), rmType);
             for (Class<?> cls : rmType.getRmClasses()) {
@@ -75,21 +77,21 @@ class RmTypeGraphBuilder {
     }
 
     private void buildAttributes() {
-        final Set<RmTypeNode> processed = new HashSet<>();
+        final Set<RmType> processed = new HashSet<>();
 
-        for (RmTypeNode rmTypeNode : rmTypeMappings.values()) {
-            if (processed.contains(rmTypeNode) || nonRmClasses.contains(rmTypeNode.getMainRmClass())) continue;
+        for (RmType rmType : rmTypeMappings.values()) {
+            if (processed.contains(rmType) || nonRmClasses.contains(rmType.getMainRmClass())) continue;
 
-            Iterable<RmBeanReflector.RmAttribute> attributes = RmBeanReflector.listProperties(rmTypeNode.getMainRmClass());
+            Iterable<RmBeanReflector.RmAttribute> attributes = RmBeanReflector.listProperties(rmType.getMainRmClass());
             List<RmTypeAttribute> resultAttributes = new ArrayList<>();
             for (RmBeanReflector.RmAttribute attribute : attributes) {
-                RmTypeNode type = rmClassMappings.get(attribute.getProperty().getClass());
+                RmType type = rmClassMappings.get(attribute.getTargetType());
 
-                resultAttributes.add(new RmTypeAttribute(attribute.getAttribute(), attribute.getProperty().getName(), rmTypeNode, type,
+                resultAttributes.add(new RmTypeAttribute(attribute.getAttribute(), attribute.getProperty().getName(), rmType, type,
                         attribute.getOccurrences()));
             }
-            rmTypeNode.setAttributes(resultAttributes);
-            processed.add(rmTypeNode);
+            rmType.setAttributes(resultAttributes);
+            processed.add(rmType);
         }
     }
 
@@ -98,7 +100,7 @@ class RmTypeGraphBuilder {
         // check removed because VERSION is both in rm and thinkehr model
         // checkState(!rmTypeMappings.containsKey(rmType), "RmType already exists: %s", rmType);
 
-        RmTypeNode rmTypeNode = new RmTypeNode(rmType, rmMainClass, otherRmClasses);
+        RmType rmTypeNode = new RmType(rmType, rmMainClass, otherRmClasses);
 
         rmTypeMappings.put(rmType, rmTypeNode);
         for (Class<?> rmClass : rmTypeNode.getRmClasses()) {
@@ -107,7 +109,7 @@ class RmTypeGraphBuilder {
         }
     }
 
-    private void addObjectFactoryClasses(Map<String, RmTypeNode> target, Class objectFactoryClass) {
+    private void addObjectFactoryClasses(Map<String, RmType> target, Class objectFactoryClass) {
         Method[] methods = objectFactoryClass.getDeclaredMethods();
         for (Method m : methods) {
             if (m.getParameterTypes().length == 0) {
@@ -117,13 +119,19 @@ class RmTypeGraphBuilder {
         }
     }
 
-    private void addObjectFactoryClass(Map<String, RmTypeNode> target, Class<?> rmClass, RmTypeNode child) {
+    private void addObjectFactoryClass(Map<String, RmType> target, Class<?> rmClass, RmType child) {
         XmlType xmlType = rmClass.getAnnotation(XmlType.class);
         if (xmlType != null || rmClass == RmObject.class) {
             String rmType = xmlType != null ? xmlType.name() : RmTypes.RM_OBJECT;
-            RmTypeNode node = target.get(rmType);
+            RmType node = target.get(rmType);
             if (node == null) {
-                node = new RmTypeNode(rmType, rmClass);
+                node = new RmType(rmType, rmClass);
+
+                if (Element.class.isAssignableFrom(rmClass)) {
+                    node.setFinalType(true);
+                    node.setDataAttribute("value");
+                }
+
                 target.put(rmType, node);
             }
             if (child != null && !node.getChildren().contains(child)) {

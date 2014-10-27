@@ -29,13 +29,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 20.6.2013
  */
 public class RmTypeAttribute {
-    private final RmTypeNode owner;
-    private final RmTypeNode targetType;
+    private final RmType owner;
+    private final RmType targetType;
     private final String attributeName;
     private final String propertyName;
     private final MultiplicityInterval existence;
 
-    public RmTypeAttribute(String attributeName, String propertyName, RmTypeNode owner, RmTypeNode targetType,
+    public RmTypeAttribute(String attributeName, String propertyName, RmType owner, RmType targetType,
             MultiplicityInterval existence) {
         this.attributeName = attributeName;
         this.propertyName = propertyName;
@@ -52,11 +52,11 @@ public class RmTypeAttribute {
         return propertyName;
     }
 
-    public RmTypeNode getOwner() {
+    public RmType getOwner() {
         return owner;
     }
 
-    public RmTypeNode getTargetType() {
+    public RmType getTargetType() {
         return targetType;
     }
 

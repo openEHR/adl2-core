@@ -20,6 +20,10 @@
 
 package org.openehr.adl.rm;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * RM model representing OpenEHR objects
  * @author markopi
@@ -40,8 +44,8 @@ public class OpenEhrRmModel implements RmModel {
         return getRmType(rmClass).getRmType();
     }
 
-    public RmTypeNode getRmType(Class<?> rmClass) {
-        RmTypeNode result = rmTypeGraph.tryGetNodeFromRmClass(rmClass);
+    public RmType getRmType(Class<?> rmClass) {
+        RmType result = rmTypeGraph.tryGetNodeFromRmClass(rmClass);
         if (result == null) {
             throw new RmModelException("Unknown RM class: " + rmClass.getName());
         }
@@ -53,15 +57,15 @@ public class OpenEhrRmModel implements RmModel {
         return rmTypeGraph.tryGetNodeFromRmType(rmType)!=null;
     }
 
-    public RmTypeNode getRmType(String rmType) {
-        RmTypeNode node = rmTypeGraph.tryGetNodeFromRmType(rmType);
+    public RmType getRmType(String rmType) {
+        RmType node = rmTypeGraph.tryGetNodeFromRmType(rmType);
         if (node == null) {
             throw new RmModelException("Unknown RM type: " + rmType);
         }
         return node;
     }
 
-    private RmTypeAttribute getRmAttribute(RmTypeNode rmType, String attribute) {
+    private RmTypeAttribute getRmAttribute(RmType rmType, String attribute) {
         RmTypeAttribute result = rmType.getAttributes().get(attribute);
         if (result == null) {
             throw new RmModelException("No attribute %s on rm type %s", attribute, rmType.getRmType());
@@ -72,6 +76,11 @@ public class OpenEhrRmModel implements RmModel {
     @Override
     public RmTypeAttribute getRmAttribute(String rmType, String attribute) {
         return getRmAttribute(getRmType(rmType), attribute);
+    }
+
+    @Override
+    public List<RmType> getAllTypes() {
+        return Lists.newArrayList(rmTypeGraph.getAllNodes());
     }
 
 

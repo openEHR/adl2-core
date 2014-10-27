@@ -20,6 +20,8 @@
 
 package org.openehr.adl.rm;
 
+import java.util.List;
+
 /**
  * Provides information about a given rm model
  *
@@ -62,5 +64,7 @@ public interface RmModel {
      */
     RmTypeAttribute getRmAttribute(String rmType, String attribute);
 
+
+    List<RmType> getAllTypes();
 
 }

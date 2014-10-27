@@ -31,42 +31,42 @@ import java.util.Map;
  */
 public class RmTypeGraph {
 
-    private final Map<String, RmTypeNode> rmTypeMappings;
-    private final Map<Class<?>, RmTypeNode> rmClassMappings;
+    private final Map<String, RmType> rmTypeMappings;
+    private final Map<Class<?>, RmType> rmClassMappings;
 
-    RmTypeGraph(Map<String, RmTypeNode> rmTypeMappings, Map<Class<?>, RmTypeNode> rmClassMappings) {
+    RmTypeGraph(Map<String, RmType> rmTypeMappings, Map<Class<?>, RmType> rmClassMappings) {
         this.rmClassMappings = rmClassMappings;
         this.rmTypeMappings = rmTypeMappings;
     }
 
     @Nullable
-    public RmTypeNode tryGetNodeFromRmType(String rmType) {
+    public RmType tryGetNodeFromRmType(String rmType) {
         return rmTypeMappings.get(rmType);
     }
 
-    public RmTypeNode getNodeFromRmType(String rmType) {
-        RmTypeNode result = rmTypeMappings.get(rmType);
+    public RmType getNodeFromRmType(String rmType) {
+        RmType result = rmTypeMappings.get(rmType);
         Preconditions.checkArgument(result != null, "Unknown rmType: '%s'", rmType);
         return result;
     }
 
     @Nullable
-    public RmTypeNode tryGetNodeFromRmClass(Class<?> rmClass) {
+    public RmType tryGetNodeFromRmClass(Class<?> rmClass) {
         return rmClassMappings.get(rmClass);
     }
 
-    public RmTypeNode getNodeFromRmClass(Class<?> rmClass) {
-        RmTypeNode result = rmClassMappings.get(rmClass);
+    public RmType getNodeFromRmClass(Class<?> rmClass) {
+        RmType result = rmClassMappings.get(rmClass);
         Preconditions.checkArgument(result != null, "Class %s is not part of rm model", rmClass.getName());
         return result;
     }
 
     public RmTypeAttribute getRmAttribute(Class<?> rmClass, String attributeName) {
-        RmTypeNode rmTypeNode = getNodeFromRmClass(rmClass);
-        return rmTypeNode.getAttributes().get(attributeName);
+        RmType rmType = getNodeFromRmClass(rmClass);
+        return rmType.getAttributes().get(attributeName);
     }
 
-    public Iterable<RmTypeNode> getAllNodes() {
+    public Iterable<RmType> getAllNodes() {
         return rmTypeMappings.values();
     }
 }

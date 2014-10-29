@@ -354,6 +354,9 @@
         <jxb:bindings node="//xsd:complexType[@name='CONSTRAINT_BINDING_ITEM']">
             <jxb:class name="ConstraintBindingItem" implClass="ConstraintBindingItem"/>
         </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='VALUE_SET_ITEM']">
+            <jxb:class name="ValueSetItem" implClass="ValueSetItem"/>
+        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='C_SECOND_ORDER']">
             <jxb:class name="CSecondOrder" implClass="CSecondOrder"/>
         </jxb:bindings>

@@ -39,6 +39,7 @@
                     <xs:element name="ontology" type="ARCHETYPE_ONTOLOGY"/>
                     <xs:element name="is_template" type="xs:boolean"/>
                     <xs:element name="is_overlay" type="xs:boolean"/>
+
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -432,6 +433,8 @@
             <xs:element name="term_bindings" type="TermBindingSet" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="constraint_bindings" type="ConstraintBindingSet" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="terminology_extracts" type="CodeDefinitionSet" maxOccurs="unbounded"/>
+            <xs:element name="value_sets" type="VALUE_SET_ITEM" maxOccurs="unbounded"/>
+
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="CodeDefinitionSet">
@@ -469,5 +472,11 @@
             <xs:element name="value" type="xs:anyURI"/>
         </xs:sequence>
         <xs:attribute name="code" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="VALUE_SET_ITEM">
+        <xs:sequence>
+            <xs:element name="members" type="xs:anyURI" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
 </xs:schema>

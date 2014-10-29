@@ -225,7 +225,27 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
 
         parseCodeDefinitionSets(result.getTerminologyExtracts(), ontology.tryGet("terminology_extract"));
         parseCodeDefinitionSets(result.getTerminologyExtracts(), ontology.tryGet("terminology_extracts"));
+
+        parseValueSetSets(result.getValueSets(), ontology.tryGet("value_set"));
+        parseValueSetSets(result.getValueSets(), ontology.tryGet("value_sets"));
+
+        // todo parse value sets
         return result;
+    }
+
+    private void parseValueSetSets(List<ValueSetItem> target, Tree tValueSets) {
+        if (tValueSets==null) return;
+        Map<String, Tree> valueSets = dadl.parseAdlMap(tValueSets);
+        for (Map.Entry<String, Tree> entry : valueSets.entrySet()) {
+            ValueSetItem vsi = new ValueSetItem();
+            vsi.setId(entry.getKey());
+            DAdlObject item = dadl.parseAdlObject(entry.getValue());
+            Tree tMembers = item.get("members");
+            if (tMembers!=null) {
+                vsi.getMembers().addAll(constraints.collectStringList(tMembers));
+            }
+            target.add(vsi);
+        }
     }
 
     private void parseConstraintBindings(List<ConstraintBindingSet> target, @Nullable Tree tConstraintBindings) {

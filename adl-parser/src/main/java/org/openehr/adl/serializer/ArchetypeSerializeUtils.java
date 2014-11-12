@@ -18,30 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.am.mixin;
+package org.openehr.adl.serializer;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
-
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class AmMixins {
-
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
-    }
-
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
-    }
-
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
-    }
-
+public class ArchetypeSerializeUtils {
+    public static void buildOccurrences(AdlStringBuilder builder, MultiplicityInterval occ) {
+            if (occ.getLower()==null && occ.getUpper()==null) {
+                builder.append("*");
+            } else if (occ.getLower()!=null && occ.getLower().equals(occ.getUpper())) {
+                builder.append(occ.getLower());
+            } else {
+                builder.append(occ.getLower()!=null?occ.getLower():0);
+                builder.append("..");
+                builder.append(occ.getUpper()!=null?occ.getUpper():"*");
+            }
+        }
 }

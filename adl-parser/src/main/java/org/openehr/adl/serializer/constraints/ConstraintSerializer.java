@@ -18,30 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.am.mixin;
+package org.openehr.adl.serializer.constraints;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.MultiplicityInterval;
-
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
+import org.openehr.adl.serializer.AdlStringBuilder;
+import org.openehr.adl.serializer.ArchetypeSerializer;
+import org.openehr.jaxb.am.CObject;
 
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class AmMixins {
+abstract public class ConstraintSerializer<T extends CObject> {
+    protected final ArchetypeSerializer serializer;
+    protected final AdlStringBuilder builder;
 
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
+    public ConstraintSerializer(ArchetypeSerializer serializer) {
+        this.serializer=serializer;
+        this.builder = serializer.getBuilder();
     }
 
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
-    }
+    abstract public void serialize(T cobj);
 
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
+    public String getSimpleCommentText(T cobj) {
+        return null;
     }
-
 }

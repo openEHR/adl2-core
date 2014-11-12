@@ -18,30 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.am.mixin;
+package org.openehr.adl.serializer;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.MultiplicityInterval;
+import org.openehr.adl.TestingArchetypeProvider;
+import org.openehr.adl.util.TestAdlParser;
+import org.openehr.jaxb.am.Archetype;
+import org.testng.annotations.Test;
 
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
+import java.io.IOException;
 
-/**
- * @author markopi
- */
-public class AmMixins {
+import static org.testng.Assert.*;
 
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
-    }
+public class DAdlSerializerTest {
+    @Test
+    public void testSerializeDadl() throws IOException {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/repository/openEHR-EHR-EVALUATION.alert.v1.adls");
 
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
-    }
-
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
+        AdlStringBuilder builder = new AdlStringBuilder();
+        DAdlSerializer serializer = new DAdlSerializer(builder);
+        serializer.serialize(archetype.getTranslations());
+        System.out.println("builder.toString() = " + builder.toString());
     }
 
 }

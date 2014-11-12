@@ -20,28 +20,24 @@
 
 package org.openehr.adl.am.mixin;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
 import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.MultiplicityInterval;
-
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
+import org.openehr.jaxb.rm.IntervalOfInteger;
 
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class AmMixins {
-
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
+public class IntervalOfDateTimeMixin<T extends IntervalOfDateTime> extends IntervalMixin<T, String>  {
+    public IntervalOfDateTimeMixin(T self) {
+        super(self);
     }
 
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
+    @Override
+    protected String getLower(T interval) {
+        return interval.getLower();
     }
 
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
+    @Override
+    protected String getUpper(T interval) {
+        return interval.getUpper();
     }
-
 }

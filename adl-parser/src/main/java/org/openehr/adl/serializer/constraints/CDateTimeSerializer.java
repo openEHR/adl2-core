@@ -18,30 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.am.mixin;
+package org.openehr.adl.serializer.constraints;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.MultiplicityInterval;
-
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
+import org.openehr.adl.am.mixin.AmMixins;
+import org.openehr.adl.serializer.ArchetypeSerializer;
+import org.openehr.jaxb.am.CDateTime;
 
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class AmMixins {
-
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
+public class CDateTimeSerializer extends ConstraintSerializer<CDateTime> {
+    public CDateTimeSerializer(ArchetypeSerializer serializer) {
+        super(serializer);
     }
 
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
+    @Override
+    public void serialize(CDateTime cobj) {
+        if (cobj.getPattern() != null) {
+            builder.append(cobj.getPattern());
+        }
+        if (cobj.getRange() != null) {
+            builder.append(AmMixins.of(cobj.getRange()).toString());
+        }
+        if (cobj.getAssumedValue() != null) {
+            builder.append("; ").append(cobj.getAssumedValue());
+        }
     }
-
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
-    }
-
 }

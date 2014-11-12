@@ -18,30 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.am.mixin;
+package org.openehr.adl.serializer;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.MultiplicityInterval;
+import org.openehr.adl.util.TestAdlParser;
+import org.openehr.jaxb.am.Archetype;
+import org.testng.annotations.Test;
 
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
+import static org.testng.Assert.*;
 
-/**
- * @author markopi
- */
-public class AmMixins {
+public class ArchetypeSerializerTest {
 
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
+    @Test
+    public void testSerialize() throws Exception {
+        Archetype archetypeAlert = TestAdlParser.parseAdl("adl15/repository/openEHR-EHR-EVALUATION.alert.v1.adls");
+        String serialized = new ArchetypeSerializer(archetypeAlert).serialize();
+
+        System.out.println(serialized);
+
+
     }
-
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
-    }
-
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
-    }
-
 }

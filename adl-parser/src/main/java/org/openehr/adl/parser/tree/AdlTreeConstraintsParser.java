@@ -88,7 +88,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         if (tTypeDefinition.getChild(index).getType() == AdlParser.OCCURRENCES) {
             result.setOccurrences(parseOccurrences(tTypeDefinition.getChild(index++).getChild(0)));
         } else {
-            result.setOccurrences(newMultiplicityInterval(1, 1));
+            //result.setOccurrences(newMultiplicityInterval(1, 1));
         }
 
         parseTypeValueConstraint(result, tTypeDefinition.getChild(index));

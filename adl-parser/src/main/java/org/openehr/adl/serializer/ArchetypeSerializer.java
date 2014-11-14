@@ -20,10 +20,7 @@
 
 package org.openehr.adl.serializer;
 
-import org.openehr.adl.serializer.constraints.CComplexObjectSerializer;
-import org.openehr.adl.serializer.constraints.CDateTimeSerializer;
-import org.openehr.adl.serializer.constraints.CTerminologyCodeSerializer;
-import org.openehr.adl.serializer.constraints.ConstraintSerializer;
+import org.openehr.adl.serializer.constraints.*;
 import org.openehr.jaxb.am.*;
 
 import java.util.HashMap;
@@ -50,7 +47,10 @@ public class ArchetypeSerializer {
 
 
         constraintSerializers = new HashMap<>();
+        constraintSerializers.put(CString.class, new CStringSerializer(this));
+        constraintSerializers.put(CReal.class, new CRealSerializer(this));
         constraintSerializers.put(CComplexObject.class, new CComplexObjectSerializer(this));
+        constraintSerializers.put(CArchetypeRoot.class, new CArchetypeRootSerializer(this));
         constraintSerializers.put(CTerminologyCode.class, new CTerminologyCodeSerializer(this));
         constraintSerializers.put(CDateTime.class, new CDateTimeSerializer(this));
     }

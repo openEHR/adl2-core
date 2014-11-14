@@ -53,33 +53,77 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             builder.append("} ");
         }
         builder.append("matches {");
-        buildAttributes(cobj);
+        if (cobj.getNodeId() != null) {
+            builder.lineComment(serializer.getArchetypeMapHolder().getTermText(cobj.getNodeId()));
+        }
+
+        buildAttributesAndTuples(cobj);
         builder.append("}");
         builder.unindent();
     }
 
-    private void buildAttributes(T cobj) {
+    private void buildAttributesAndTuples(T cobj) {
         if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) return;
 
         builder.indent().newline();
         for (CAttribute cattr : cobj.getAttributes()) {
-            builder.tryNewLine();
-            if (cattr.getRmAttributeName() != null) {
-                builder.append(cattr.getRmAttributeName());
-            } else {
-                builder.append(cattr.getDifferentialPath());
-            }
-            builder.append(" ");
-            if (cattr.getCardinality() != null) {
-                builder.append("cardinality matches {");
-                appendCardinality(cattr.getCardinality());
-                builder.append("} ");
-            }
-            builder.append("matches ");
-            buildAttributeChildConstraints(cattr);
-            builder.append("");
+            buildAttribute(cattr);
+        }
+        for (CAttributeTuple cAttributeTuple : cobj.getAttributeTuples()) {
+            buildTuple(cAttributeTuple);
         }
         builder.unindent().newline();
+    }
+
+
+    private void buildAttribute(CAttribute cattr) {
+        builder.tryNewLine();
+        if (cattr.getRmAttributeName() != null) {
+            builder.append(cattr.getRmAttributeName());
+        } else {
+            builder.append(cattr.getDifferentialPath());
+        }
+        builder.append(" ");
+        if (cattr.getCardinality() != null) {
+            builder.append("cardinality matches {");
+            appendCardinality(cattr.getCardinality());
+            builder.append("} ");
+        }
+        builder.append("matches ");
+        buildAttributeChildConstraints(cattr);
+        builder.append("");
+    }
+
+    private void buildTuple(CAttributeTuple cAttributeTuple) {
+        builder.tryNewLine();
+        builder.append("[");
+        List<String> members = new ArrayList<>();
+        for (CAttribute cAttribute : cAttributeTuple.getMembers()) {
+            members.add(cAttribute.getRmAttributeName());
+        }
+        builder.append(Joiner.on(", ").join(members));
+        builder.append("] matches {");
+        builder.indent();
+        for (int i = 0; i < cAttributeTuple.getChildren().size(); i++) {
+            CObjectTuple cObjectTuple = cAttributeTuple.getChildren().get(i);
+            builder.newline();
+            builder.append("[");
+            for (int j = 0; j < cObjectTuple.getMembers().size(); j++) {
+                builder.append("{");
+                serializer.buildCObject(cObjectTuple.getMembers().get(j));
+                builder.append("}");
+                if (j < cObjectTuple.getMembers().size() - 1) {
+                    builder.append(", ");
+                }
+            }
+            builder.append("]");
+            if (i < cAttributeTuple.getChildren().size() - 1) {
+                builder.append(", ");
+            }
+
+        }
+        builder.unindent().newline();
+        builder.append("}");
     }
 
     private void buildAttributeChildConstraints(CAttribute cattr) {
@@ -93,13 +137,11 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
         if (indent) {
             builder.newline();
         }
-        // todo tuples
-
         builder.append("}");
 
         if (!indent && !cattr.getChildren().isEmpty()) {
             String commentText = serializer.getSimpleCommentText(cattr.getChildren().get(0));
-            if (commentText!=null) {
+            if (commentText != null) {
                 builder.lineComment(commentText);
             }
 

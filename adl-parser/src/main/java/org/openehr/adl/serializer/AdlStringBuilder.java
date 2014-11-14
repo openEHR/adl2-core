@@ -44,8 +44,14 @@ public class AdlStringBuilder {
     }
 
     public AdlStringBuilder text(String str) {
-        return append("\"").append(StringEscapeUtils.escapeJava(str)).append("\"");
+        String text = quoteText(str);
+        return append(text);
 
+    }
+
+    private String quoteText(String str) {
+        str = str.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
+        return "\""+str+"\"";
     }
 
     public AdlStringBuilder tryNewLine() {

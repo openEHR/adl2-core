@@ -109,6 +109,7 @@ public class DAdlSerializer {
         if (!list.isEmpty()) {
             Object o = list.get(0);
             if (isPlainType(o)) {
+                builder.append("<");
                 for (int i = 0; i < list.size(); i++) {
                     Object item = list.get(i);
                     serializePlain(item);
@@ -116,6 +117,7 @@ public class DAdlSerializer {
                         builder.append(", ");
                     }
                 }
+                builder.append(">");
                 return;
             }
         }

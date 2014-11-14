@@ -37,7 +37,7 @@ public class DAdlSerializerTest {
         AdlStringBuilder builder = new AdlStringBuilder();
         DAdlSerializer serializer = new DAdlSerializer(builder);
         serializer.serialize(archetype.getTranslations());
-        System.out.println("builder.toString() = " + builder.toString());
+//        System.out.println("builder.toString() = " + builder.toString());
     }
 
 }

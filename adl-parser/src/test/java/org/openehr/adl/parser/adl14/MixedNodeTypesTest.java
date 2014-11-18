@@ -44,7 +44,7 @@ public class MixedNodeTypesTest extends ParserTestBase {
         assertThat(attr.getChildren()).hasSize(2);
 
         CComplexObject first = (CComplexObject) attr.getChildren().get(0);
-        assertCComplexObject(first, "DV_CODED_TEXT", null, MANDATORY, 1);
+        assertCComplexObject(first, "DV_CODED_TEXT", null, null, 1);
         assertThat(first.getAttributes().get(0).getRmAttributeName()).isEqualTo("defining_code");
 
         CDvOrdinal second = (CDvOrdinal) attr.getChildren().get(1);

@@ -53,7 +53,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
         Template template = operationalTemplateBuilder.build(archetype);
 
         // root node
-        assertCArchetypeRoot(template.getDefinition(), "COMPOSITION", null, MANDATORY, 1, "openEHR-EHR-COMPOSITION.root_use_archetype.v1");
+        assertCArchetypeRoot(template.getDefinition(), "COMPOSITION", null, null, 1, "openEHR-EHR-COMPOSITION.root_use_archetype.v1");
 
         // inline of use_archetype node
         CArchetypeRoot evaluation = AmQuery.get(template, "content");
@@ -70,7 +70,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
         Template template = operationalTemplateBuilder.build(archetype);
 
         // root node
-        assertCArchetypeRoot(template.getDefinition(), "OBSERVATION", null, MANDATORY, 1,
+        assertCArchetypeRoot(template.getDefinition(), "OBSERVATION", null, null, 1,
                 "openEHR-EHR-OBSERVATION.internal_ref_binding.v1");
 
         CObject data1 = AmQuery.get(template, "data/events[at0002]/data");

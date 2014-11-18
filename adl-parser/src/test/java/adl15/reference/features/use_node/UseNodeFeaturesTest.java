@@ -42,8 +42,7 @@ public class UseNodeFeaturesTest {
                 .isEqualTo("[0,1]");
         assertThat(AmMixins.of(AmQuery.get(archetype, "contacts[id6]/addresses[id8]").getOccurrences()).toString())
                 .isEqualTo("[0,2]");
-        assertThat(AmMixins.of(AmQuery.get(archetype, "contacts[id6]/addresses[id9]").getOccurrences()).toString())
-                .isEqualTo("[1,1]");
+        assertThat(AmQuery.get(archetype, "contacts[id6]/addresses[id9]").getOccurrences()).isNull();
 
 
         assertArchetypeInternalRef((ArchetypeInternalRef)AmQuery.get(archetype, "contacts[id10]/addresses[id11]"),
@@ -61,9 +60,9 @@ public class UseNodeFeaturesTest {
                 "adl15/reference/features/use_node/openEHR-EHR-OBSERVATION.path_analysis_use_nodes.v1.adls");
         CComplexObject cluster = AmQuery.get(archetype, "data[id2]/events[id3]/data[id4]/items[id12]");
         ArchetypeInternalRef items1 = AmQuery.get(cluster, "items[id13]/items[id21]");
-        assertArchetypeInternalRef(items1, "/data[id2]/events[id3]/data[id4]/items[id14]", "[1,1]");
+        assertArchetypeInternalRef(items1, "/data[id2]/events[id3]/data[id4]/items[id14]", null);
         ArchetypeInternalRef items2 = AmQuery.get(cluster, "items[id22]");
-        assertArchetypeInternalRef(items2, "/data[id2]/events[id3]/data[id4]/items[id14]", "[1,1]");
+        assertArchetypeInternalRef(items2, "/data[id2]/events[id3]/data[id4]/items[id14]", null);
 
     }
     @Test
@@ -75,6 +74,8 @@ public class UseNodeFeaturesTest {
 
     private void assertArchetypeInternalRef(ArchetypeInternalRef actual, String targetPath, String occurrencesString) {
         assertThat(actual.getTargetPath()).isEqualTo(targetPath);
-        assertThat(AmMixins.of(actual.getOccurrences()).toString()).isEqualTo(occurrencesString);
+        if (occurrencesString!=null) {
+            assertThat(AmMixins.of(actual.getOccurrences()).toString()).isEqualTo(occurrencesString);
+        }
     }
 }

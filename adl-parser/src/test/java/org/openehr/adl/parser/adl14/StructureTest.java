@@ -80,8 +80,7 @@ public class StructureTest extends ParserTestBase {
     public void testStructure() throws Exception {
         // root object
         CComplexObject obj = definition;
-        IntervalOfInteger occurrences = newIntervalOfInteger(1, 1);
-        assertCComplexObject(obj, "ENTRY", "at0000", occurrences, 2);
+        assertCComplexObject(obj, "ENTRY", "at0000", null, 2);
 
         // first attribute of root object
         CAttribute attr = obj.getAttributes().get(0);
@@ -89,7 +88,7 @@ public class StructureTest extends ParserTestBase {
 
         // 2nd level object
         obj = (CComplexObject) attr.getChildren().get(0);
-        assertCComplexObject(obj, "RELATED_PARTY", null, occurrences, 1);
+        assertCComplexObject(obj, "RELATED_PARTY", null, null, 1);
 
         // attribute of 2nd level object
         attr = (CAttribute) obj.getAttributes().get(0);
@@ -97,7 +96,7 @@ public class StructureTest extends ParserTestBase {
 
         // leaf object
         obj = (CComplexObject) attr.getChildren().get(0);
-        assertCComplexObject(obj, "TEXT", null, occurrences, 1);
+        assertCComplexObject(obj, "TEXT", null, null, 1);
 
         // attribute of leaf object
         attr = (CAttribute) obj.getAttributes().get(0);

@@ -31,7 +31,7 @@ public class ArchetypeSerializerTest {
     @Test
     public void testSerialize() throws Exception {
         Archetype archetypeAlert = TestAdlParser.parseAdl("adl15/repository/openEHR-EHR-EVALUATION.alert.v1.adls");
-        String serialized = new ArchetypeSerializer(archetypeAlert).serialize();
+        String serialized = ArchetypeSerializer.serialize(archetypeAlert);
 
 //        System.out.println(serialized);
 
@@ -41,7 +41,7 @@ public class ArchetypeSerializerTest {
     @Test
     public void testQuantityTuple() throws Exception {
         Archetype archetype = TestAdlParser.parseAdl("adl15/tuples/openEHR-EHR-OBSERVATION.quantity_tuple.v1.adls");
-        String serialized = new ArchetypeSerializer(archetype).serialize();
+        String serialized = ArchetypeSerializer.serialize(archetype);
 
 //        System.out.println(serialized);
     }

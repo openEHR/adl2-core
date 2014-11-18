@@ -39,7 +39,7 @@ public class ArchetypeSerializer {
     private final Map<Class, ConstraintSerializer> constraintSerializers;
 
 
-    public ArchetypeSerializer(Archetype archetype) {
+    private ArchetypeSerializer(Archetype archetype) {
         this.builder = new AdlStringBuilder();
         this.archetype = archetype;
         this.archetypeMapHolder = new ArchetypeMapHolder(archetype);
@@ -56,7 +56,11 @@ public class ArchetypeSerializer {
     }
 
 
-    public String serialize() {
+    public static String serialize(Archetype archetype) {
+        return new ArchetypeSerializer(archetype).serialize();
+    }
+
+    private String serialize() {
         if (archetype.isIsTemplate()) {
             builder.append("template");
         } else {

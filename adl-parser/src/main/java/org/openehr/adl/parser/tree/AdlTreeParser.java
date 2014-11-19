@@ -174,7 +174,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         String archetypeId = collectText(child(tArchetype, 0, AdlParser.AST_ARCHETYPE_ID));
         target.getArchetypeId().setValue(archetypeId);
 
-        target.setIsTemplate(tArchetype.getType() != AdlParser.ARCHETYPE);
+        target.setIsTemplate(tArchetype.getType() == AdlParser.TEMPLATE);
         target.setIsOverlay(tArchetype.getType() == AdlParser.TEMPLATE_OVERLAY);
 
         if (tArchetype.getChildCount() > 1) {

@@ -63,7 +63,10 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
     }
 
     private void buildAttributesAndTuples(T cobj) {
-        if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) return;
+        if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) {
+            builder.append("*");
+            return;
+        }
 
         builder.indent().newline();
         for (CAttribute cattr : cobj.getAttributes()) {
@@ -129,7 +132,6 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
     private void buildAttributeChildConstraints(CAttribute cattr) {
         boolean indent = !cattr.getChildren().isEmpty() &&
                          (cattr.getChildren().size() > 1 || !(cattr.getChildren().get(0) instanceof CPrimitiveObject));
-//        if (indent) builder.indent();
         builder.append("{");
         for (CObject cObject : cattr.getChildren()) {
             serializer.buildCObject(cObject);
@@ -146,7 +148,6 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             }
 
         }
-//        if (indent) builder.unindent().newline();
     }
 
     private void appendCardinality(Cardinality card) {

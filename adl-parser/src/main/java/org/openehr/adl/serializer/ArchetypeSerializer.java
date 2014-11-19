@@ -65,7 +65,7 @@ public class ArchetypeSerializer {
             builder.append("template");
         } else {
             if (archetype.isIsOverlay()) {
-                builder.append("archetype_overlay");
+                builder.append("template_overlay");
             } else {
                 builder.append("archetype");
             }
@@ -75,6 +75,12 @@ public class ArchetypeSerializer {
             builder.append(" (adl_version=").append(archetype.getAdlVersion()).append(")");
         }
         builder.newIndentedline().append(archetype.getArchetypeId().getValue()).unindent().newline();
+
+        if (archetype.getParentArchetypeId()!=null) {
+            builder.newline().append("specialize").newIndentedline()
+                    .append(archetype.getArchetypeId().getValue())
+                    .unindent().newline();
+        }
 
         if (archetype.getConcept() != null) {
             String comment = archetypeMapHolder.getTermText(defaultLanguage, archetype.getConcept());

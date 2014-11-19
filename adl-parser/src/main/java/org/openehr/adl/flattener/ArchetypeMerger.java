@@ -26,6 +26,8 @@ import org.openehr.adl.am.AmObjectNotFoundException;
 import org.openehr.adl.am.AmQuery;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
+import org.openehr.adl.rm.RmTypeAttribute;
+import org.openehr.adl.util.AdlUtils;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 import static org.openehr.adl.util.AdlUtils.front;
 import static org.openehr.adl.util.AdlUtils.makeClone;
 
@@ -64,9 +67,11 @@ class ArchetypeMerger {
         expandAttributeNodes(RmPath.ROOT, flatParent.getDefinition(), specialized.getDefinition());
         flattenCObject(RmPath.ROOT, null, flatParent.getDefinition(), specialized.getDefinition());
 
+
         mergeOntologies(flatParent.getOntology(), specialized.getOntology());
         annotationsMerger.merge(flatParent.getAnnotations(), specialized.getAnnotations());
     }
+
 
     private void mergeOntologies(ArchetypeOntology parent, ArchetypeOntology specialized) {
         new OntologyFlattener(parent, specialized).flatten();
@@ -112,7 +117,7 @@ class ArchetypeMerger {
             if (parentAttribute != null) {
                 flattenCAttribute(attributePath, parentAttribute, specializedAttribute);
             }
-            if (specializedAttribute.getExistence()!=null && isEmptyInterval(specializedAttribute.getExistence())) {
+            if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
                 iterator.remove();
             }
         }
@@ -152,7 +157,7 @@ class ArchetypeMerger {
                 if (pair.parent != null) {
                     flattenCObject(childPath, specialized, pair.parent, pair.specialized);
                 }
-                if (pair.specialized.getOccurrences()==null || !isEmptyInterval(pair.specialized.getOccurrences())) {
+                if (pair.specialized.getOccurrences() == null || !isEmptyInterval(pair.specialized.getOccurrences())) {
                     result.add(pair.specialized);
                 }
             } else {

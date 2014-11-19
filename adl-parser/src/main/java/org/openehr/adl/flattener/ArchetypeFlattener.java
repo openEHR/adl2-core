@@ -21,11 +21,13 @@
 package org.openehr.adl.flattener;
 
 import org.openehr.adl.rm.RmModel;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.adl.rm.RmTypeAttribute;
+import org.openehr.adl.util.AdlUtils;
+import org.openehr.jaxb.am.*;
 
 import javax.annotation.Nullable;
 
+import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 import static org.openehr.adl.util.AdlUtils.createFlatArchetypeClone;
 
 /**
@@ -35,9 +37,11 @@ import static org.openehr.adl.util.AdlUtils.createFlatArchetypeClone;
  */
 public class ArchetypeFlattener {
     private final ArchetypeMerger merger;
+    private final RmModel rmModel;
 
     public ArchetypeFlattener(RmModel rmModel) {
         merger = new ArchetypeMerger(rmModel);
+        this.rmModel = rmModel;
     }
 
     /**
@@ -59,7 +63,46 @@ public class ArchetypeFlattener {
             merger.merge(flatParent, result);
         }
 
+        fillDefaultOccurrences(null, result.getDefinition());
+
+
         return result;
     }
+
+
+    private void fillDefaultOccurrences(CAttribute parentAttr, CObject cobj) {
+        if (cobj.getOccurrences() == null) {
+            if (parentAttr != null) {
+                cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getExistence()));
+            } else {
+                cobj.setOccurrences(newMultiplicityInterval(1, 1));
+            }
+        }
+
+        if (cobj instanceof CComplexObject) {
+            CComplexObject complexObj = (CComplexObject) cobj;
+            for (CAttribute attribute : complexObj.getAttributes()) {
+                fillDefaultExistence(complexObj, attribute);
+            }
+            for (CAttributeTuple cAttributeTuple : complexObj.getAttributeTuples()) {
+                for (CObjectTuple cObjectTuple : cAttributeTuple.getChildren()) {
+                    for (CPrimitiveObject cPrimitiveObject : cObjectTuple.getMembers()) {
+                        fillDefaultOccurrences(null, cPrimitiveObject);
+                    }
+                }
+            }
+        }
+    }
+
+    private void fillDefaultExistence(CComplexObject parentConstraint, CAttribute attribute) {
+        if (attribute.getExistence() == null) {
+            RmTypeAttribute typeAttribute = rmModel.getRmAttribute(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
+            attribute.setExistence(AdlUtils.makeClone(typeAttribute.getExistence()));
+        }
+        for (CObject cObject : attribute.getChildren()) {
+            fillDefaultOccurrences(attribute, cObject);
+        }
+    }
+
 
 }

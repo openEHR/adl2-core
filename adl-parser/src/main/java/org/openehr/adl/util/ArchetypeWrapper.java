@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.serializer;
+package org.openehr.adl.util;
 
 import com.google.common.collect.Lists;
 import org.openehr.jaxb.am.*;
@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * @author Marko Pipan
  */
-public class ArchetypeMapHolder {
+public class ArchetypeWrapper {
     private final Archetype archetype;
     // terminology, code -> value
     private final Map<String, Map<String, CodePhrase>> terminologyBindings;
@@ -42,13 +42,17 @@ public class ArchetypeMapHolder {
     private final Map<String, Map<String, Map<String, String>>> constraintDefinitions;
     private final Map<String, List<String>> valueSets;
 
-    public ArchetypeMapHolder(Archetype archetype) {
+    public ArchetypeWrapper(Archetype archetype) {
         this.archetype = archetype;
         terminologyBindings = parseTerminologyBindings(archetype.getOntology());
         terminologyDefinitions = parseCodeDefinitionSet(archetype.getOntology().getTermDefinitions());
         constraintDefinitions = parseCodeDefinitionSet(archetype.getOntology().getConstraintDefinitions());
         valueSets = parseValueSets(archetype.getOntology().getValueSets());
 
+    }
+
+    public Archetype getArchetype() {
+        return archetype;
     }
 
     private Map<String, List<String>> parseValueSets(List<ValueSetItem> valueSets) {

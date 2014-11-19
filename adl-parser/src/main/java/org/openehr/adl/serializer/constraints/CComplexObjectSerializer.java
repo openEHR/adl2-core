@@ -54,7 +54,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
         }
         builder.append("matches {");
         if (cobj.getNodeId() != null) {
-            builder.lineComment(serializer.getArchetypeMapHolder().getTermText(cobj.getNodeId()));
+            builder.lineComment(serializer.getArchetypeWrapper().getTermText(cobj.getNodeId()));
         }
 
         buildAttributesAndTuples(cobj);

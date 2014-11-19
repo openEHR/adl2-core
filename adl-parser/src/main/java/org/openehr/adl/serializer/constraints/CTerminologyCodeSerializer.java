@@ -70,7 +70,7 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
             } else {
                 builder.append(cobj.getAssumedValue() != null ? ";" : "]");
             }
-            builder.lineComment(serializer.getArchetypeMapHolder().getTermText(code));
+            builder.lineComment(serializer.getArchetypeWrapper().getTermText(code));
         }
         if (cobj.getAssumedValue() != null) {
             builder.newline();
@@ -85,9 +85,9 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
         if (cobj.getCodeList().size() != 1) {
             return super.getSimpleCommentText(cobj);
         }
-        String text = serializer.getArchetypeMapHolder().getConstraintDefinitionText(cobj.getCodeList().get(0));
+        String text = serializer.getArchetypeWrapper().getConstraintDefinitionText(cobj.getCodeList().get(0));
         if (text==null) {
-            text=serializer.getArchetypeMapHolder().getTermText(cobj.getCodeList().get(0));
+            text=serializer.getArchetypeWrapper().getTermText(cobj.getCodeList().get(0));
         }
         return text;
     }

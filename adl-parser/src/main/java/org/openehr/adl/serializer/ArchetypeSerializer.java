@@ -21,12 +21,11 @@
 package org.openehr.adl.serializer;
 
 import org.openehr.adl.serializer.constraints.*;
+import org.openehr.adl.util.ArchetypeWrapper;
 import org.openehr.jaxb.am.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.openehr.adl.serializer.ArchetypeSerializeUtils.buildOccurrences;
 
 /**
  * @author Marko Pipan
@@ -34,7 +33,7 @@ import static org.openehr.adl.serializer.ArchetypeSerializeUtils.buildOccurrence
 public class ArchetypeSerializer {
     private final AdlStringBuilder builder;
     private final Archetype archetype;
-    private final ArchetypeMapHolder archetypeMapHolder;
+    private final ArchetypeWrapper archetypeWrapper;
     private final String defaultLanguage;
     private final Map<Class, ConstraintSerializer> constraintSerializers;
 
@@ -42,7 +41,7 @@ public class ArchetypeSerializer {
     private ArchetypeSerializer(Archetype archetype) {
         this.builder = new AdlStringBuilder();
         this.archetype = archetype;
-        this.archetypeMapHolder = new ArchetypeMapHolder(archetype);
+        this.archetypeWrapper = new ArchetypeWrapper(archetype);
         this.defaultLanguage = archetype.getOriginalLanguage().getCodeString();
 
 
@@ -83,7 +82,7 @@ public class ArchetypeSerializer {
         }
 
         if (archetype.getConcept() != null) {
-            String comment = archetypeMapHolder.getTermText(defaultLanguage, archetype.getConcept());
+            String comment = archetypeWrapper.getTermText(defaultLanguage, archetype.getConcept());
             builder.newline().append("concept").newIndentedline()
                     .append("[").append(archetype.getConcept()).append("]").lineComment(comment)
                     .unindent().newline();
@@ -142,8 +141,8 @@ public class ArchetypeSerializer {
         return archetype;
     }
 
-    public ArchetypeMapHolder getArchetypeMapHolder() {
-        return archetypeMapHolder;
+    public ArchetypeWrapper getArchetypeWrapper() {
+        return archetypeWrapper;
     }
 
     public String getDefaultLanguage() {

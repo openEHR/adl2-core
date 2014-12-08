@@ -132,4 +132,10 @@ public class ArchetypeWrapper {
         return getConstraintDefinitionText(archetype.getOriginalLanguage().getCodeString(), code);
     }
 
+    public List<String> getValueSet(String code) {
+        return valueSets.get(code);
+    }
+
+
+
 }

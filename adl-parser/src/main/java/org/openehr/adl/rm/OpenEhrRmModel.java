@@ -57,6 +57,7 @@ public class OpenEhrRmModel implements RmModel {
         return rmTypeGraph.tryGetNodeFromRmType(rmType)!=null;
     }
 
+    @Override
     public RmType getRmType(String rmType) {
         RmType node = rmTypeGraph.tryGetNodeFromRmType(rmType);
         if (node == null) {

@@ -77,7 +77,7 @@ public class ArchetypeSerializer {
 
         if (archetype.getParentArchetypeId()!=null) {
             builder.newline().append("specialize").newIndentedline()
-                    .append(archetype.getArchetypeId().getValue())
+                    .append(archetype.getParentArchetypeId().getValue())
                     .unindent().newline();
         }
 

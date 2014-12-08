@@ -43,7 +43,7 @@ public class ArtefactTypeTest extends ParserTestBase {
         Archetype template = parseArchetype("adl15/artefact_type/openEHR-EHR-ADMIN_ENTRY.template_overlay.v1.adls");
 
         assertThat(template.isIsOverlay()).isTrue();
-        assertThat(template.isIsTemplate()).isTrue();
+        assertThat(template.isIsTemplate()).isFalse();
     }
 
     @Test

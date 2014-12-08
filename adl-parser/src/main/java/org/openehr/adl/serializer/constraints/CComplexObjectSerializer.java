@@ -52,22 +52,19 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             buildOccurrences(builder, cobj.getOccurrences());
             builder.append("} ");
         }
-        builder.append("matches {");
-        if (cobj.getNodeId() != null) {
+        if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) {
+            builder.append("matches {*}");
             builder.lineComment(serializer.getArchetypeWrapper().getTermText(cobj.getNodeId()));
+        } else {
+            builder.append("matches {");
+            builder.lineComment(serializer.getArchetypeWrapper().getTermText(cobj.getNodeId()));
+            buildAttributesAndTuples(cobj);
+            builder.append("}");
         }
-
-        buildAttributesAndTuples(cobj);
-        builder.append("}");
         builder.unindent();
     }
 
     private void buildAttributesAndTuples(T cobj) {
-        if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) {
-            builder.append("*");
-            return;
-        }
-
         builder.indent().newline();
         for (CAttribute cattr : cobj.getAttributes()) {
             buildAttribute(cattr);

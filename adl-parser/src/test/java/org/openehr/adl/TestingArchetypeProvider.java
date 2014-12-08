@@ -83,9 +83,7 @@ public class TestingArchetypeProvider implements ArchetypeProvider {
 
 
     private FlatArchetype parseAndFlattenArchetype(String archetypeId) {
-        String classpath = archetypeIdToClasspathMap.get(archetypeId);
-        checkState(classpath != null, "No archetype with archetypeId=%s", archetypeId);
-        DifferentialArchetype differential = TestAdlParser.parseAdl(classpath);
+        DifferentialArchetype differential = getDifferentialArchetype(archetypeId);
         FlatArchetype parent;
         if (differential.getParentArchetypeId() != null) {
             parent = getArchetype(differential.getParentArchetypeId().getValue());
@@ -96,6 +94,13 @@ public class TestingArchetypeProvider implements ArchetypeProvider {
         return flattener.flatten(parent, differential);
     }
 
+
+    @Override
+    public DifferentialArchetype getDifferentialArchetype(String archetypeId) {
+        String classpath = archetypeIdToClasspathMap.get(archetypeId);
+        checkState(classpath != null, "No archetype with archetypeId=%s", archetypeId);
+        return TestAdlParser.parseAdl(classpath);
+    }
 
     @Override
     public FlatArchetype getArchetype(String archetypeId) {

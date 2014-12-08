@@ -103,8 +103,13 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
         assertThat(alertOntology.getTermDefinitions()).hasSize(1);
         assertThat(alertOntology.getTermDefinitions().get(0).getLanguage()).isEqualTo("en");
 
-
     }
+
+//    @Test
+//    public void testOverrideEmpty() throws Exception {
+//        FlatArchetype archetype = archetypeProvider.getArchetype("openEHR-EHR-COMPOSITION.override_empty.v1");
+//        System.out.println("archetype = " + archetype);
+//    }
 
 
     private void assertCArchetypeRoot(CComplexObject obj, String rmTypeName,

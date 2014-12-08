@@ -50,7 +50,10 @@ public class AdlStringBuilder {
     }
 
     private String quoteText(String str) {
-        str = str.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
+        str = StringUtils.replace(str, "\\", "\\\\");
+        str = StringUtils.replace(str, "\"", "\\\"");
+
+//        str = str.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\"");
         return "\""+str+"\"";
     }
 

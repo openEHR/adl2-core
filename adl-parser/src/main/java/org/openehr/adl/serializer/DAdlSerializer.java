@@ -83,13 +83,17 @@ public class DAdlSerializer {
                 if (value == null) continue;
                 if (value instanceof List && ((List) value).isEmpty()) continue;
                 String attribute = getAttributeForField(pd.getName());
-                values.add(new NameValue(attribute, value));
+                values.add(new NameValue(attribute, value, value instanceof List && isPlainType(((List)value).get(0))));
             }
 
             for (int i = 0; i < values.size(); i++) {
                 NameValue value = values.get(i);
                 builder.append(value.name).append(" = ");
-                serialize(value.value);
+                if (value.plain) {
+                    serializePlain(value.value);
+                } else {
+                    serialize(value.value);
+                }
                 if (i < values.size() - 1) {
                     builder.newline();
                 }
@@ -162,7 +166,8 @@ public class DAdlSerializer {
         } else if (item instanceof ValueSetItem) {
             ValueSetItem vsi = (ValueSetItem) item;
             serializeKey(vsi.getId());
-            serializePlain(vsi.getMembers());
+            serialize(item);
+            //serializePlain(vsi.getMembers());
         } else if (item instanceof String) {
             serializePlain(item);
         } else {
@@ -182,10 +187,12 @@ public class DAdlSerializer {
     private static class NameValue {
         final String name;
         final Object value;
+        final boolean plain;
 
-        private NameValue(String name, Object value) {
+        private NameValue(String name, Object value, boolean plain) {
             this.name = name;
             this.value = value;
+            this.plain=plain;
         }
     }
 }

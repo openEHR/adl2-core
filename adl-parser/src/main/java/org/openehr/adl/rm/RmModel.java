@@ -37,6 +37,8 @@ public interface RmModel {
      */
     Class<?> getRmClass(String rmType);
 
+    RmType getRmType(String rmType);
+
     /**
      * Gets the type name of a particular java class
      *

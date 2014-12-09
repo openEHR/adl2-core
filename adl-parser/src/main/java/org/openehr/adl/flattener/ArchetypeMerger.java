@@ -22,12 +22,8 @@ package org.openehr.adl.flattener;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.openehr.adl.am.AmObjectNotFoundException;
-import org.openehr.adl.am.AmQuery;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
-import org.openehr.adl.rm.RmTypeAttribute;
-import org.openehr.adl.util.AdlUtils;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
@@ -37,10 +33,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
-import static org.openehr.adl.util.AdlUtils.front;
-import static org.openehr.adl.util.AdlUtils.makeClone;
+import static org.openehr.adl.util.AdlUtils.*;
 
 /**
  * Merges a specialized differential specialized archetype with its flat parent to produce a flat version of the
@@ -64,7 +59,7 @@ class ArchetypeMerger {
      * @param specialized Specialized archetype
      */
     void merge(FlatArchetype flatParent, FlatArchetype specialized) {
-        expandAttributeNodes(RmPath.ROOT, flatParent.getDefinition(), specialized.getDefinition());
+        expandAttributeNodes(specialized.getDefinition());
         flattenCObject(RmPath.ROOT, null, flatParent.getDefinition(), specialized.getDefinition());
 
 
@@ -79,31 +74,85 @@ class ArchetypeMerger {
 
 
     /* expands differential paths into actual nodes */
-    private void expandAttributeNodes(RmPath path, CComplexObject flatParent, CComplexObject specialized) {
-        ListIterator<CAttribute> iterator = specialized.getAttributes().listIterator();
-        while (iterator.hasNext()) {
-            CAttribute specializedAttribute = iterator.next();
-            CAttribute attribute;
-            if (specializedAttribute.getDifferentialPath() != null) {
-                attribute = expandAttribute(path, flatParent, specializedAttribute);
-                iterator.set(attribute);
-            } else {
-                attribute = specializedAttribute;
+    private void expandAttributeNodes(CComplexObject sourceObject) {
+        List<CAttribute> differentialAttributes = Lists.newArrayList();
+        for (CAttribute cAttribute : sourceObject.getAttributes()) {
+            if (cAttribute.getDifferentialPath() != null) {
+                differentialAttributes.add(cAttribute);
             }
 
-            CAttribute parentAttribute = findAttribute(flatParent.getAttributes(), attribute.getRmAttributeName());
-            if (parentAttribute != null) {
+        }
 
-                for (CObject cObject : attribute.getChildren()) {
-                    if (cObject instanceof CComplexObject) {
-                        CObject parentChild = findChild(parentAttribute, cObject.getNodeId());
-                        RmPath childPath = path.resolve(attribute.getRmAttributeName(), cObject.getNodeId());
-                        if (parentChild instanceof CComplexObject) {
-                            expandAttributeNodes(childPath, (CComplexObject) parentChild, (CComplexObject) cObject);
-                        }
-                    }
+        for (CAttribute specializedAttribute : differentialAttributes) {
+            expandAttribute(sourceObject, specializedAttribute);
+            sourceObject.getAttributes().remove(specializedAttribute);
+        }
+
+        for (CAttribute cAttribute : sourceObject.getAttributes()) {
+            for (CObject cObject : cAttribute.getChildren()) {
+                if (cObject instanceof CComplexObject) {
+                    expandAttributeNodes((CComplexObject) cObject);
                 }
             }
+        }
+    }
+
+    private CAttribute expandAttribute(CComplexObject sourceObject, CAttribute specializedAttribute) {
+        checkArgument(specializedAttribute.getDifferentialPath() != null);
+
+        RmPath differentialPath = RmPath.valueOf(specializedAttribute.getDifferentialPath());
+
+        CAttribute targetAttribute = makeClone(specializedAttribute);
+        targetAttribute.setDifferentialPath(null);
+        targetAttribute.setRmAttributeName(differentialPath.getAttribute());
+
+        return expandAttribute(sourceObject, differentialPath.getParent().segments(), targetAttribute);
+    }
+
+    private CAttribute expandAttribute(CComplexObject sourceObject, List<RmPath> intermediateSegments, CAttribute targetAttribute) {
+        if (intermediateSegments.isEmpty()) {
+            sourceObject.getAttributes().add(targetAttribute);
+            return targetAttribute;
+        }
+
+        RmPath segment = head(intermediateSegments);
+
+        CAttribute existing = findAttribute(sourceObject.getAttributes(), segment.getAttribute());
+
+        if (existing != null) { // attribute already exist, merge with it
+            CComplexObject newSource = null;
+            if (segment.getNodeId() == null && !existing.getChildren().isEmpty()) {
+                newSource = (CComplexObject) existing.getChildren().get(0);
+            } else {
+                for (CObject cObject : existing.getChildren()) {
+                    if (cObject.getNodeId() != null && cObject.getNodeId().equals(segment.getNodeId())) {
+                        newSource = (CComplexObject) cObject;
+                        break;
+                    }
+                }
+                if (newSource == null) { // constraint on existing attribute does not exist, add it
+                    newSource = new CComplexObject();
+                    newSource.setNodeId(segment.getNodeId());
+                    existing.getChildren().add(newSource);
+                }
+            }
+
+            expandAttribute(newSource, tail(intermediateSegments), targetAttribute);
+            return existing;
+        } else { // attribute not found on sourceObject, create it
+
+            CAttribute newAttribute = new CAttribute();
+            newAttribute.setRmAttributeName(segment.getAttribute());
+
+            CComplexObject newSource = new CComplexObject();
+            newSource.setNodeId(segment.getNodeId());
+            newAttribute.getChildren().add(newSource);
+
+            sourceObject.getAttributes().add(newAttribute);
+
+            expandAttribute(newSource, tail(intermediateSegments), targetAttribute);
+
+            return newAttribute;
         }
     }
 
@@ -261,59 +310,6 @@ class ArchetypeMerger {
     }
 
 
-    private CAttribute createIntermediateNodes(RmPath rmPath, List<AmQuery.Segment> parentSegments, CAttribute specialized) {
-
-        CAttribute result = specialized;
-        RmPath pathSegment = rmPath;
-        for (int i = parentSegments.size() - 1; i >= 0; i--) {
-            AmQuery.Segment parentSegment = parentSegments.get(i);
-
-            result = createIntermediateNode(pathSegment, parentSegment, result);
-
-            pathSegment = pathSegment.getParent();
-        }
-        return result;
-    }
-
-    private CAttribute createIntermediateNode(RmPath pathSegment, AmQuery.Segment parentSegment, CAttribute expandedAttribute) {
-        CAttribute result = makeClone(parentSegment.getAttribute());
-
-        // put expandedAttribute into its proper place in the result attribute
-        for (CObject cObject : result.getChildren()) {
-            if (atCodeMatches(pathSegment.getNodeId(), cObject.getNodeId())) {
-                ListIterator<CAttribute> iterator = ((CComplexObject) cObject).getAttributes().listIterator();
-                while (iterator.hasNext()) {
-                    CAttribute parentAttribute = iterator.next();
-                    if (parentAttribute.getRmAttributeName().equals(expandedAttribute.getRmAttributeName())) {
-                        iterator.set(expandedAttribute);
-                        return result;
-                    }
-                }
-                throw new AdlFlattenerException("No parent attribute found for attribute " + expandedAttribute.getRmAttributeName());
-            }
-        }
-        throw new AdlFlattenerException("No parent object found for nodeId " + pathSegment.getNodeId());
-    }
-
-    private CAttribute expandAttribute(RmPath path, CComplexObject flatParent, CAttribute differentialAttribute) {
-        RmPath rmPath = RmPath.valueOf(differentialAttribute.getDifferentialPath());
-        List<AmQuery.Segment> parentSegments;
-        try {
-            parentSegments = AmQuery.segments(flatParent, differentialAttribute.getDifferentialPath());
-        } catch (AmObjectNotFoundException e) {
-            throw new AdlFlattenerException(
-                    String.format("Differential path not found: %s at %s", differentialAttribute.getDifferentialPath(), path));
-        }
-
-
-        CAttribute specialized = makeClone(differentialAttribute);
-        specialized.setDifferentialPath(null);
-        specialized.setRmAttributeName(rmPath.getAttribute());
-
-        return createIntermediateNodes(rmPath.getParent(), front(parentSegments), specialized);
-    }
-
-
     private <T> T first(@Nullable T first, @Nullable T second) {
         if (first != null) return first;
         if (second != null) return second;
@@ -341,6 +337,8 @@ class ArchetypeMerger {
 
     private boolean atCodeMatches(@Nullable String atCode, @Nullable String candidate) {
         if (atCode == null) return true;
+        if (candidate==null) return true;
+
         if (atCode.equals(candidate)) return true;
         if (candidate != null && candidate.startsWith(atCode + ".")) {
             return true;

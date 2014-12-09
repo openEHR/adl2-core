@@ -105,11 +105,12 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     }
 
-//    @Test
-//    public void testOverrideEmpty() throws Exception {
-//        FlatArchetype archetype = archetypeProvider.getArchetype("openEHR-EHR-COMPOSITION.override_empty.v1");
-//        System.out.println("archetype = " + archetype);
-//    }
+    @Test
+    public void testOverrideEmpty() throws Exception {
+        FlatArchetype archetype = archetypeProvider.getArchetype("openEHR-EHR-COMPOSITION.override_empty.v1");
+        CArchetypeRoot cArchetypeRoot = AmQuery.get(archetype, "content");
+        assertThat(cArchetypeRoot.getArchetypeId().getValue()).isEqualTo("openEHR-EHR-OBSERVATION.body_weight.v1");
+    }
 
 
     private void assertCArchetypeRoot(CComplexObject obj, String rmTypeName,

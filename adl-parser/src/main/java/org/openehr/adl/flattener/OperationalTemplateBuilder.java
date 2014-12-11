@@ -111,7 +111,7 @@ public class OperationalTemplateBuilder {
             return makeClone(targetNode);
         } else if (source instanceof CArchetypeRoot) {
             CArchetypeRoot t = (CArchetypeRoot) source;
-            final String archetypeId = t.getArchetypeId() != null ? t.getArchetypeId().getValue() : t.getTemplateId().getValue();
+            final String archetypeId = t.getArchetypeRef();
             FlatArchetype targetArchetype = archetypeProvider.getArchetype(archetypeId);
             CObject result = createArchetypeRoot(targetArchetype, state);
             result.setNodeId(source.getNodeId());
@@ -167,12 +167,9 @@ public class OperationalTemplateBuilder {
     private CArchetypeRoot createArchetypeRoot(FlatArchetype source, State state) {
 
         CArchetypeRoot result = new CArchetypeRoot();
-        result.setArchetypeId(source.getArchetypeId());
+        result.setArchetypeRef(source.getArchetypeId().getValue());
         result.setRmTypeName(source.getDefinition().getRmTypeName());
         result.setOccurrences(makeClone(source.getDefinition().getOccurrences()));
-
-        result.setTemplateId(new TemplateId());
-        result.getTemplateId().setValue(source.getArchetypeId().getValue());
 
         final String archetypeId = source.getArchetypeId().getValue();
 

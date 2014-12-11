@@ -86,6 +86,7 @@
                     <xs:element name="rm_attribute_name" type="xs:string"/>
                     <xs:element name="existence" type="MultiplicityInterval"/>
                     <xs:element name="differential_path" type="xs:string" minOccurs="0"/>
+                    <xs:element name="is_multiple" type="xs:boolean"/>
                     <xs:element name="match_negated" type="xs:boolean"/>
                     <xs:element name="children" type="C_OBJECT" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="cardinality" type="CARDINALITY"/>

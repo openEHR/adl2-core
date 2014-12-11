@@ -123,13 +123,19 @@ public class AmQuery {
         for (CAttribute cAttribute : attributes) {
             if (cAttribute.getRmAttributeName().equals(attribute)) {
                 for (CObject cObject : cAttribute.getChildren()) {
-                    if (nodeId == null || nodeId.equals(cObject.getNodeId())) {
+                    if (nodeIdMatches(cObject.getNodeId(), nodeId)) {
                         return new Segment(cAttribute, cObject);
                     }
                 }
             }
         }
         return null;
+    }
+
+    private static boolean nodeIdMatches(String candidateNodeId, String nodeId) {
+        return nodeId == null
+               || nodeId.equals(candidateNodeId)
+               || candidateNodeId != null && candidateNodeId.startsWith(nodeId + ".");
     }
 
     public static class Segment {

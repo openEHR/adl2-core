@@ -55,11 +55,11 @@
         <xs:complexContent>
             <xs:extension base="C_COMPLEX_OBJECT">
                 <xs:sequence>
-                    <xs:element name="archetype_id" type="ARCHETYPE_ID"/>
-                    <xs:element name="template_id" type="TEMPLATE_ID" minOccurs="0"/>
+                    <xs:element name="archetype_ref" type="xs:string"/>
+                    <!--<xs:element name="template_id" type="TEMPLATE_ID" minOccurs="0"/>-->
                     <!--<xs:element name="default_values" type="DEFAULT_VALUE" minOccurs="0" maxOccurs="unbounded"/>-->
-                    <xs:element name="term_definitions" type="ARCHETYPE_TERM" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="term_bindings" type="TermBindingSet" minOccurs="0" maxOccurs="unbounded"/>
+                    <!--<xs:element name="term_definitions" type="ARCHETYPE_TERM" minOccurs="0" maxOccurs="unbounded"/>-->
+                    <!--<xs:element name="term_bindings" type="TermBindingSet" minOccurs="0" maxOccurs="unbounded"/>-->
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

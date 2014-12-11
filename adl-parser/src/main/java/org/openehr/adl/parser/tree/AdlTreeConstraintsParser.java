@@ -291,7 +291,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         if (isType(tArchetypeReference.getChild(index), AdlParser.AT_CODE_VALUE)) {
             result.setNodeId(tArchetypeReference.getChild(index++).getText());
         }
-        result.setArchetypeId(newArchetypeId(checkNotNull(collectText(tArchetypeReference.getChild(index++)))));
+        result.setArchetypeRef(checkNotNull(collectText(tArchetypeReference.getChild(index++))));
 
         if (isType(tArchetypeReference.getChild(index), AdlParser.OCCURRENCES)) {
             result.setOccurrences(parseOccurrences(tArchetypeReference.getChild(index++).getChild(0)));

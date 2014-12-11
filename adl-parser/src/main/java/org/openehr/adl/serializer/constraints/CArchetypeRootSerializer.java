@@ -34,21 +34,13 @@ public class CArchetypeRootSerializer extends ConstraintSerializer<CArchetypeRoo
     @Override
     public void serialize(CArchetypeRoot cobj) {
         builder.indent().newline();
-        if (cobj.getTemplateId()!=null) {
-            builder.append("use_template");
-        } else {
-            builder.append("use_archetype");
-        }
+        builder.append("use_archetype");
         builder.append(" ").append(cobj.getRmTypeName());
         builder.append("[");
-        if (cobj.getNodeId()!=null) {
+        if (cobj.getNodeId() != null) {
             builder.append(cobj.getNodeId()).append(", ");
         }
-        if (cobj.getTemplateId()!=null) {
-            builder.append(cobj.getTemplateId().getValue());
-        } else {
-            builder.append(cobj.getArchetypeId().getValue());
-        }
+        builder.append(cobj.getArchetypeRef());
         builder.append("]");
 
         builder.unindent();

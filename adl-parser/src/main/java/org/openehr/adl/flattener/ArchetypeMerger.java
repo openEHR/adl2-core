@@ -22,16 +22,14 @@ package org.openehr.adl.flattener;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -180,7 +178,30 @@ class ArchetypeMerger {
             }
         }
 
+
+        // merge tuples
+        Set<TreeSet<String>> tupleAttributes = new HashSet<>();
+        for (CAttributeTuple attributeTuple : specialized.getAttributeTuples()) {
+            tupleAttributes.add(makeTupleAttributeSet(attributeTuple.getMembers()));
+        }
+
+        for (CAttributeTuple attributeTuple : flatParent.getAttributeTuples()) {
+            // skip tuples that are alread specialized
+            if (tupleAttributes.contains(makeTupleAttributeSet(attributeTuple.getMembers()))) continue;
+            // add from parent
+            specialized.getAttributeTuples().add(makeClone(attributeTuple));
+        }
+
     }
+
+    private TreeSet<String> makeTupleAttributeSet(List<CAttribute> members) {
+        TreeSet<String> result = new TreeSet<>();
+        for (CAttribute member : members) {
+            result.add(member.getRmAttributeName());
+        }
+        return result;
+    }
+
 
 //    private boolean isEmptyInterval(MultiplicityInterval interval) {
 //        if (interval==null) return false;
@@ -224,33 +245,15 @@ class ArchetypeMerger {
     private List<Pair<CObject>> getChildPairs(RmPath path, CAttribute parent, CAttribute specialized) {
         List<Pair<CObject>> result = new ArrayList<>();
         for (CObject parentChild : parent.getChildren()) {
-            result.add(new Pair<>(parentChild, findChild(specialized, parentChild.getNodeId())));
+            result.add(new Pair<>(parentChild, findSpecializedConstraintOfParentNode(specialized, parentChild.getNodeId())));
         }
         for (CObject specializedChild : specialized.getChildren()) {
-            CObject parentChild = findChild(parent, specializedChild.getNodeId());
+            CObject parentChild = findParentConstraintOfSpecializedNode(parent, specializedChild.getNodeId());
             if (parentChild == null) {
 
-                if (specializedChild.getSiblingOrder() != null) {
-                    int index = Integer.MIN_VALUE;
-                    int i = 0;
-                    while (i < result.size()) {
-                        Pair<CObject> pair = result.get(i);
-                        if (pair.parent != null && atCodeMatches(
-                                specializedChild.getSiblingOrder().getSiblingNodeId(),
-                                pair.parent.getNodeId())) {
-                            index = i;
-                            if (!specializedChild.getSiblingOrder().isIsBefore()) {
-                                index = ++i;
-                                while (i < result.size() && result.get(i).parent == null) {
-                                    index = ++i;
-                                }
-                            }
-                            break;
-                        }
-                        i++;
-                    }
-                    require(index >= 0, "Could order node with nodeId=%s: No child with nodeId=%s found in parent at %s",
-                            specializedChild.getNodeId(), specializedChild.getSiblingOrder().getSiblingNodeId(), path);
+                int index = getOrderIndex(path, result, specializedChild);
+
+                if (index >= 0) {
                     result.add(index, new Pair<>(parentChild, specializedChild));
                 } else {
                     result.add(new Pair<>(parentChild, specializedChild));
@@ -259,6 +262,34 @@ class ArchetypeMerger {
             }
         }
         return result;
+    }
+
+    private int getOrderIndex(RmPath path, List<Pair<CObject>> result, CObject specializedChild) {
+        if (specializedChild.getSiblingOrder() != null) {
+            int index = Integer.MIN_VALUE;
+            int i = 0;
+            while (i < result.size()) {
+                Pair<CObject> pair = result.get(i);
+                if (pair.parent != null && atCodeMatchesOrSpecializes(
+                        specializedChild.getSiblingOrder().getSiblingNodeId(),
+                        pair.parent.getNodeId())) {
+                    index = i;
+                    if (!specializedChild.getSiblingOrder().isIsBefore()) {
+                        index = ++i;
+                        while (i < result.size() && result.get(i).parent == null) {
+                            index = ++i;
+                        }
+                    }
+                    break;
+                }
+                i++;
+            }
+            require(index >= 0, "Could order node with nodeId=%s: No child with nodeId=%s found in parent at %s",
+                    specializedChild.getNodeId(), specializedChild.getSiblingOrder().getSiblingNodeId(), path);
+            return index;
+        } else {
+            return -1;
+        }
     }
 
     private void flattenCObject(RmPath path, @Nullable CAttribute container, CObject parent, CObject specialized) {
@@ -278,7 +309,7 @@ class ArchetypeMerger {
                 specialized.getRmTypeName(), parent.getRmTypeName());
 
 
-        if (specialized instanceof CComplexObject) {
+        if (specialized instanceof CComplexObject && parent instanceof CComplexObject) {
             flattenCComplexObject(path, (CComplexObject) parent, (CComplexObject) specialized);
         }
 
@@ -319,7 +350,7 @@ class ArchetypeMerger {
     @Nullable
     private CAttribute findAttribute(List<CAttribute> attributes, String attributeName) {
         for (CAttribute attribute : attributes) {
-            if (attribute.getRmAttributeName().equals(attributeName)) {
+            if (attribute.getRmAttributeName()!=null && attribute.getRmAttributeName().equals(attributeName)) {
                 return attribute;
             }
         }
@@ -327,20 +358,27 @@ class ArchetypeMerger {
     }
 
     @Nullable
-    private CObject findChild(CAttribute parent, @Nullable String nodeId) {
+    private CObject findParentConstraintOfSpecializedNode(CAttribute parent, @Nullable String nodeId) {
         for (CObject candidate : parent.getChildren()) {
-            if (atCodeMatches(nodeId, candidate.getNodeId())) return candidate;
+            if (atCodeMatchesOrSpecializes(nodeId, candidate.getNodeId())) return candidate;
+        }
+        return null;
+    }
+    @Nullable
+    private CObject findSpecializedConstraintOfParentNode(CAttribute parent, @Nullable String nodeId) {
+        for (CObject candidate : parent.getChildren()) {
+            if (atCodeMatchesOrSpecializes(candidate.getNodeId(), nodeId)) return candidate;
         }
         return null;
     }
 
 
-    private boolean atCodeMatches(@Nullable String atCode, @Nullable String candidate) {
+    private boolean atCodeMatchesOrSpecializes(@Nullable String atCode, @Nullable String sameOrParentCode) {
         if (atCode == null) return true;
-        if (candidate==null) return true;
+        if (sameOrParentCode == null) return true;
 
-        if (atCode.equals(candidate)) return true;
-        if (candidate != null && candidate.startsWith(atCode + ".")) {
+        if (atCode.equals(sameOrParentCode)) return true;
+        if (atCode.startsWith(sameOrParentCode + ".")) {
             return true;
         }
         return false;

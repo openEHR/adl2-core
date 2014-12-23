@@ -55,7 +55,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
             nodeids.add(cObject.getNodeId());
         }
 
-        assertThat(nodeids).containsExactly("id6", "id7", "id8", "id9", "id10", "id11", "id0.2", "id12", "id13", "id10.1", "id10.2", "id0.1");
+        assertThat(nodeids).containsExactly("id6", "id7", "id8", "id9", "id10", "id11", "id0.2", "id12", "id13", "id0.1");
 
     }
 

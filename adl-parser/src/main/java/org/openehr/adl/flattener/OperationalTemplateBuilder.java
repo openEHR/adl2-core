@@ -65,6 +65,8 @@ public class OperationalTemplateBuilder {
     }
 
     private void buildOntology(Template target, State state) {
+        String mainArchetypeId = ((CArchetypeRoot)target.getDefinition()).getArchetypeRef();
+
         for (Map.Entry<String, FlatArchetype> entry : state.containedArchetypes.entrySet()) {
             String archetypeId = entry.getKey();
             FlatArchetype archetype = entry.getValue();
@@ -78,6 +80,7 @@ public class OperationalTemplateBuilder {
             dest.getTermDefinitions().addAll(source.getTermDefinitions());
             dest.getTermBindings().addAll(source.getTermBindings());
             dest.getConstraintDefinitions().addAll(source.getConstraintDefinitions());
+            dest.getValueSets().addAll(source.getValueSets());
 
             target.getComponentOntologies().add(makeClone(dest));
         }
@@ -170,6 +173,7 @@ public class OperationalTemplateBuilder {
         result.setArchetypeRef(source.getArchetypeId().getValue());
         result.setRmTypeName(source.getDefinition().getRmTypeName());
         result.setOccurrences(makeClone(source.getDefinition().getOccurrences()));
+        result.setNodeId(source.getDefinition().getNodeId());
 
         final String archetypeId = source.getArchetypeId().getValue();
 

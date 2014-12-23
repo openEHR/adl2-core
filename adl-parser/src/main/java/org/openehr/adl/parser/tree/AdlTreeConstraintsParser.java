@@ -211,6 +211,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
 
         final CAttribute result = new CAttribute();
         result.setCardinality(cardinality);
+        result.setIsMultiple(cardinality!=null);
 
         if (attributeNameOrPath.startsWith("/")) {
             assertAdlV15("path based attributes", attributeNode);

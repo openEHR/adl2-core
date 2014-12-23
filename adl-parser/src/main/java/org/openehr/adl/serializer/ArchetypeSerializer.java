@@ -48,10 +48,13 @@ public class ArchetypeSerializer {
         constraintSerializers = new HashMap<>();
         constraintSerializers.put(CString.class, new CStringSerializer(this));
         constraintSerializers.put(CReal.class, new CRealSerializer(this));
+        constraintSerializers.put(CInteger.class, new CIntegerSerializer(this));
         constraintSerializers.put(CComplexObject.class, new CComplexObjectSerializer(this));
         constraintSerializers.put(CArchetypeRoot.class, new CArchetypeRootSerializer(this));
         constraintSerializers.put(CTerminologyCode.class, new CTerminologyCodeSerializer(this));
         constraintSerializers.put(CDateTime.class, new CDateTimeSerializer(this));
+        constraintSerializers.put(CDate.class, new CDateSerializer(this));
+        constraintSerializers.put(CTime.class, new CTimeSerializer(this));
     }
 
 

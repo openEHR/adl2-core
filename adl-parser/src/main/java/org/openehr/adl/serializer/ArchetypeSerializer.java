@@ -54,6 +54,8 @@ public class ArchetypeSerializer {
         constraintSerializers.put(CTerminologyCode.class, new CTerminologyCodeSerializer(this));
         constraintSerializers.put(CDateTime.class, new CDateTimeSerializer(this));
         constraintSerializers.put(CDate.class, new CDateSerializer(this));
+        constraintSerializers.put(CBoolean.class, new CBooleanSerializer(this));
+        constraintSerializers.put(CDuration.class, new CDurationSerializer(this));
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
     }
 

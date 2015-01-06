@@ -1,0 +1,68 @@
+template (adl_version=1.5)
+    openEHR-EHR-COMPOSITION.override_empty.v1
+
+specialize
+    openEHR-EHR-COMPOSITION.encounter.v1
+
+language
+    original_language = <[ISO_639-1::en]>
+    translations = <
+        ["ko"] = <
+            accreditation = <"Medical Doctor">
+            author = <
+                ["name"] = <"Seung-Jong Yu">
+                ["organisation"] = <"Yonsei FM Clinic">
+                ["email"] = <"seungjong.yu@gmail.com">
+            >
+            language = <[ISO_639-1::ko]>
+        >
+        ["ar-sy"] = <
+            author = <
+                ["name"] = <"Mona Saleh">
+            >
+            language = <[ISO_639-1::ar-sy]>
+        >
+        ["es-ar"] = <
+            accreditation = <"Medical Doctor">
+            author = <
+                ["name"] = <"Edgardo Vazquez">
+                ["organisation"] = <"VinculoMedico">
+            >
+            language = <[ISO_639-1::es-ar]>
+        >
+    >
+    
+definition
+    COMPOSITION[id1.1] occurrences matches {1} matches {    -- Encounter Body Weight
+        /content matches {
+            use_archetype OBSERVATION[openEHR-EHR-OBSERVATION.body_weight.v1]
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["en"] = <
+            ["id1.1"] = <
+                ["text"] = <"Encounter Body Weight">
+                ["description"] = <"Generic encounter or progress note composition.">
+            >
+        >
+        ["ko"] = <
+            ["id1.1"] = <
+                ["text"] = <"환자대면">
+                ["description"] = <"외래기록, 경과기록, 간호기록와 일반노트와 같은 환자를 대면한 후 작성하는 기록 composition">
+            >
+        >
+        ["ar-sy"] = <
+            ["id1.1"] = <
+                ["text"] = <"المقابلة">
+                ["description"] = <"مقابلة جنيسة (غير محدودة الملكية) أو بِنْية ملاحظة تقدم حالة المريض">
+            >
+        >
+        ["es-ar"] = <
+            ["id1.1"] = <
+                ["text"] = <"Consulta">
+                ["description"] = <"Composition de consulta generica o notas de evolucion">
+            >
+        >
+    >

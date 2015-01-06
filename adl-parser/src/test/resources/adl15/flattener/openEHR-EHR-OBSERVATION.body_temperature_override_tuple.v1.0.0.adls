@@ -1,0 +1,263 @@
+archetype (adl_version=1.5)
+    openEHR-EHR-OBSERVATION.body_temperature_override_tuple.v1.0.0
+
+specialize
+    openEHR-EHR-OBSERVATION.body_temperature.v1
+
+language
+    original_language = <[ISO_639-1::en]>
+    translations = <
+        ["de"] = <
+            author = <
+                ["name"] = <"Sebastian Garde">
+                ["organisation"] = <"Ocean Informatics">
+            >
+            language = <[ISO_639-1::de]>
+        >
+        ["nb"] = <
+            author = <
+                ["name"] = <"Jostein Ven">
+                ["organisation"] = <"KITH">
+                ["email"] = <"jostein.ven@kith.no">
+            >
+            language = <[ISO_639-1::nb]>
+        >
+        ["ar-sy"] = <
+            author = <
+                ["name"] = <"Mona Saleh">
+            >
+            language = <[ISO_639-1::ar-sy]>
+        >
+        ["es-ar"] = <
+            accreditation = <"University of Morón">
+            author = <
+                ["name"] = <"Domingo Liotta">
+                ["organisation"] = <"University of Morón">
+            >
+            language = <[ISO_639-1::es-ar]>
+        >
+        ["fa"] = <
+            author = <
+                ["name"] = <"Shahla Foozonkhah">
+                ["organisation"] = <"Ocean Informatics">
+            >
+            language = <[ISO_639-1::fa]>
+        >
+        ["ru"] = <
+            author = <
+                ["name"] = <"Igor Lizunov">
+                ["email"] = <"i.lizunov@infinnity.ru">
+            >
+            language = <[ISO_639-1::ru]>
+        >
+        ["es"] = <
+            accreditation = <"University of Morón">
+            author = <
+                ["name"] = <"Domingo Liotta">
+                ["organisation"] = <"University of Morón">
+            >
+            language = <[ISO_639-1::es]>
+        >
+        ["pt-br"] = <
+            accreditation = <"P2D Health Advisor Council">
+            author = <
+                ["name"] = <"Marco Borges">
+                ["organisation"] = <"P2D">
+                ["email"] = <"marco.borges@p2d.com.br">
+            >
+            language = <[ISO_639-1::pt-br]>
+        >
+    >
+    
+definition
+    OBSERVATION[id1.1] occurrences matches {1} matches {    -- Body temperature
+        /data[id3]/events[id4]/data[id2]/items matches {
+            ELEMENT[id5.1] matches {    -- Temperature 2
+                value matches {
+                    DV_QUANTITY[id61.1] matches {*}
+                }
+            }
+        }
+        /data[id3]/events[id4]/state[id30]/items matches {
+            ELEMENT[id31.1] occurrences matches {1} matches {    -- Body exposure
+                value matches {
+                    DV_CODED_TEXT[id62.1] matches {
+                        defining_code matches {[ac1.1]}
+                    }
+                }
+            }
+            CLUSTER[id57.1] occurrences matches {0..0} matches {*}    -- Environmental Conditions
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["en"] = <
+            ["id1.1"] = <
+                ["text"] = <"Body temperature">
+                ["description"] = <"A measurement of the body temperature, which is a surrogate for the whole body temperature of the person.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperature 2">
+                ["description"] = <"The measured body temperature (as a surrogate for the whole body).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"Body exposure">
+                ["description"] = <"The thermal situation of the person who is having the temperature taken.">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Environmental Conditions">
+                ["description"] = <"Details about the environmental conditions at the time of temperature measurement.">
+            >
+        >
+        ["de"] = <
+            ["id1.1"] = <
+                ["text"] = <"Körpertemperatur">
+                ["description"] = <"Eine Messung der Körpertemperatur an einer bestimmten Stelle als Surrogat für den gesamten Körper der Person.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperatur">
+                ["description"] = <"Die gemessene Körpertemperatur (als Surrogat für den gesamten Körper).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"Körperexposition">
+                ["description"] = <"Die thermale Situation der Person, deren Temperatur gemessen wird.">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Umgebungsbedingungen">
+                ["description"] = <"Details über die Umgebungsbedingungen zur Zeit der Messung.">
+            >
+        >
+        ["nb"] = <
+            ["id1.1"] = <
+                ["text"] = <"Kroppstemperatur">
+                ["description"] = <"Måling av kroppstemperatur som skal gjenspeile den faktiske kroppstemperaturen">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperatur">
+                ["description"] = <"Målt kroppstemperatur (som gjenspeiler faktisk kroppstemperatur)">
+            >
+            ["id31.1"] = <
+                ["text"] = <"*Body exposure(en)">
+                ["description"] = <"*The thermal situation of the person who is having the temperature taken.(en)">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Omgivelser">
+                ["description"] = <"Detaljer om omgivelsene når temperatur ble målt">
+            >
+        >
+        ["ar-sy"] = <
+            ["id1.1"] = <
+                ["text"] = <"درجة حرارة الجسم">
+                ["description"] = <"قياس لدرجة حرارة الجسم, و التي تحل كبديل لدرجة الحرارة الكلية لجسم الشخص">
+            >
+            ["id5.1"] = <
+                ["text"] = <"درجة الحرارة">
+                ["description"] = <"درجة الحرارة التي تم قياسها - كبديل عن الجسم الكلي">
+            >
+            ["id31.1"] = <
+                ["text"] = <"تَعَرُّض الجسم">
+                ["description"] = <"الموقف الحراري للشخص الذي يتم قياس درجة حرارته">
+            >
+            ["id57.1"] = <
+                ["text"] = <"الظروف البيئية">
+                ["description"] = <"تفاصيل حول الظروف البيئية في وقت قياس درجة الحرارة">
+            >
+        >
+        ["es-ar"] = <
+            ["id1.1"] = <
+                ["text"] = <"Temperatura Corporal">
+                ["description"] = <"La medición de la temperatura corporal, que deriva en la temperatura de todo el cuerpo de una persona.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperatura">
+                ["description"] = <"La temperatura corporal medida (representa la temperatura de todo el cuerpo).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"Exposición corporal">
+                ["description"] = <"La situación térmica de la persona al cual se le registra la temperatura.">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Condiciones Ambientales">
+                ["description"] = <"Detalles de las condiciones ambientales al momento del registro de la temperatura.">
+            >
+        >
+        ["fa"] = <
+            ["id1.1"] = <
+                ["text"] = <"دمای بدن">
+                ["description"] = <"اندازه گیری دمای بدن که جایگزینی برای دمای کل بدن فرد است">
+            >
+            ["id5.1"] = <
+                ["text"] = <"دما">
+                ["description"] = <"دمای اندازه گیری شده از بدن (به عنوان جایگزینی برای کل بدن)٬">
+            >
+            ["id31.1"] = <
+                ["text"] = <"نحوه پوشش بدن">
+                ["description"] = <"وضعیت گرمایی (به لحاظ پوشش) فردی که دمایش گرفته شده است">
+            >
+            ["id57.1"] = <
+                ["text"] = <"شرایط محیطی">
+                ["description"] = <"جزییاتی در مورد شرایط محیطی در زمان اندازه گیری دما ">
+            >
+        >
+        ["ru"] = <
+            ["id1.1"] = <
+                ["text"] = <"Температура тела">
+                ["description"] = <"Измерение температуры тела, которая является суррогатом температуры тела человека в целом.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Температура(ru)">
+                ["description"] = <"Измеряется температура тела (как суррогат для всего тела).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"*Body exposure(en)">
+                ["description"] = <"*The thermal situation of the person who is having the temperature taken(en)">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Условия внешней среды">
+                ["description"] = <"Подробная информация об условиях внешней среды в момент изменения температуры.">
+            >
+        >
+        ["es"] = <
+            ["id1.1"] = <
+                ["text"] = <"Temperatura Corporal">
+                ["description"] = <"La medición de la temperatura corporal, que deriva en la temperatura de todo el cuerpo de una persona.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperatura">
+                ["description"] = <"La temperatura corporal medida (representa la temperatura de todo el cuerpo).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"Exposición corporal">
+                ["description"] = <"La situación térmica de la persona al cual se le registra la temperatura.">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Condiciones Ambientales">
+                ["description"] = <"Detalles de las condiciones ambientales al momento del registro de la temperatura.">
+            >
+        >
+        ["pt-br"] = <
+            ["id1.1"] = <
+                ["text"] = <"Temperatura Corporal">
+                ["description"] = <"O valor para a temperatura corporal, com valor médio equivalente para o corpo inteiro.">
+            >
+            ["id5.1"] = <
+                ["text"] = <"Temperatura">
+                ["description"] = <"A temperatura corporal aferida (média para o corpo inteiro).">
+            >
+            ["id31.1"] = <
+                ["text"] = <"Exposição do corpo">
+                ["description"] = <"A situação térmica da pessoa que tem a sua temperatura aferida.">
+            >
+            ["id57.1"] = <
+                ["text"] = <"Condições ambientais">
+                ["description"] = <"Detalhes sobre as condições ambientais no momento em que foi aferida a temperatura.">
+            >
+        >
+    >
+    value_sets = <
+        ["ac1.1"] = <
+            id = <"ac1.1">
+            members = <"at32", "at33">
+        >
+    >

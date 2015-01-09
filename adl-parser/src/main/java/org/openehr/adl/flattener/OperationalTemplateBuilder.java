@@ -21,6 +21,7 @@
 package org.openehr.adl.flattener;
 
 import com.google.common.collect.Sets;
+import org.openehr.adl.FlatArchetypeProvider;
 import org.openehr.am.AmObject;
 import org.openehr.adl.ArchetypeProvider;
 import org.openehr.adl.am.AmQuery;
@@ -28,7 +29,6 @@ import org.openehr.adl.util.walker.AbstractAmVisitor;
 import org.openehr.adl.util.walker.AmVisitContext;
 import org.openehr.adl.util.walker.ArchetypeWalker;
 import org.openehr.jaxb.am.*;
-import org.openehr.jaxb.rm.TemplateId;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -41,9 +41,9 @@ import static org.openehr.adl.util.AdlUtils.makeClone;
  * @author markopi
  */
 public class OperationalTemplateBuilder {
-    private final ArchetypeProvider archetypeProvider;
+    private final FlatArchetypeProvider archetypeProvider;
 
-    public OperationalTemplateBuilder(ArchetypeProvider archetypeProvider) {
+    public OperationalTemplateBuilder(FlatArchetypeProvider archetypeProvider) {
         this.archetypeProvider = archetypeProvider;
     }
 
@@ -115,7 +115,7 @@ public class OperationalTemplateBuilder {
         } else if (source instanceof CArchetypeRoot) {
             CArchetypeRoot t = (CArchetypeRoot) source;
             final String archetypeId = t.getArchetypeRef();
-            FlatArchetype targetArchetype = archetypeProvider.getArchetype(archetypeId);
+            FlatArchetype targetArchetype = archetypeProvider.getFlatArchetype(archetypeId);
             CObject result = createArchetypeRoot(targetArchetype, state);
             result.setNodeId(source.getNodeId());
             result.setSiblingOrder(source.getSiblingOrder());

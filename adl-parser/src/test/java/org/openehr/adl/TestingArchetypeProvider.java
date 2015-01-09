@@ -41,7 +41,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * @author markopi
  */
-public class TestingArchetypeProvider implements ArchetypeProvider {
+public class TestingArchetypeProvider implements FlatArchetypeProvider {
     private final Map<String, String> archetypeIdToClasspathMap;
     private final LoadingCache<String, FlatArchetype> archetypeIdToArchetypeMap = CacheBuilder.newBuilder()
             .build(new CacheLoader<String, FlatArchetype>() {
@@ -86,7 +86,7 @@ public class TestingArchetypeProvider implements ArchetypeProvider {
         DifferentialArchetype differential = getDifferentialArchetype(archetypeId);
         FlatArchetype parent;
         if (differential.getParentArchetypeId() != null) {
-            parent = getArchetype(differential.getParentArchetypeId().getValue());
+            parent = getFlatArchetype(differential.getParentArchetypeId().getValue());
         } else {
             parent = null;
         }
@@ -103,7 +103,7 @@ public class TestingArchetypeProvider implements ArchetypeProvider {
     }
 
     @Override
-    public FlatArchetype getArchetype(String archetypeId) {
+    public FlatArchetype getFlatArchetype(String archetypeId) {
         return archetypeIdToArchetypeMap.getUnchecked(archetypeId);
     }
 }

@@ -30,7 +30,7 @@
             <xs:element name="description" type="RESOURCE_DESCRIPTION" minOccurs="0"/>
             <xs:element name="translations" type="TRANSLATION_DETAILS" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="revision_history" type="REVISION_HISTORY" minOccurs="0"/>
-            <xs:element name="annotations" type="ANNOTATION_SET" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="annotations" type="RESOURCE_ANNOTATIONS" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="TRANSLATION_DETAILS">
@@ -64,13 +64,18 @@
             <xs:element name="other_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="ANNOTATION_SET">
+    <xs:complexType name="RESOURCE_ANNOTATIONS">
         <xs:sequence>
-            <xs:element name="items" type="ANNOTATION" maxOccurs="unbounded"/>
+            <xs:element name="items" type="RESOURCE_ANNOTATION_NODES" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RESOURCE_ANNOTATION_NODES">
+        <xs:sequence>
+            <xs:element name="items" type="RESOURCE_ANNOTATION_NODE_ITEMS" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="language" type="xs:string"/>
     </xs:complexType>
-    <xs:complexType name="ANNOTATION">
+    <xs:complexType name="RESOURCE_ANNOTATION_NODE_ITEMS">
         <xs:sequence>
             <xs:element name="items" type="StringDictionaryItem" maxOccurs="unbounded"/>
         </xs:sequence>

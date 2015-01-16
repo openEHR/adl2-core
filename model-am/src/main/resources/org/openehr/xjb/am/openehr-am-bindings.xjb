@@ -42,11 +42,14 @@
         <jxb:bindings node="//xsd:complexType[@name='StringDictionaryItem']">
             <jxb:class ref="org.openehr.jaxb.rm.StringDictionaryItem"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION']">
-            <jxb:class ref="org.openehr.jaxb.rm.Annotation"/>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATIONS']">
+            <jxb:class ref="org.openehr.jaxb.rm.ResourceAnnotations"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION_SET']">
-            <jxb:class ref="org.openehr.jaxb.rm.AnnotationSet"/>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATION_NODES']">
+            <jxb:class ref="org.openehr.jaxb.rm.ResourceAnnotationNodes"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATION_NODE_ITEMS']">
+            <jxb:class ref="org.openehr.jaxb.rm.ResourceAnnotationNodeItems"/>
         </jxb:bindings>
     </jxb:bindings>
 

@@ -21,13 +21,11 @@
 package org.openehr.adl.serializer;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableSet;
 import org.openehr.jaxb.am.ArchetypeTerm;
 import org.openehr.jaxb.am.CodeDefinitionSet;
 import org.openehr.jaxb.am.ValueSetItem;
-import org.openehr.jaxb.rm.CodePhrase;
-import org.openehr.jaxb.rm.ResourceDescriptionItem;
-import org.openehr.jaxb.rm.StringDictionaryItem;
-import org.openehr.jaxb.rm.TranslationDetails;
+import org.openehr.jaxb.rm.*;
 
 import javax.annotation.Nonnull;
 import java.beans.BeanInfo;
@@ -35,6 +33,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Marko Pipan
@@ -66,12 +65,17 @@ public class DAdlSerializer {
         }
     }
 
+    public void serializeBean(Object obj) {
+        serializeBean(obj, ImmutableSet.<String>of());
+    }
+
     /**
      * Serializes bean, without wrapping it with &lt;/&gt;
      *
      * @param obj bean to serialize
+     * @param attributesToIgnore attributes that are not written to dadl
      */
-    public void serializeBean(Object obj) {
+    public void serializeBean(Object obj, Set<String> attributesToIgnore) {
         builder.newIndentedline();
         try {
             BeanInfo info = Introspector.getBeanInfo(obj.getClass());
@@ -83,7 +87,9 @@ public class DAdlSerializer {
                 if (value == null) continue;
                 if (value instanceof List && ((List) value).isEmpty()) continue;
                 String attribute = getAttributeForField(pd.getName());
-                values.add(new NameValue(attribute, value, value instanceof List && isPlainType(((List)value).get(0))));
+                if (!attributesToIgnore.contains(attribute)) {
+                    values.add(new NameValue(attribute, value, value instanceof List && isPlainType(((List) value).get(0))));
+                }
             }
 
             for (int i = 0; i < values.size(); i++) {
@@ -167,14 +173,25 @@ public class DAdlSerializer {
             ValueSetItem vsi = (ValueSetItem) item;
             serializeKey(vsi.getId());
             serialize(item);
-            //serializePlain(vsi.getMembers());
+        } else if (item instanceof ResourceAnnotationNodes) {
+            ResourceAnnotationNodes vsi = (ResourceAnnotationNodes) item;
+            serializeKey(vsi.getLanguage());
+            builder.append("<");
+            serializeBean(vsi, ImmutableSet.of("language"));
+            builder.append(">");
+        } else if (item instanceof ResourceAnnotationNodeItems) {
+            ResourceAnnotationNodeItems vsi = (ResourceAnnotationNodeItems) item;
+            serializeKey(vsi.getPath());
+            builder.append("<");
+            serializeBean(vsi, ImmutableSet.of("path"));
+            builder.append(">");
         } else if (item instanceof String) {
             serializePlain(item);
         } else {
             throw new IllegalArgumentException(item.getClass().getName());
         }
-
     }
+
 
     private static String getAttributeForField(@Nonnull String fieldName) {
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);

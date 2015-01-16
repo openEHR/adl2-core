@@ -27,6 +27,7 @@ import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
+import org.openehr.jaxb.rm.ResourceAnnotations;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -62,7 +63,12 @@ class ArchetypeMerger {
 
 
         mergeOntologies(flatParent.getOntology(), specialized.getOntology());
-        annotationsMerger.merge(flatParent.getAnnotations(), specialized.getAnnotations());
+        if (flatParent.getAnnotations()!=null) {
+            if (specialized.getAnnotations()==null) {
+                specialized.setAnnotations(new ResourceAnnotations());
+            }
+            annotationsMerger.merge(flatParent.getAnnotations().getItems(), specialized.getAnnotations().getItems());
+        }
     }
 
 

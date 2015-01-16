@@ -81,7 +81,8 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
                     result.setOntology(parseOntology(child.getChild(0)));
                     break;
                 case AdlParser.ANNOTATIONS:
-                    parseAnnotations(result.getAnnotations(), child.getChild(0));
+                    result.setAnnotations(new ResourceAnnotations());
+                    parseAnnotations(result.getAnnotations().getItems(), child.getChild(0));
                     break;
                 default:
                     throw new RuntimeRecognitionException(child);
@@ -90,7 +91,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private void parseAnnotations(List<AnnotationSet> target, Tree tAnnotations) {
+    private void parseAnnotations(List<ResourceAnnotationNodes> target, Tree tAnnotations) {
         if (tAnnotations.getType() == AdlParser.AST_ADL_OBJECT) {
             tAnnotations = dadl.parseAdlObject(tAnnotations).get("items");
         }
@@ -100,7 +101,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
 
         for (Map.Entry<String, Tree> entry : languageMap.entrySet()) {
             String language = entry.getKey();
-            AnnotationSet annotationSet = new AnnotationSet();
+            ResourceAnnotationNodes annotationSet = new ResourceAnnotationNodes();
             annotationSet.setLanguage(language);
             parseSingleLanguageAnnotations(annotationSet.getItems(), entry.getValue());
             target.add(annotationSet);
@@ -108,7 +109,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
 
     }
 
-    private void parseSingleLanguageAnnotations(List<Annotation> target, Tree tAnnotations) {
+    private void parseSingleLanguageAnnotations(List<ResourceAnnotationNodeItems> target, Tree tAnnotations) {
         if (tAnnotations.getType() == AdlParser.AST_ADL_OBJECT) {
             tAnnotations = dadl.parseAdlObject(tAnnotations).get("items");
         }
@@ -116,7 +117,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         Map<String, Tree> pathMap = dadl.parseAdlMap(tAnnotations);
 
         for (Map.Entry<String, Tree> entry : pathMap.entrySet()) {
-            Annotation annotation = new Annotation();
+            ResourceAnnotationNodeItems annotation = new ResourceAnnotationNodeItems();
             annotation.setPath(entry.getKey());
             Tree tValue = entry.getValue();
             if (tValue.getType() == AdlParser.AST_ADL_OBJECT) {

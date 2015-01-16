@@ -300,14 +300,17 @@
         <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION']">
             <jxb:class name="ResourceDescription" implClass="ResourceDescription"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION']">
-            <jxb:class name="Annotation" implClass="Annotation"/>
-        </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='ANNOTATION_SET']">
-            <jxb:class name="AnnotationSet" implClass="AnnotationSet"/>
-        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='RESOURCE_DESCRIPTION_ITEM']">
             <jxb:class name="ResourceDescriptionItem" implClass="ResourceDescriptionItem"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATIONS']">
+            <jxb:class name="ResourceAnnotations"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATION_NODES']">
+            <jxb:class name="ResourceAnnotationNodes"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='RESOURCE_ANNOTATION_NODE_ITEMS']">
+            <jxb:class name="ResourceAnnotationNodeItems"/>
         </jxb:bindings>
     </jxb:bindings>
 

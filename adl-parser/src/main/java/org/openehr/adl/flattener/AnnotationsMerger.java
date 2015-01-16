@@ -21,8 +21,9 @@
 package org.openehr.adl.flattener;
 
 import com.google.common.base.Function;
-import org.openehr.jaxb.rm.Annotation;
-import org.openehr.jaxb.rm.AnnotationSet;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
+import org.openehr.jaxb.rm.ResourceAnnotations;
 import org.openehr.jaxb.rm.StringDictionaryItem;
 
 import javax.annotation.Nullable;
@@ -34,15 +35,15 @@ import static org.openehr.adl.util.AdlUtils.makeClone;
  * @author markopi
  */
 public class AnnotationsMerger {
-    private final Function<AnnotationSet, String> ANNOTATION_SET_KEY_EXTRACTOR = new Function<AnnotationSet, String>() {
+    private final Function<ResourceAnnotationNodes, String> ANNOTATION_SET_KEY_EXTRACTOR = new Function<ResourceAnnotationNodes, String>() {
         @Override
-        public String apply(AnnotationSet input) {
+        public String apply(ResourceAnnotationNodes input) {
             return input.getLanguage();
         }
     };
-    private final Function<Annotation, String> ANNOTATION_KEY_EXTRACTOR = new Function<Annotation, String>() {
+    private final Function<ResourceAnnotationNodeItems, String> ANNOTATION_KEY_EXTRACTOR = new Function<ResourceAnnotationNodeItems, String>() {
         @Override
-        public String apply(Annotation input) {
+        public String apply(ResourceAnnotationNodeItems input) {
             return input.getPath();
         }
     };
@@ -53,13 +54,13 @@ public class AnnotationsMerger {
         }
     };
 
-    public void merge(List<AnnotationSet> parent, List<AnnotationSet> target) {
+    public void merge(List<ResourceAnnotationNodes> parent, List<ResourceAnnotationNodes> target) {
         mergeAnnotationSets(target, parent);
     }
 
-    private void mergeAnnotationSets(List<AnnotationSet> target, List<AnnotationSet> parent) {
-        for (AnnotationSet parentItem : parent) {
-            AnnotationSet existing = find(target, parentItem.getLanguage(), ANNOTATION_SET_KEY_EXTRACTOR);
+    private void mergeAnnotationSets(List<ResourceAnnotationNodes> target, List<ResourceAnnotationNodes> parent) {
+        for (ResourceAnnotationNodes parentItem : parent) {
+            ResourceAnnotationNodes existing = find(target, parentItem.getLanguage(), ANNOTATION_SET_KEY_EXTRACTOR);
             if (existing != null) {
                 mergeAnnotations(existing.getItems(), parentItem.getItems());
             } else {
@@ -68,9 +69,9 @@ public class AnnotationsMerger {
         }
     }
 
-    private void mergeAnnotations(List<Annotation> target, List<Annotation> parent) {
-        for (Annotation parentItem : parent) {
-            Annotation existing = find(target, parentItem.getPath(), ANNOTATION_KEY_EXTRACTOR);
+    private void mergeAnnotations(List<ResourceAnnotationNodeItems> target, List<ResourceAnnotationNodeItems> parent) {
+        for (ResourceAnnotationNodeItems parentItem : parent) {
+            ResourceAnnotationNodeItems existing = find(target, parentItem.getPath(), ANNOTATION_KEY_EXTRACTOR);
             if (existing != null) {
                 mergeStringDictionaryItems(existing.getItems(), parentItem.getItems());
             } else {
@@ -98,6 +99,5 @@ public class AnnotationsMerger {
         }
         return null;
     }
-
 
 }

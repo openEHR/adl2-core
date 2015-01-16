@@ -22,8 +22,8 @@ package org.openehr.adl.parser.adl15;
 
 import org.openehr.adl.ParserTestBase;
 import org.openehr.jaxb.am.Archetype;
-import org.openehr.jaxb.rm.Annotation;
-import org.openehr.jaxb.rm.AnnotationSet;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -36,13 +36,13 @@ public class AnnotationsTest extends ParserTestBase {
     public void testRmPath() {
         Archetype archetype = parseArchetype("adl15/annotations/openEHR-EHR-COMPOSITION.annotations_rm_path.v1.adls");
 
-        assertThat(archetype.getAnnotations()).hasSize(1);
-        AnnotationSet en = archetype.getAnnotations().get(0);
+        assertThat(archetype.getAnnotations().getItems()).hasSize(1);
+        ResourceAnnotationNodes en = archetype.getAnnotations().getItems().get(0);
 
         assertThat(en.getLanguage()).isEqualTo("en");
         assertThat(en.getItems()).hasSize(3);
 
-        Annotation facilityName = en.getItems().get(2);
+        ResourceAnnotationNodeItems facilityName = en.getItems().get(2);
         assertThat(facilityName.getPath()).isEqualTo("/context/health_care_facility/name");
         assertThat(facilityName.getItems()).hasSize(1);
         assertThat(facilityName.getItems().get(0).getId())

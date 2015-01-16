@@ -113,8 +113,8 @@ public class AdlUtils {
         target.setOriginalLanguage(source.getOriginalLanguage());
         target.setParentArchetypeId(source.getParentArchetypeId());
         target.setRevisionHistory(source.getRevisionHistory());
+        target.setAnnotations(source.getAnnotations());
 
-        target.getAnnotations().addAll(source.getAnnotations());
         target.getInvariants().addAll(source.getInvariants());
         target.getTranslations().addAll(source.getTranslations());
         target.setIsOverlay(source.isIsOverlay());

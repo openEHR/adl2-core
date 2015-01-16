@@ -21,8 +21,8 @@
 package org.openehr.adl.flattener;
 
 import org.openehr.jaxb.am.FlatArchetype;
-import org.openehr.jaxb.rm.Annotation;
-import org.openehr.jaxb.rm.AnnotationSet;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -38,13 +38,13 @@ public class MergeAnnotationsTest extends FlattenerTestBase {
     public void testMergeAnnotations() {
         FlatArchetype archetype = parseAndFlattenArchetype("adl15/annotations/openEHR-EHR-EVALUATION.annotations_1st_child.v1.adls");
 
-        assertThat(archetype.getAnnotations()).hasSize(1);
+        assertThat(archetype.getAnnotations().getItems()).hasSize(1);
 
-        AnnotationSet en = archetype.getAnnotations().get(0);
+        ResourceAnnotationNodes en = archetype.getAnnotations().getItems().get(0);
         assertThat(en.getLanguage()).isEqualTo("en");
         assertThat(en.getItems()).hasSize(4);
 
-        Map<String, Annotation> enMap = annotationToMap(en.getItems());
+        Map<String, ResourceAnnotationNodeItems> enMap = annotationToMap(en.getItems());
 
         assertThat(enMap.get("/data[at0001]/items[at0.8]").getItems()).hasSize(3);
         Map<String, String> at08 = dictToMap(enMap.get("/data[at0001]/items[at0.8]").getItems());

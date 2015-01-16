@@ -115,6 +115,13 @@ public class ArchetypeSerializer {
 
         if (archetype.getOntology()!=null) {
             builder.newline().append("terminology").dadlBean(archetype.getOntology());
+            builder.newline();
+        }
+
+        if ((archetype.getAnnotations()!=null && !archetype.getAnnotations().getItems().isEmpty())) {
+            builder.newline().append("annotations");
+            builder.dadlBean(archetype.getAnnotations());
+            builder.newline();
         }
 
         return builder.toString();

@@ -25,8 +25,8 @@ import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.openehr.jaxb.am.FlatArchetype;
-import org.openehr.jaxb.rm.Annotation;
-import org.openehr.jaxb.rm.AnnotationSet;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,17 +57,17 @@ abstract public class FlattenerTestBase extends ParserTestBase {
         return flattener.flatten(parent, differential);
     }
 
-    protected Map<String, AnnotationSet> annotationSetToMap(List<AnnotationSet> items) {
-        Map<String, AnnotationSet> result = new HashMap<>();
-        for (AnnotationSet item : items) {
+    protected Map<String, ResourceAnnotationNodes> annotationSetToMap(List<ResourceAnnotationNodes> items) {
+        Map<String, ResourceAnnotationNodes> result = new HashMap<>();
+        for (ResourceAnnotationNodes item : items) {
             result.put(item.getLanguage(), item);
         }
         return result;
     }
 
-    protected Map<String, Annotation> annotationToMap(List<Annotation> items) {
-        Map<String, Annotation> result = new HashMap<>();
-        for (Annotation item : items) {
+    protected Map<String, ResourceAnnotationNodeItems> annotationToMap(List<ResourceAnnotationNodeItems> items) {
+        Map<String, ResourceAnnotationNodeItems> result = new HashMap<>();
+        for (ResourceAnnotationNodeItems item : items) {
             result.put(item.getPath(), item);
         }
         return result;

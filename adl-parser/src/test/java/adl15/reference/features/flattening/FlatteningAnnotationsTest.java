@@ -26,8 +26,8 @@ import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.openehr.jaxb.am.FlatArchetype;
-import org.openehr.jaxb.rm.Annotation;
-import org.openehr.jaxb.rm.AnnotationSet;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.openehr.jaxb.rm.StringDictionaryItem;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -57,8 +57,8 @@ public class FlatteningAnnotationsTest {
 
         FlatArchetype flattened = flatten(parent, specialized);
 
-        assertThat(flattened.getAnnotations()).hasSize(1);
-        AnnotationSet annotations = flattened.getAnnotations().get(0);
+        assertThat(flattened.getAnnotations().getItems()).hasSize(1);
+        ResourceAnnotationNodes annotations = flattened.getAnnotations().getItems().get(0);
         assertThat(annotations.getLanguage()).isEqualTo("en");
         assertThat(annotations.getItems()).hasSize(2);
 
@@ -80,8 +80,8 @@ public class FlatteningAnnotationsTest {
 
         FlatArchetype flattened = flatten(parent, specialized);
 
-        assertThat(flattened.getAnnotations()).hasSize(1);
-        AnnotationSet annotations = flattened.getAnnotations().get(0);
+        assertThat(flattened.getAnnotations().getItems()).hasSize(1);
+        ResourceAnnotationNodes annotations = flattened.getAnnotations().getItems().get(0);
         assertThat(annotations.getLanguage()).isEqualTo("en");
         assertThat(annotations.getItems()).hasSize(4);
 
@@ -102,8 +102,8 @@ public class FlatteningAnnotationsTest {
                 "medline ref", "this is a medline ref on allergic reaction"));
     }
 
-    private Map<String, String> getAnnotation(AnnotationSet annotations, String path) {
-        for (Annotation annotation : annotations.getItems()) {
+    private Map<String, String> getAnnotation(ResourceAnnotationNodes annotations, String path) {
+        for (ResourceAnnotationNodeItems annotation : annotations.getItems()) {
             if (annotation.getPath().equals(path)) {
                 Map<String, String> result = new LinkedHashMap<>();
                 for (StringDictionaryItem item : annotation.getItems()) {

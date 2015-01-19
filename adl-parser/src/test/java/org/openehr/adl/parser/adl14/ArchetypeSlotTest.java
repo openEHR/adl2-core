@@ -117,7 +117,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
                 expectedStringExpression, assertion.getStringExpression());
 
         // "archetype_id/value" refers to a string attribute
-        assertEquals("Left type inside this archetype slot is wrong", "String", left.getType());
+        assertEquals("Left type inside this archetype slot is wrong", RmTypes.STRING, left.getType());
         assertEquals("Left reference type inside this archetype slot is wrong", RmTypes.ReferenceType.ATTRIBUTE.toString(),
                 left.getReferenceType());
 

@@ -101,6 +101,23 @@ public final class RmType {
         return attributesMap;
     }
 
+    public RmTypeAttribute getAttribute(String attributeName) {
+        RmTypeAttribute result = attributesMap.get(attributeName);
+        if (result == null) {
+            // search for attribute on subclasses
+            for (RmType subtype : getChildren()) {
+                try {
+                    return subtype.getAttribute(attributeName);
+                } catch (RmModelException e) {
+                    // no attribute on this subclass
+                }
+            }
+            throw new RmModelException(String.format("Rm type %s has no attribute %s", rmType, attributeName));
+        }
+        return result;
+    }
+
+
     public String getDataAttribute() {
         return dataAttribute;
     }
@@ -117,12 +134,18 @@ public final class RmType {
         this.finalType = finalType;
     }
 
-    public Object newValueInstance() {
-        try {
-            return mainRmClass.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating new instance of type " + mainRmClass.getName(), e);
+
+    public boolean isSubclassOf(String rmType) {
+        RmType type = this;
+        while (type != null) {
+            if (type.getRmType().equals(rmType)) return true;
+            type = type.getParent();
         }
+        return false;
+    }
+
+    public boolean isSubclassOf(RmType rmType) {
+        return rmType != null && isSubclassOf(rmType.getRmType());
     }
 
     void setAttributes(List<RmTypeAttribute> attributes) {

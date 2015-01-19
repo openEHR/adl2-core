@@ -22,9 +22,9 @@ package org.openehr.adl.flattener;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
+import org.openehr.adl.rm.RmType;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.openehr.jaxb.rm.ResourceAnnotations;
@@ -59,12 +59,14 @@ class ArchetypeMerger {
      */
     void merge(FlatArchetype flatParent, FlatArchetype specialized) {
         expandAttributeNodes(specialized.getDefinition());
+//        AdlParserPostprocessor.fillRmTypes(rmModel, specialized);
+
         flattenCObject(RmPath.ROOT, null, flatParent.getDefinition(), specialized.getDefinition());
 
 
         mergeOntologies(flatParent.getOntology(), specialized.getOntology());
-        if (flatParent.getAnnotations()!=null) {
-            if (specialized.getAnnotations()==null) {
+        if (flatParent.getAnnotations() != null) {
+            if (specialized.getAnnotations() == null) {
                 specialized.setAnnotations(new ResourceAnnotations());
             }
             annotationsMerger.merge(flatParent.getAnnotations().getItems(), specialized.getAnnotations().getItems());
@@ -209,12 +211,6 @@ class ArchetypeMerger {
     }
 
 
-//    private boolean isEmptyInterval(MultiplicityInterval interval) {
-//        if (interval==null) return false;
-//        return Integer.valueOf(0).equals(interval.getLower()) && Integer.valueOf(0).equals(interval.getUpper());
-//    }
-
-
     private void mergeAttribute(CAttribute parent, CAttribute result) {
         result.setExistence(first(result.getExistence(), parent.getExistence()));
         result.setCardinality(first(result.getCardinality(), parent.getCardinality()));
@@ -251,7 +247,7 @@ class ArchetypeMerger {
     private List<Pair<CObject>> getChildPairs(RmPath path, CAttribute parent, CAttribute specialized) {
         List<Pair<CObject>> result = new ArrayList<>();
         for (CObject parentChild : parent.getChildren()) {
-            result.add(new Pair<>(parentChild, findSpecializedConstraintOfParentNode(specialized, parentChild.getNodeId())));
+            result.add(new Pair<>(parentChild, findSpecializedConstraintOfParentNode(specialized, parentChild)));
         }
         for (CObject specializedChild : specialized.getChildren()) {
             CObject parentChild = findParentConstraintOfSpecializedNode(parent, specializedChild.getNodeId());
@@ -308,10 +304,11 @@ class ArchetypeMerger {
             return;
         }
 
-        Class<?> parentRmClass = getRmClass(path, parent.getRmTypeName());
-        Class<?> specializedRmClass = getRmClass(path, specialized.getRmTypeName());
+        RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
+        RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
 
-        require(parentRmClass.isAssignableFrom(specializedRmClass), "Rm type %s is not a subclass of %s",
+
+        require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
                 specialized.getRmTypeName(), parent.getRmTypeName());
 
 
@@ -323,10 +320,6 @@ class ArchetypeMerger {
             negateCObject(parent, specialized);
         }
 
-    }
-
-    private Class<?> getRmClass(RmPath path, String rmTypeName) {
-        return rmModel.getRmClass(rmTypeName);
     }
 
     private void negateCObject(CObject parent, CObject specialized) {
@@ -356,7 +349,7 @@ class ArchetypeMerger {
     @Nullable
     private CAttribute findAttribute(List<CAttribute> attributes, String attributeName) {
         for (CAttribute attribute : attributes) {
-            if (attribute.getRmAttributeName()!=null && attribute.getRmAttributeName().equals(attributeName)) {
+            if (attribute.getRmAttributeName() != null && attribute.getRmAttributeName().equals(attributeName)) {
                 return attribute;
             }
         }
@@ -370,14 +363,23 @@ class ArchetypeMerger {
         }
         return null;
     }
+
     @Nullable
-    private CObject findSpecializedConstraintOfParentNode(CAttribute parent, @Nullable String nodeId) {
-        for (CObject candidate : parent.getChildren()) {
-            if (atCodeMatchesOrSpecializes(candidate.getNodeId(), nodeId)) return candidate;
+    private CObject findSpecializedConstraintOfParentNode(CAttribute specializedAttribute, CObject parentConstraint) {
+        for (CObject candidate : specializedAttribute.getChildren()) {
+            if (!atCodeMatchesOrSpecializes(candidate.getNodeId(), parentConstraint.getNodeId())) continue;
+
+            // rm type on the specialized constraint can only be null on intermediate nodes on differential path.
+            // Just accept the parent constraint, since differential paths are only allowed on aom 1.5, where node_id
+            // (already checked above) is always required.
+            if (candidate.getRmTypeName() != null) {
+                RmType specializedRmType = rmModel.getRmType(candidate.getRmTypeName());
+                if (!specializedRmType.isSubclassOf(parentConstraint.getRmTypeName())) continue;
+            }
+            return candidate;
         }
         return null;
     }
-
 
     private boolean atCodeMatchesOrSpecializes(@Nullable String atCode, @Nullable String sameOrParentCode) {
         if (atCode == null) return true;

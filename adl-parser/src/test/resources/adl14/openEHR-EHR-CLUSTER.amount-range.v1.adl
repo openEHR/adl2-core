@@ -36,11 +36,11 @@ definition
 			ELEMENT[at0001.1] matches {	-- Upper quantity
 				value matches {
 					DV_COUNT matches {
-						magnitude matches {|>=1|}
+						magnitude matches {|>=2|} -- changed to be different from parent, for testing
 					}
-					DV_PROPORTION matches {
-						numerator matches {|>=0.0|}
-						denominator matches {|>0.0|}
+					DV_PROPORTION matches { -- changed to be different from parent, for testing
+						numerator matches {|>=2.0|}
+						denominator matches {|>2.0|}
 					}
 				}
 			}
@@ -69,7 +69,6 @@ definition
 			}
 		}
 	}
-
 
 
 ontology

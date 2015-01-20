@@ -24,10 +24,11 @@ package org.openehr.adl.rm;
  * @author markopi
  */
 public class RmTypes {
-    public static final String INTEGER = "Integer";
-    public static final String BOOLEAN = "Boolean";
-    public static final String REAL = "Real";
-    public static final String STRING = "String";
+    public static final String INTEGER = "C_INTEGER";
+    public static final String BOOLEAN = "C_BOOLEAN";
+    public static final String REAL = "C_REAL";
+    public static final String STRING = "C_STRING";
+    public static final String TERMINOLOGY_CODE = "C_TERMINOLOGY_CODE";
     public static final String RM = "RM";
     public static final String DURATION = "DURATION";
     public static final String DATE_TIME = "DATE_TIME";

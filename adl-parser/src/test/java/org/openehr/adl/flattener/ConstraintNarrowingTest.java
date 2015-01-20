@@ -43,7 +43,8 @@ public class ConstraintNarrowingTest extends FlattenerTestBase {
         assertCAttribute(items, "items", MANDATORY, newCardinality(false, false, MANDATORY_UNBOUNDED), 7);
     }
 
-    @Test(expectedExceptions = AdlFlattenerException.class)
+    @Test(enabled = false, expectedExceptions = AdlFlattenerException.class)
+    // flat archetype validation moved out of flattener
     public void testTypeConstraintFails() {
         // fails, because DV_DATE_TIME is not a subclass of DV_TEXT
         Archetype flattened = parseAndFlattenArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn-typeconstraint-fail.v1.adls");

@@ -20,6 +20,7 @@
 
 package org.openehr.adl.rm;
 
+import org.openehr.jaxb.am.CTerminologyCode;
 import org.openehr.jaxb.rm.DataValue;
 import org.openehr.jaxb.rm.Element;
 import org.openehr.rm.RmObject;
@@ -66,6 +67,7 @@ class RmTypeGraphBuilder {
         addRmType(RmTypes.INTEGER, Long.class, Long.TYPE, Integer.class, Integer.TYPE,
                 Short.class, Short.TYPE, Byte.class, Byte.TYPE, BigInteger.class);
         addRmType(RmTypes.REAL, Double.class, Double.TYPE, Float.class, Float.TYPE);
+        addRmType(RmTypes.TERMINOLOGY_CODE, CTerminologyCode.class);
         // Add other
         addRmType(RmTypes.LIST, List.class);
         addRmType(RmTypes.DATE, Date.class);

@@ -258,3 +258,16 @@ ontology
 			>
 		>
 	>
+
+annotations
+    items = <
+        ["en"] = <
+            items = <
+                ["/data[at0001]/items[at0003]"] = <
+                    items = <
+                        ["element_name"] = <"Description">
+                    >
+                >
+            >
+        >
+    >

@@ -22,13 +22,17 @@ package org.openehr.adl.flattener;
 
 import com.google.common.collect.Sets;
 import org.openehr.adl.FlatArchetypeProvider;
-import org.openehr.am.AmObject;
-import org.openehr.adl.ArchetypeProvider;
 import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.util.ArchetypeWrapper;
 import org.openehr.adl.util.walker.AbstractAmVisitor;
+import org.openehr.adl.util.walker.AmConstraintContext;
 import org.openehr.adl.util.walker.AmVisitContext;
 import org.openehr.adl.util.walker.ArchetypeWalker;
+import org.openehr.am.AmObject;
 import org.openehr.jaxb.am.*;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
+import org.openehr.jaxb.rm.ResourceAnnotations;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -56,17 +60,21 @@ public class OperationalTemplateBuilder {
     public Template build(FlatArchetype source) {
         checkArgument(source != null && source.isIsTemplate(), "Archetype must be a template");
         Template result = createTemplateClone(source);
+
         State state = new State();
 
         resolveReferences(result, source, state);
         buildOntology(result, state);
+        addArchetypeAnnotations(result, source, state);
 
         return result;
     }
 
-    private void buildOntology(Template target, State state) {
-        String mainArchetypeId = ((CArchetypeRoot)target.getDefinition()).getArchetypeRef();
+    private void addArchetypeAnnotations(Template result, FlatArchetype source, State state) {
+        ArchetypeWalker.walkConstraints(new AnnotationAddingVisitor(result), source, new AmConstraintContext());
+    }
 
+    private void buildOntology(Template target, State state) {
         for (Map.Entry<String, FlatArchetype> entry : state.containedArchetypes.entrySet()) {
             String archetypeId = entry.getKey();
             FlatArchetype archetype = entry.getValue();
@@ -195,6 +203,7 @@ public class OperationalTemplateBuilder {
         private final Deque<FlatArchetype> archetypeRoots = new ArrayDeque<>();
         // all archetypes contained in the template
         private final Map<String, FlatArchetype> containedArchetypes = new LinkedHashMap<>();
+
         public void pushArchetypeRoot(String archetypeId, FlatArchetype archetype) {
             containedArchetypes.put(archetypeId, archetype);
             archetypeRoots.push(archetype);
@@ -224,4 +233,54 @@ public class OperationalTemplateBuilder {
             return super.preorderVisit(item, context);
         }
     }
+
+    private class AnnotationAddingVisitor extends AbstractAmVisitor<AmObject, AmConstraintContext> {
+        private final Template template;
+
+        public AnnotationAddingVisitor(Template template) {
+            this.template = template;
+        }
+
+        @Override
+        public ArchetypeWalker.Action<? extends AmObject> preorderVisit(AmObject item, AmConstraintContext context) {
+            if (!context.getAmParents().isEmpty() && item instanceof CArchetypeRoot) {
+                CArchetypeRoot car = (CArchetypeRoot) item;
+                Archetype archetype = archetypeProvider.getFlatArchetype(car.getArchetypeRef());
+                String defaultLanguage = archetype.getOriginalLanguage().getCodeString();
+                if (archetype.getAnnotations() != null) {
+                    for (ResourceAnnotationNodes ran : archetype.getAnnotations().getItems()) {
+                        if (!ran.getLanguage().equals(defaultLanguage)) continue;
+
+                        ResourceAnnotationNodes templateRan = getOrCreateLanguageAnnotations(template,
+                                ran.getLanguage());
+
+                        for (ResourceAnnotationNodeItems rani : ran.getItems()) {
+                            String path = context.getRmPath().toString() + rani.getPath();
+                            ResourceAnnotationNodeItems templateRani = new ResourceAnnotationNodeItems();
+                            templateRani.setPath(path);
+                            templateRani.getItems().addAll(rani.getItems());
+                            templateRan.getItems().add(templateRani);
+                        }
+                    }
+                }
+            }
+            return ArchetypeWalker.Action.next();
+        }
+
+        private ResourceAnnotationNodes getOrCreateLanguageAnnotations(Template template, String language) {
+            if (template.getAnnotations()==null) {
+                template.setAnnotations(new ResourceAnnotations());
+            }
+            for (ResourceAnnotationNodes item : template.getAnnotations().getItems()) {
+                if (item.getLanguage().equals(language)) {
+                    return item;
+                }
+            }
+            ResourceAnnotationNodes ran = new ResourceAnnotationNodes();
+            ran.setLanguage(language);
+            template.getAnnotations().getItems().add(ran);
+            return ran;
+        }
+    }
+
 }

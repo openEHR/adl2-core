@@ -25,6 +25,8 @@ import org.openehr.adl.TestingArchetypeProvider;
 import org.openehr.adl.am.AmQuery;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.IntervalOfInteger;
+import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
+import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -102,6 +104,20 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
         FlatArchetypeOntology alertOntology = template.getComponentOntologies().get(1);
         assertThat(alertOntology.getTermDefinitions()).hasSize(1);
         assertThat(alertOntology.getTermDefinitions().get(0).getLanguage()).isEqualTo("en");
+
+    }
+
+    @Test
+    public void testAnnotations() throws Exception {
+        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
+
+        Template template = operationalTemplateBuilder.build(archetype);
+        assertThat(template.getAnnotations().getItems()).hasSize(1);
+        ResourceAnnotationNodes enAnnotations = template.getAnnotations().getItems().get(0);
+        assertThat(enAnnotations.getLanguage()).isEqualTo("en");
+        assertThat(enAnnotations.getItems()).hasSize(1);
+        final ResourceAnnotationNodeItems enDescriptionAnnotation = enAnnotations.getItems().get(0);
+        assertThat(enDescriptionAnnotation.getPath()).isEqualTo("/content/data[at0001]/items[at0003]");
 
     }
 

@@ -1,7 +1,6 @@
 package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.serializer.ArchetypeSerializer;
-import org.openehr.adl.serializer.constraints.ConstraintSerializer;
 import org.openehr.jaxb.am.CObject;
 
 /**

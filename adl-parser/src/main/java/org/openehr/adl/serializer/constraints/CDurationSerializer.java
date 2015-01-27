@@ -22,7 +22,6 @@ package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.serializer.ArchetypeSerializer;
-import org.openehr.jaxb.am.CDate;
 import org.openehr.jaxb.am.CDuration;
 
 /**

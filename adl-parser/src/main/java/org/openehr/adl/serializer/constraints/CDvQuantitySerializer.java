@@ -1,12 +1,9 @@
 package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.serializer.ArchetypeSerializer;
-import org.openehr.adl.serializer.constraints.ConstraintSerializer;
 import org.openehr.jaxb.am.CDvQuantity;
 import org.openehr.jaxb.am.CQuantityItem;
 import org.openehr.jaxb.rm.DvQuantity;
-
-import java.sql.BatchUpdateException;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -38,7 +35,7 @@ public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
         builder.newIndentedline()
                 .indent()
 
-                .append("property = <[").append(cobj.getProperty().getTerminologyId().getValue()).append("::" ).append(cobj.getProperty().getCodeString()).append("]>")
+                .append("property = <[").append(cobj.getProperty().getTerminologyId().getValue()).append("::").append(cobj.getProperty().getCodeString()).append("]>")
                 .newIndentedline();
 
         builder.tryNewLine().append("list = <")
@@ -50,24 +47,23 @@ public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
                     .newIndentedline()
                     .append("units = <\"" + item.getUnits() + "\">")
                     .tryNewLine();
-if(item.getMagnitude() != null) {
-    builder.append("magnitude").append(" = ")
-            .append("<|").append(firstNonNull(item.getMagnitude().getLower(), "0"))
-            .append("..<").append(firstNonNull(item.getMagnitude().getUpper(), "*"))
-            .append("|>");
-    builder                   .newline();
-}
-if(item.getPrecision() != null) {
-    builder.append("precision = ")
-            .append("<|").append(firstNonNull(item.getPrecision().getUpper(), "0")).append("|>")
+            if (item.getMagnitude() != null) {
+                builder.append("magnitude").append(" = ")
+                        .append("<|").append(firstNonNull(item.getMagnitude().getLower(), "0"))
+                        .append("..<").append(firstNonNull(item.getMagnitude().getUpper(), "*"))
+                        .append("|>");
+                builder.newline();
+            }
+            if (item.getPrecision() != null) {
+                builder.append("precision = ")
+                        .append("<|").append(firstNonNull(item.getPrecision().getUpper(), "0")).append("|>")
 
-            .newline();
-}
- builder                 .unindent()
+                        .newline();
+            }
+            builder.unindent()
                     .append(">")
-            .newline()
+                    .newline()
             ;
-
 
 
         }

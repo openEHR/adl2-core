@@ -1,7 +1,6 @@
 package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.serializer.ArchetypeSerializer;
-import org.openehr.adl.serializer.constraints.ConstraintSerializer;
 import org.openehr.jaxb.am.ArchetypeSlot;
 
 /**
@@ -15,6 +14,6 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
 
     @Override
     public void serialize(ArchetypeSlot cobj) {
-System.err.println("Not implemented serialize ArchetypeSlot" + cobj.getNodeId());
+        System.err.println("Not implemented serialize ArchetypeSlot" + cobj.getNodeId());
     }
 }

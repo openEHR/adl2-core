@@ -24,6 +24,10 @@ import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static org.testng.Assert.*;
 
 public class ArchetypeSerializerTest {
@@ -33,9 +37,51 @@ public class ArchetypeSerializerTest {
         Archetype archetypeAlert = TestAdlParser.parseAdl("adl15/repository/openEHR-EHR-EVALUATION.alert.v1.adls");
         String serialized = ArchetypeSerializer.serialize(archetypeAlert);
 
-//        System.out.println(serialized);
+//System.out.println(serialized);
 
 
+    }
+
+    @Test
+    public void testSerializeCodedText() throws Exception{
+        Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-composition.dv_coded_text.test.adl");
+        String serialized = ArchetypeSerializer.serialize(archetype);
+        assertNotNull(serialized);
+    }
+
+    @Test public void testSerializeDemoArchetype(){
+        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
+        String serialized = ArchetypeSerializer.serialize(archetype);
+        assertNotNull(serialized);
+write(serialized, "TestDemoArchetype.adl");
+    }
+    @Test
+    public void testAssumedValueOnQuantituy() throws Exception{
+
+            Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.test_assumed.v1.adl");
+                    String serialized = ArchetypeSerializer.serialize(archetype);
+
+        assertNotNull(serialized);
+        write(serialized, "TestAssumedValueOnQuantity.txt");
+    }
+    @Test
+    public void testSerializeQuantity() throws Exception{
+        Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-entry.c_dv_quantity_full.test.adl");
+        String serialized = ArchetypeSerializer.serialize(archetype);
+        assertNotNull(serialized);
+       // System.out.println(serialized);
+        write(serialized, "TestSerializeQuantity.txt");
+    }
+    private void write(String adl, String file){
+        try {
+            FileWriter writer = new FileWriter(new File("target/"+file));
+            writer.write(adl);
+            writer.flush();
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

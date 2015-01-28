@@ -8,6 +8,9 @@ import org.openehr.jaxb.rm.DvQuantity;
 import static com.google.common.base.MoreObjects.firstNonNull;
 
 /**
+ * <pre>
+ *
+ * </pre>
  * Created by bna on 27.01.2015.
  */
 public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
@@ -15,50 +18,41 @@ public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
         super(archetypeSerializer);
     }
 
-    /**
-     * C_DV_QUANTITY <
-     * property = <[openehr::125]>
-     * list = <
-     * ["1"] = <
-     * units = <"mm[Hg]">
-     * magnitude = <|0.0..<1000.0|>
-     * precision = <|0|>
-     * >
-     * >
-     * >
-     *
-     * @param cobj
-     */
     @Override
     public void serialize(CDvQuantity cobj) {
-        System.err.println("CDvQuantity  not implemented atr ALL!");
-        builder.newIndentedline()
-                .indent()
+        builder
+                .newIndentedline()
+                .append("C_DV_QUANTITY <")
+                .newIndentedline()
+                .append("property = <[")
+                .append(cobj.getProperty().getTerminologyId().getValue())
+                .append("::")
+                .append(cobj.getProperty().getCodeString())
+                .append("]>")
+                .newline();
 
-                .append("property = <[").append(cobj.getProperty().getTerminologyId().getValue()).append("::").append(cobj.getProperty().getCodeString()).append("]>")
-                .newIndentedline();
-
-        builder.tryNewLine().append("list = <")
-                .newIndentedline();
+        builder.tryNewLine().append("list = <").newIndentedline();
         int n = 0;
         for (CQuantityItem item : cobj.getList()) {
             n++;
             builder.append("[\"" + n + "\"] = <")
-                    .newIndentedline()
-                    .append("units = <\"" + item.getUnits() + "\">")
-                    .tryNewLine();
+                    .newIndentedline();
+            if (item.getUnits() != null) {
+                builder.append("units = <\"").append(item.getUnits()).append("\">");
+                builder.newline();
+            }
             if (item.getMagnitude() != null) {
                 builder.append("magnitude").append(" = ")
                         .append("<|").append(firstNonNull(item.getMagnitude().getLower(), "0"))
-                        .append("..<").append(firstNonNull(item.getMagnitude().getUpper(), "*"))
+                        .append("..").append(firstNonNull(item.getMagnitude().getUpper(), "*"))
                         .append("|>");
                 builder.newline();
             }
             if (item.getPrecision() != null) {
                 builder.append("precision = ")
-                        .append("<|").append(firstNonNull(item.getPrecision().getUpper(), "0")).append("|>")
+                        .append("<|").append(firstNonNull(item.getPrecision().getUpper(), "0")).append("|>");
 
-                        .newline();
+                builder.newline();
             }
             builder.unindent()
                     .append(">")
@@ -69,18 +63,9 @@ public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
         }
         builder
                 .tryNewLine()
-                .append(">");
-        builder.unindent();
-
-        /**
-         *
-         assumed_value = <
-         magnitude = <4.0>
-         units = <"km">
-         precision = <2>
-         >
-
-         */
+                .append(">")
+                .unindent()
+                .unindent();
         DvQuantity assumedValue = cobj.getAssumedValue();
         if (assumedValue != null) {
 
@@ -95,7 +80,10 @@ public class CDvQuantitySerializer extends ConstraintSerializer<CDvQuantity> {
                     .newline()
                     .unindent()
                     .append(">")
-                    .newline();
+        .newline()
+            ;
         }
+        builder.append(">");
+        builder.unindent();
     }
 }

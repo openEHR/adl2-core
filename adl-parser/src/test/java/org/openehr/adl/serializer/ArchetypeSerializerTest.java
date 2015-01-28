@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotNull;
 
 public class ArchetypeSerializerTest {
 
@@ -36,45 +36,53 @@ public class ArchetypeSerializerTest {
     public void testSerialize() throws Exception {
         Archetype archetypeAlert = TestAdlParser.parseAdl("adl15/repository/openEHR-EHR-EVALUATION.alert.v1.adls");
         String serialized = ArchetypeSerializer.serialize(archetypeAlert);
-
-//System.out.println(serialized);
-
-
+        write(serialized, "TestSerialize-Alert-v1.adls");
     }
 
     @Test
-    public void testSerializeCodedText() throws Exception{
+    public void testSerializeCodedText() throws Exception {
         Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-composition.dv_coded_text.test.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
     }
 
-    @Test public void testSerializeDemoArchetype(){
+    @Test
+    public void testSerializeDemoArchetype() {
         Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
-write(serialized, "TestDemoArchetype.adl");
-    }
-    @Test
-    public void testAssumedValueOnQuantituy() throws Exception{
+        write(serialized, "TestDemoArchetype.adl");
 
-            Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.test_assumed.v1.adl");
-                    String serialized = ArchetypeSerializer.serialize(archetype);
+    }
+
+
+    @Test
+    public void testAssumedValueOnQuantituy() throws Exception {
+
+        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.test_assumed.v1.adl");
+        String serialized = ArchetypeSerializer.serialize(archetype);
 
         assertNotNull(serialized);
-        write(serialized, "TestAssumedValueOnQuantity.txt");
+        write(serialized, "TestAssumedValueOnQuantity.adl");
     }
+
     @Test
-    public void testSerializeQuantity() throws Exception{
+    public void testSerializeQuantity() throws Exception {
         Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-entry.c_dv_quantity_full.test.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
-       // System.out.println(serialized);
-        write(serialized, "TestSerializeQuantity.txt");
+        // System.out.println(serialized);
+        write(serialized, "TestSerializeQuantity.adl");
     }
-    private void write(String adl, String file){
+
+    /**
+     * Write the ADL to target/{file) to inspect manually }
+     * @param adl the string representation of Archetype 
+     * @param file the filename
+     */
+    private void write(String adl, String file) {
         try {
-            FileWriter writer = new FileWriter(new File("target/"+file));
+            FileWriter writer = new FileWriter(new File("target/" + file));
             writer.write(adl);
             writer.flush();
             writer.close();

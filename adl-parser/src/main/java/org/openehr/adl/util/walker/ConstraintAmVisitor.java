@@ -25,6 +25,8 @@ import org.openehr.adl.rm.RmPath;
 import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.am.CObject;
 
+import javax.annotation.Nullable;
+
 /**
  * @author markopi
  */
@@ -59,6 +61,7 @@ public class ConstraintAmVisitor<C extends AmConstraintContext> extends Dispatch
             }
             return super.preorderVisit(item, context);
         }
+
 
         @Override
         public ArchetypeWalker.Action<? extends AmObject> postorderVisit(AmObject item, C context,

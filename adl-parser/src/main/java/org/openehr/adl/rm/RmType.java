@@ -41,6 +41,7 @@ public final class RmType {
     private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
     private String dataAttribute;
     private boolean finalType;
+    private Display display;
 
     public RmType(String rmType, Class rmClass, Class... otherRmClasses) {
         this.rmType = rmType;
@@ -95,6 +96,14 @@ public final class RmType {
 
     public String getRmType() {
         return rmType;
+    }
+
+    public Display getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Display display) {
+        this.display = display;
     }
 
     public Map<String, RmTypeAttribute> getAttributes() {
@@ -155,4 +164,8 @@ public final class RmType {
         }
         this.attributesMap = ImmutableMap.copyOf(attributesMap);
     }
+
+
+    public static enum Display {display, transparent, none}
+
 }

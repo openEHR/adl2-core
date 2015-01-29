@@ -21,8 +21,8 @@
 package org.openehr.adl.rm;
 
 import org.openehr.jaxb.am.CTerminologyCode;
-import org.openehr.jaxb.rm.DataValue;
 import org.openehr.jaxb.rm.Element;
+import org.openehr.jaxb.rm.ItemStructure;
 import org.openehr.rm.RmObject;
 
 import javax.xml.bind.annotation.XmlType;
@@ -132,6 +132,9 @@ class RmTypeGraphBuilder {
                 if (Element.class.isAssignableFrom(rmClass)) {
                     node.setFinalType(true);
                     node.setDataAttribute("value");
+                }
+                if (ItemStructure.class.isAssignableFrom(rmClass)) {
+                    node.setDisplay(RmType.Display.transparent);
                 }
 
                 target.put(rmType, node);

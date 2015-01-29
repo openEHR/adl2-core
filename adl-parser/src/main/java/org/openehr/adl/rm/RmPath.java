@@ -22,6 +22,7 @@ package org.openehr.adl.rm;
 
 import com.google.common.base.Splitter;
 import org.apache.commons.lang.ObjectUtils;
+import org.openehr.adl.util.AdlUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -40,18 +43,22 @@ public final class RmPath {
     private static final Pattern SEGMENT_PATTERN = Pattern.compile("([a-zA-Z0-9_]*)(\\[((ac|at|id)[0-9.]+)\\])?");
 
     @SuppressWarnings("ConstantConditions")
-    public static final RmPath ROOT = new RmPath(null, "", null);
+    public static final RmPath ROOT = new RmPath(null, "", null, null);
 
     public static final Splitter PATH_SPLITTER = Splitter.on("/").omitEmptyStrings();
 
     private final RmPath parent;
     private final String attribute;
     private final String nodeId;
+    private final String name;
 
-    private RmPath(RmPath parent, String attribute, @Nullable String nodeId) {
+    private RmPath(RmPath parent, String attribute, @Nullable String nodeId, @Nullable String name) {
+        checkNotNull(attribute);
+        checkArgument(name==null || nodeId!=null, "name can only be non-null when nodeId is null");
         this.parent = parent;
         this.attribute = attribute;
         this.nodeId = nodeId;
+        this.name = name;
     }
 
     public RmPath getParent() {
@@ -67,26 +74,37 @@ public final class RmPath {
         return nodeId;
     }
 
+    @Nullable
+    public String getName() {
+        return name;
+    }
 
     public RmPath resolve(String path) {
         List<Segment> segments = parseSegments(path);
         RmPath node = this;
         for (Segment segment : segments) {
-            node = new RmPath(node, segment.attribute, segment.nodeId);
+            node = new RmPath(node, segment.attribute, segment.nodeId, segment.name);
         }
         return node;
     }
 
     public RmPath resolve(String attribute, @Nullable String nodeId) {
-        return new RmPath(this, attribute, nodeId);
+        return new RmPath(this, attribute, nodeId, null);
+    }
+    public RmPath resolve(String attribute, @Nullable String nodeId, @Nullable String name) {
+        return new RmPath(this, attribute, nodeId, name);
     }
 
     public RmPath constrain(@Nullable String nodeId) {
+        return constrain(nodeId, null);
+    }
+    public RmPath constrain(@Nullable String nodeId, @Nullable String name) {
         checkState(this.nodeId == null || nodeId == null, "Path already constrained");
 
-        if (ObjectUtils.equals(this.nodeId, nodeId)) return this;
-        return new RmPath(parent, attribute, nodeId);
+        if (ObjectUtils.equals(this.nodeId, nodeId) && ObjectUtils.equals(this.name, name)) return this;
+        return new RmPath(parent, attribute, nodeId, name);
     }
+
 
     @Override
     public boolean equals(@Nullable Object o) {
@@ -97,6 +115,7 @@ public final class RmPath {
 
         if (!attribute.equals(rmPath.attribute)) return false;
         if (nodeId != null ? !nodeId.equals(rmPath.nodeId) : rmPath.nodeId != null) return false;
+        if (name != null ? !name.equals(rmPath.name) : rmPath.name != null) return false;
         if (parent != null ? !parent.equals(rmPath.parent) : rmPath.parent != null) return false;
 
         return true;
@@ -107,6 +126,7 @@ public final class RmPath {
         int result = parent != null ? parent.hashCode() : 0;
         result = 31 * result + attribute.hashCode();
         result = 31 * result + (nodeId != null ? nodeId.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 
@@ -117,7 +137,11 @@ public final class RmPath {
         }
         builder.append(attribute);
         if (nodeId != null) {
-            builder.append("[").append(nodeId).append("]");
+            builder.append("[").append(nodeId);
+            if (name!=null) {
+                builder.append(", '").append(name.replaceAll("'", "''")).append("'");
+            }
+            builder.append("]");
         }
     }
 
@@ -138,6 +162,7 @@ public final class RmPath {
         return builder.toString();
     }
 
+    // currently does not support paths with name constrains
     private static List<Segment> parseSegments(String origPathStr) {
         String pathStr = origPathStr;
         if (!pathStr.startsWith("/")) {
@@ -166,7 +191,7 @@ public final class RmPath {
         RmPath path = ROOT;
         List<Segment> segments = parseSegments(str);
         for (Segment segment : segments) {
-            path = new RmPath(path, segment.attribute, segment.nodeId);
+            path = new RmPath(path, segment.attribute, segment.nodeId, segment.name);
         }
         return path;
     }
@@ -185,5 +210,6 @@ public final class RmPath {
     private static class Segment {
         String attribute;
         String nodeId;
+        String name;
     }
 }

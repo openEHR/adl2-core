@@ -57,6 +57,12 @@ public class ArchetypeSerializer {
         constraintSerializers.put(CBoolean.class, new CBooleanSerializer(this));
         constraintSerializers.put(CDuration.class, new CDurationSerializer(this));
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
+        constraintSerializers.put(CDvQuantity.class, new CDvQuantitySerializer(this));
+        constraintSerializers.put(CCodePhrase.class, new CCodePhraseSerializer (this));
+constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
+        constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this
+        ));
+        constraintSerializers.put(ArchetypeInternalRef.class, new ArchetypeInternalRefSerializer(this));
     }
 
 

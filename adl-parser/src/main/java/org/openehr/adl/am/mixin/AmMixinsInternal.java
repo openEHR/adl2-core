@@ -22,10 +22,7 @@ package org.openehr.adl.am.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.rm.IntervalOfDateTime;
-import org.openehr.jaxb.rm.IntervalOfInteger;
-import org.openehr.jaxb.rm.IntervalOfReal;
-import org.openehr.jaxb.rm.MultiplicityInterval;
+import org.openehr.jaxb.rm.*;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
@@ -45,6 +42,7 @@ class AmMixinsInternal {
                 .put(IntervalOfReal.class, IntervalOfRealMixin.class)
                 .put(MultiplicityInterval.class, MultiplicityIntervalMixin.class)
                 .put(CAttribute.class, CAttributeMixin.class)
+                .put(IntervalOfDuration.class, IntervalOfDurationMixin.class)
                 .build();
 
         configuration = ImmutableMap.copyOf(conf);

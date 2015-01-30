@@ -46,6 +46,9 @@ public class TestAdlParser {
             throw new RuntimeException(e);
         }
     }
+    public static DifferentialArchetype parseAdlFromString(String adl){
+        return new AdlDeserializer(new OpenEhrRmModel()).parse(adl);
+    }
 
 
     public static DifferentialArchetype parseAdl(String classpathResource) {

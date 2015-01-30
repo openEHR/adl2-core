@@ -1,0 +1,59 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ELEMENT.test_codephrase_1.v1
+
+concept
+	[at0000]	-- Test codephrase 1
+language
+	original_language = <[ISO_639-1::nb]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"C65B1BD2D2065B74F790F165BAC5FCBB">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Test codephrase 1
+		value matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {
+					[local::
+					at0001, 	-- abcd
+					at0002; 	-- 1234
+					at0002]	-- assumed value
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["nb"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test codephrase 1">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"abcd">
+					description = <"Test på abcd">
+				>
+				["at0002"] = <
+					text = <"1234">
+					description = <"Test på 1234">
+				>
+			>
+		>
+	>

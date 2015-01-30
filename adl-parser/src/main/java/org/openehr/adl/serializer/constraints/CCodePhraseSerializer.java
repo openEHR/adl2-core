@@ -35,6 +35,9 @@ public class CCodePhraseSerializer extends ConstraintSerializer<CCodePhrase> {
                 builder.append(code).append(",").newline();
             }
         }
+        if(cobj.getAssumedValue() != null){
+            builder.append(";").newline().append(cobj.getAssumedValue().getCodeString());
+        }
         builder.append("]").unindent();
     }
 

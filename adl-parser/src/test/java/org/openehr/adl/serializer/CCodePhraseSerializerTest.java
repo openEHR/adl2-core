@@ -7,9 +7,11 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Created by bna on 30.01.2015.
+ * "Unit test" for @see CCodePhraseSerializer
  */
 public class CCodePhraseSerializerTest {
+
+
 
 
     @Test
@@ -39,5 +41,12 @@ public class CCodePhraseSerializerTest {
 
     }
 
+    @Test
+    public void testSerializeWithTerminologyIcd10(){
+        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-ELEMENT.test_codephrase_term.v1.adl");
+        assertThat(archetype).as("No archetype named openEHR-EHR-ELEMENT.test_codephrase_term.v1.adl").isNotNull();
+        String adl = ArchetypeSerializer.serialize(archetype);
+        assertThat(adl).isNotNull();
+    }
 
 }

@@ -22,9 +22,7 @@ package org.openehr.adl.serializer;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
-import org.openehr.jaxb.am.ArchetypeTerm;
-import org.openehr.jaxb.am.CodeDefinitionSet;
-import org.openehr.jaxb.am.ValueSetItem;
+import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
 
 import javax.annotation.Nonnull;
@@ -187,7 +185,19 @@ public class DAdlSerializer {
             builder.append(">");
         } else if (item instanceof String) {
             serializePlain(item);
-        } else {
+        }else if (item instanceof ConstraintBindingSet){
+            ConstraintBindingSet set = (ConstraintBindingSet) item;
+            serializeKey(set.getTerminology());
+            builder.append("<").newIndentedline().append("items = <");
+            serializeListMap(set.getItems());
+            builder.append(">");
+        }else if(item instanceof ConstraintBindingItem){
+            ConstraintBindingItem c = (ConstraintBindingItem) item;
+            serializeKey(c.getCode());
+            //serializeItem(c.getValue());
+            builder.append("<").append(c.getValue()).append(">");
+        }
+        else {
             throw new IllegalArgumentException(item.getClass().getName());
         }
     }

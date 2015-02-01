@@ -41,9 +41,11 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
             builder.append(cobj.getPattern());
         }
         if (cobj.getRange() != null) {
-            IntervalMixin<IntervalOfDuration, Comparable> mixin = AmMixins.of(cobj.getRange());
-            String s = AmMixins.of(cobj.getRange()).toString();
-            builder.append(AmMixins.of(cobj.getRange()).toString());
+            builder.append("|").append(cobj.getRange().getLower());
+            if(!cobj.getRange().getLower().equals(cobj.getRange().getUpper())){
+                builder.append("..").append(cobj.getRange().getUpper());
+            }
+            builder.append("|");
         }
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());

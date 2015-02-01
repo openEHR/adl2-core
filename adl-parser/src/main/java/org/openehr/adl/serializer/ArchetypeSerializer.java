@@ -59,9 +59,8 @@ public class ArchetypeSerializer {
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
         constraintSerializers.put(CDvQuantity.class, new CDvQuantitySerializer(this));
         constraintSerializers.put(CCodePhrase.class, new CCodePhraseSerializer (this));
-constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
-        constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this
-        ));
+        constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
+        constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this));
         constraintSerializers.put(ArchetypeInternalRef.class, new ArchetypeInternalRefSerializer(this));
     }
 
@@ -145,7 +144,6 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
             throw new AssertionError("Unsupported constraint: " + cobj.getClass().getName());
         }
     }
-
 
     public String getSimpleCommentText(CObject cobj) {
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());

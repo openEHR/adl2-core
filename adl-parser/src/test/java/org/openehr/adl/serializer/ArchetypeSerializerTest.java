@@ -22,6 +22,8 @@ package org.openehr.adl.serializer;
 
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.apache.commons.io.FileUtils;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
@@ -57,14 +59,15 @@ public class ArchetypeSerializerTest {
         assertThat(result).isNotNull();
 
     }
-    //@Test
+    @Test
     public void testSerializeDemoArchetype() {
         Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
+        write(serialized, "TestDemoArchetype.adl");
         Archetype result = TestAdlParser.parseAdlFromString(serialized);
 assertThat(result).isNotNull();
-        write(serialized, "TestDemoArchetype.adl");
+        
 
     }
 
@@ -94,6 +97,7 @@ assertThat(result).isNotNull();
      */
     private void write(String adl, String file) {
         try {
+            FileUtils.forceMkdir(new File("target"));
             FileWriter writer = new FileWriter(new File("target/" + file));
             writer.write(adl);
             writer.flush();

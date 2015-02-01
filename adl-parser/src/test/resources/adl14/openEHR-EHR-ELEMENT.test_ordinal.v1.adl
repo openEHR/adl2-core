@@ -1,0 +1,62 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ELEMENT.test_ordinal.v1
+
+concept
+	[at0000]	-- Test ordinal
+language
+	original_language = <[ISO_639-1::nb]>
+description
+	original_author = <
+		["name"] = <"Bjørn Næss">
+		["organisation"] = <"DIPS ASA">
+		["email"] = <"bna@dips.no">
+		["date"] = <"2015-02-01">
+	>
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Test serialize Ordinal">
+			use = <"Test serialize Ordinal">
+			misuse = <"Clinical use ">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"7D8212E61239653E3D2ECEC4F72653A7">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Test ordinal
+		value matches {
+			0|[local::at0001], 	-- Item 0
+			1|[local::at0002], 	-- Item 1
+			2|[local::at0003]; 	-- Item 2
+			2  	-- assumed value
+		}
+	}
+
+ontology
+	term_definitions = <
+		["nb"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test ordinal">
+					description = <"Test serialize Ordinal">
+				>
+				["at0001"] = <
+					text = <"Item 0">
+					description = <"This is item 0">
+				>
+				["at0002"] = <
+					text = <"Item 1">
+					description = <"This is item 1">
+				>
+				["at0003"] = <
+					text = <"Item 2">
+					description = <"This is item 2">
+				>
+			>
+		>
+	>

@@ -1,0 +1,49 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-ELEMENT.test_count_min_value.v1
+
+concept
+	[at0000]	-- Test count min value
+language
+	original_language = <[ISO_639-1::nb]>
+description
+	original_author = <
+		["name"] = <"Bjørn Næss">
+		["organisation"] = <"DIPS ASA">
+		["email"] = <"bna@dips.no">
+		["date"] = <"2015-02-01">
+	>
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Test serialize count with min value only">
+			use = <"Test serialize count with min value only">
+			misuse = <"Clinical use">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"17CAD6566146D1AB9674B6CF8619C96E">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Test count min value
+		value matches {
+			DV_COUNT matches {
+				magnitude matches {|>=0|}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["nb"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test count min value">
+					description = <"Test serialize count with min value only">
+				>
+			>
+		>
+	>

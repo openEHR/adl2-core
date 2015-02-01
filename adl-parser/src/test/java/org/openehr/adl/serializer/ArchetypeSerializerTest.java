@@ -53,8 +53,8 @@ public class ArchetypeSerializerTest {
         Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
         String adl = ArchetypeSerializer.serialize(archetype);
         write(adl, "openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
-     //   Archetype result = TestAdlParser.parseAdlFromString(adl);
-      //  assertThat(result).isNotNull();
+     Archetype result = TestAdlParser.parseAdlFromString(adl);
+        assertThat(result).isNotNull();
 
     }
     //@Test
@@ -84,7 +84,6 @@ assertThat(result).isNotNull();
         Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-entry.c_dv_quantity_full.test.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
-        // System.out.println(serialized);
         write(serialized, "TestSerializeQuantity.adl");
     }
 

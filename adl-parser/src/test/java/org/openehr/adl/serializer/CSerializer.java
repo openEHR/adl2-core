@@ -1,5 +1,7 @@
 package org.openehr.adl.serializer;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +32,7 @@ public abstract class CSerializer {
             try {
                 System.out.println("adlResult");
                 System.out.println(adl);
+                createTargetIfNotExist();
                 FileWriter writer = new FileWriter(new File("target/" + filename));
 
                 writer.write(adl);
@@ -38,6 +41,16 @@ public abstract class CSerializer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void createTargetIfNotExist(){
+
+        try {
+            File f = new File("target");
+            FileUtils.forceMkdir(f);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

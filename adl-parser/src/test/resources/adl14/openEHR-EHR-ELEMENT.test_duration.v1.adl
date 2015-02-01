@@ -24,14 +24,14 @@ description
 	lifecycle_state = <"0">
 	other_contributors = <>
 	other_details = <
-		["MD5-CAM-1.0.1"] = <"598C4C775E924BFB732E499928A54CC1">
+		["MD5-CAM-1.0.1"] = <"EEA381F3EC3C12618E6F73DB7E99741A">
 	>
 
 definition
 	ELEMENT[at0000] matches {	-- Test interval
 		value matches {
 			DV_DURATION matches {
-				value matches {PTH; PT12H}
+				value matches {PTH/|PT0H..PT24H|; PT10H}
 			}
 		}
 	}

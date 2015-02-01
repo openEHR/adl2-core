@@ -120,7 +120,8 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
         }
 
         if (archetype.getOntology()!=null) {
-            builder.newline().append("terminology").dadlBean(archetype.getOntology());
+            //builder.newline().append("terminology").dadlBean(archetype.getOntology());
+            builder.newline().append("ontology").dadlBean(archetype.getOntology());
             builder.newline();
         }
 
@@ -136,6 +137,7 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
 
 
     public void buildCObject(CObject cobj) {
+
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
         if (serializer!=null) {
             serializer.serialize(cobj);

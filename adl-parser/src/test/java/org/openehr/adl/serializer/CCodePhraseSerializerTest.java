@@ -1,15 +1,20 @@
 package org.openehr.adl.serializer;
 
+import com.google.common.collect.Iterators;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * "Unit test" for @see CCodePhraseSerializer
  */
-public class CCodePhraseSerializerTest {
+public class CCodePhraseSerializerTest extends CSerializer{
 
 
 
@@ -47,6 +52,13 @@ public class CCodePhraseSerializerTest {
         assertThat(archetype).as("No archetype named openEHR-EHR-ELEMENT.test_codephrase_term.v1.adl").isNotNull();
         String adl = ArchetypeSerializer.serialize(archetype);
         assertThat(adl).isNotNull();
+        write(adl, "CodePhraseTerm.adl");
+        Archetype resultArchetype = TestAdlParser.parseAdlFromString(adl);
+        assertThat(resultArchetype).isNotNull();
+
+
     }
+
+
 
 }

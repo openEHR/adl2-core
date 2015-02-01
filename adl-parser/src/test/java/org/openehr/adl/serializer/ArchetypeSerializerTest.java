@@ -20,6 +20,8 @@
 
 package org.openehr.adl.serializer;
 
+
+import static org.fest.assertions.Assertions.assertThat;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
@@ -47,10 +49,21 @@ public class ArchetypeSerializerTest {
     }
 
     @Test
+    public void testSerializeBloodPressure(){
+        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+        String adl = ArchetypeSerializer.serialize(archetype);
+        write(adl, "openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+     //   Archetype result = TestAdlParser.parseAdlFromString(adl);
+      //  assertThat(result).isNotNull();
+
+    }
+    //@Test
     public void testSerializeDemoArchetype() {
         Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
+        Archetype result = TestAdlParser.parseAdlFromString(serialized);
+assertThat(result).isNotNull();
         write(serialized, "TestDemoArchetype.adl");
 
     }
@@ -76,7 +89,7 @@ public class ArchetypeSerializerTest {
     }
 
     /**
-     * Write the ADL to target/{file) to inspect manually }
+     * Write the ADL to target/{file) to inspect manually and try open with Archetype Editor
      * @param adl the string representation of Archetype 
      * @param file the filename
      */

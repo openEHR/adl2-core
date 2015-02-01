@@ -26,10 +26,10 @@ public class CDvOrdinalSerializer extends ConstraintSerializer<CDvOrdinal> {
 
     @Override
     public void serialize(CDvOrdinal cobj) {
-        System.out.println("Serialize CdvOrdinal");
         List<DvOrdinal> ordinalList = cobj.getList();
         int i = 0;
         for (DvOrdinal o : ordinalList) {
+            i++;
             builder.append(o.getValue()).append("|")
                     .append("[")
                     .append(o.getSymbol().getDefiningCode().getTerminologyId().getValue())

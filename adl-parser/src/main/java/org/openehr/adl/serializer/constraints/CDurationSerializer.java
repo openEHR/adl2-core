@@ -20,9 +20,12 @@
 
 package org.openehr.adl.serializer.constraints;
 
+import org.openehr.adl.am.mixin.AmMixin;
 import org.openehr.adl.am.mixin.AmMixins;
+import org.openehr.adl.am.mixin.IntervalMixin;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CDuration;
+import org.openehr.jaxb.rm.IntervalOfDuration;
 
 /**
  * @author Marko Pipan
@@ -38,7 +41,11 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
             builder.append(cobj.getPattern());
         }
         if (cobj.getRange() != null) {
-            builder.append(AmMixins.of(cobj.getRange()).toString());
+            builder.append("|").append(cobj.getRange().getLower());
+            if(!cobj.getRange().getLower().equals(cobj.getRange().getUpper())){
+                builder.append("..").append(cobj.getRange().getUpper());
+            }
+            builder.append("|");
         }
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());

@@ -59,9 +59,8 @@ public class ArchetypeSerializer {
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
         constraintSerializers.put(CDvQuantity.class, new CDvQuantitySerializer(this));
         constraintSerializers.put(CCodePhrase.class, new CCodePhraseSerializer (this));
-constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
-        constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this
-        ));
+        constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
+        constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this));
         constraintSerializers.put(ArchetypeInternalRef.class, new ArchetypeInternalRefSerializer(this));
     }
 
@@ -120,7 +119,8 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
         }
 
         if (archetype.getOntology()!=null) {
-            builder.newline().append("terminology").dadlBean(archetype.getOntology());
+            //builder.newline().append("terminology").dadlBean(archetype.getOntology());
+            builder.newline().append("ontology").dadlBean(archetype.getOntology());
             builder.newline();
         }
 
@@ -136,6 +136,7 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
 
 
     public void buildCObject(CObject cobj) {
+
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
         if (serializer!=null) {
             serializer.serialize(cobj);
@@ -143,7 +144,6 @@ constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
             throw new AssertionError("Unsupported constraint: " + cobj.getClass().getName());
         }
     }
-
 
     public String getSimpleCommentText(CObject cobj) {
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());

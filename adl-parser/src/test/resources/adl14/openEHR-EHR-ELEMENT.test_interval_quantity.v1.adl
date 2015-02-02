@@ -1,0 +1,81 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ELEMENT.test_interval_quantity.v1
+
+concept
+	[at0000]	-- Test interval quantity
+language
+	original_language = <[ISO_639-1::nb]>
+description
+	original_author = <
+		["name"] = <"Bjørn Næss">
+		["organisation"] = <"DIPS ASA">
+		["email"] = <"bna@dips.no">
+		["date"] = <"2015-02-01">
+	>
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Test of deserialize/serialize interval of quantity">
+			use = <"Test of deserialize/serialize interval of quantity">
+			misuse = <"Clinical use">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"395CA3C6FD16EC778A8E92A7340E93B5">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Test interval quantity
+		value matches {
+			DV_INTERVAL<DV_QUANTITY> matches {
+				upper matches {
+					C_DV_QUANTITY <
+						property = <[openehr::122]>
+						list = <
+							["1"] = <
+								units = <"m">
+								magnitude = <|5.0..50.0|>
+							>
+						>
+						assumed_value = <
+							magnitude = <20.0>
+							units = <"m">
+							precision = <-1>
+						>
+					>
+				}
+				lower matches {
+					C_DV_QUANTITY <
+						property = <[openehr::122]>
+						list = <
+							["1"] = <
+								units = <"m">
+								magnitude = <|0.0..10.0|>
+								precision = <|2|>
+							>
+						>
+						assumed_value = <
+							magnitude = <5.0>
+							units = <"m">
+							precision = <2>
+						>
+					>
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["nb"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test interval quantity">
+					description = <"Test of deserialize/serialize interval of quantity">
+				>
+			>
+		>
+	>

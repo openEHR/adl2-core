@@ -22,9 +22,7 @@ package org.openehr.adl.serializer;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
-import org.openehr.jaxb.am.ArchetypeTerm;
-import org.openehr.jaxb.am.CodeDefinitionSet;
-import org.openehr.jaxb.am.ValueSetItem;
+import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
 
 import javax.annotation.Nonnull;
@@ -43,6 +41,10 @@ public class DAdlSerializer {
 
     public DAdlSerializer(AdlStringBuilder builder) {
         this.builder = builder;
+    }
+
+    private static String getAttributeForField(@Nonnull String fieldName) {
+        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
     }
 
     public void serialize(Object obj) {
@@ -72,7 +74,7 @@ public class DAdlSerializer {
     /**
      * Serializes bean, without wrapping it with &lt;/&gt;
      *
-     * @param obj bean to serialize
+     * @param obj                bean to serialize
      * @param attributesToIgnore attributes that are not written to dadl
      */
     public void serializeBean(Object obj, Set<String> attributesToIgnore) {
@@ -149,6 +151,7 @@ public class DAdlSerializer {
     }
 
     private void serializeItem(Object item) {
+     //   System.out.println("serializeItem:" + item);
         if (item instanceof TranslationDetails) {
             TranslationDetails td = (TranslationDetails) item;
             serializeKey(td.getLanguage().getCodeString());
@@ -164,11 +167,19 @@ public class DAdlSerializer {
         } else if (item instanceof CodeDefinitionSet) {
             CodeDefinitionSet cds = (CodeDefinitionSet) item;
             serializeKey(cds.getLanguage());
+            builder.append("<").newIndentedline().append("items =  ");
             serialize(cds.getItems());
+            builder.unindent().newline().append(">");
+            //builder.newline().append(">");
         } else if (item instanceof ArchetypeTerm) {
             ArchetypeTerm at = (ArchetypeTerm) item;
             serializeKey(at.getCode());
-            serialize(at.getItems());
+            List<StringDictionaryItem> items = at.getItems();
+            builder.append("<").indent();
+            for (StringDictionaryItem s : items) {
+                builder.newline().append(s.getId()).append(" = ").dadl(s.getValue());
+            }
+            builder.newline().unindent().append(">");
         } else if (item instanceof ValueSetItem) {
             ValueSetItem vsi = (ValueSetItem) item;
             serializeKey(vsi.getId());
@@ -187,14 +198,32 @@ public class DAdlSerializer {
             builder.append(">");
         } else if (item instanceof String) {
             serializePlain(item);
+        } else if (item instanceof ConstraintBindingSet) {
+            ConstraintBindingSet set = (ConstraintBindingSet) item;
+            serializeKey(set.getTerminology());
+            builder.append("<").newIndentedline().append("items = <");
+            serializeListMap(set.getItems());
+            builder.append(">");
+            builder.unindent().newline().append(">");
+        } else if (item instanceof ConstraintBindingItem) {
+            ConstraintBindingItem c = (ConstraintBindingItem) item;
+            serializeKey(c.getCode());
+            //serializeItem(c.getValue());
+            builder.append("<").append(c.getValue()).append(">");
+        } else if (item instanceof TermBindingSet) {
+            TermBindingSet t = (TermBindingSet) item;
+            serializeKey(t.getTerminology());
+            builder.append("<").newIndentedline().append("items = <");
+            serializeListMap(t.getItems());
+            builder.append(">");
+            builder.unindent().newline().append(">");
+        } else if (item instanceof TermBindingItem) {
+            TermBindingItem t = (TermBindingItem) item;
+            serializeKey(t.getCode());
+            serialize(t.getValue());
         } else {
             throw new IllegalArgumentException(item.getClass().getName());
         }
-    }
-
-
-    private static String getAttributeForField(@Nonnull String fieldName) {
-        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
     }
 
     private void serializeKey(String key) {
@@ -209,7 +238,7 @@ public class DAdlSerializer {
         private NameValue(String name, Object value, boolean plain) {
             this.name = name;
             this.value = value;
-            this.plain=plain;
+            this.plain = plain;
         }
     }
 }

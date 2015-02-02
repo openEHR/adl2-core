@@ -20,6 +20,8 @@
 
 package org.openehr.adl.serializer;
 
+
+import org.apache.commons.io.FileUtils;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
@@ -28,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.testng.Assert.assertNotNull;
 
 public class ArchetypeSerializerTest {
@@ -47,11 +50,24 @@ public class ArchetypeSerializerTest {
     }
 
     @Test
+    public void testSerializeBloodPressure() {
+        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+        String adl = ArchetypeSerializer.serialize(archetype);
+        write(adl, "openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+        Archetype result = TestAdlParser.parseAdlFromString(adl);
+        assertThat(result).isNotNull();
+
+    }
+
+    @Test
     public void testSerializeDemoArchetype() {
         Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
         write(serialized, "TestDemoArchetype.adl");
+        Archetype result = TestAdlParser.parseAdlFromString(serialized);
+        assertThat(result).isNotNull();
+
 
     }
 
@@ -71,17 +87,18 @@ public class ArchetypeSerializerTest {
         Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-entry.c_dv_quantity_full.test.adl");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
-        // System.out.println(serialized);
         write(serialized, "TestSerializeQuantity.adl");
     }
 
     /**
-     * Write the ADL to target/{file) to inspect manually }
-     * @param adl the string representation of Archetype 
+     * Write the ADL to target/{file) to inspect manually and try open with Archetype Editor
+     *
+     * @param adl  the string representation of Archetype
      * @param file the filename
      */
     private void write(String adl, String file) {
         try {
+            FileUtils.forceMkdir(new File("target"));
             FileWriter writer = new FileWriter(new File("target/" + file));
             writer.write(adl);
             writer.flush();

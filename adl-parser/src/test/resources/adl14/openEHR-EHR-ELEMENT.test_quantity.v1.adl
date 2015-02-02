@@ -1,0 +1,67 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ELEMENT.test_quantity.v1
+
+concept
+	[at0000]	-- Test quantity
+language
+	original_language = <[ISO_639-1::nb]>
+description
+	original_author = <
+		["name"] = <"Bjørn Næss">
+		["organisation"] = <"DIPS ASA">
+		["email"] = <"bna@dips.no">
+		["date"] = <"2015-02-01">
+	>
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"To test deserialize/serialize of DV_QUANTITY">
+			use = <"To test deserialize/serialize of DV_QUANTITY">
+			misuse = <"Clinical use">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"The references \"used\" ">
+		["MD5-CAM-1.0.1"] = <"D36EA2E7A7E6FC93FE05265A890F5560">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Test quantity
+		value matches {
+			C_DV_QUANTITY <
+				property = <[openehr::124]>
+				list = <
+					["1"] = <
+						units = <"kg">
+						magnitude = <|0.0..10.0|>
+						precision = <|1|>
+					>
+					["2"] = <
+						units = <"mg">
+						magnitude = <|0.0..10000.0|>
+						precision = <|1|>
+					>
+				>
+				assumed_value = <
+					magnitude = <5.0>
+					units = <"kg">
+					precision = <1>
+				>
+			>
+		}
+	}
+
+ontology
+	term_definitions = <
+		["nb"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test quantity">
+					description = <"The description  for \"serialize\"">
+				>
+			>
+		>
+	>

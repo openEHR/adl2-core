@@ -93,6 +93,12 @@ public class AdlUtils {
         return makeClone(result);
     }
 
+    public static DifferentialArchetype createDifferentialArchetypeClone(FlatArchetype source) {
+        DifferentialArchetype result = new DifferentialArchetype();
+        fillArchetypeFields(result, source);
+        return makeClone(result);
+    }
+
     public static Template createTemplateClone(FlatArchetype source) {
         Template result = new Template();
         fillArchetypeFields(result, source);
@@ -101,7 +107,7 @@ public class AdlUtils {
     }
 
 
-    private static void fillArchetypeFields(FlatArchetype target, Archetype source) {
+    private static void fillArchetypeFields(Archetype target, Archetype source) {
         target.setDefinition(source.getDefinition());
         target.setIsControlled(source.isIsControlled());
         target.setArchetypeId(source.getArchetypeId());

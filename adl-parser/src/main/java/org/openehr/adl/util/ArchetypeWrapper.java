@@ -136,6 +136,12 @@ public class ArchetypeWrapper {
         return valueSets.get(code);
     }
 
+    @Nullable
+    public CodePhrase getTerminologyBinding(String terminology, String code) {
+        Map<String, CodePhrase> singleTerminologyBinding = terminologyBindings.get(terminology);
+        if (singleTerminologyBinding == null) return null;
+        return singleTerminologyBinding.get(code);
+    }
 
 
 }

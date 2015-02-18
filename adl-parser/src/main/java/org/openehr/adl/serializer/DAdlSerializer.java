@@ -179,7 +179,7 @@ public class DAdlSerializer {
             for (StringDictionaryItem s : items) {
                 builder.newline().append(s.getId()).append(" = ").dadl(s.getValue());
             }
-            builder.newline().unindent().append(">");
+            builder.unindent().newline().append(">");
         } else if (item instanceof ValueSetItem) {
             ValueSetItem vsi = (ValueSetItem) item;
             serializeKey(vsi.getId());

@@ -458,7 +458,7 @@
     </xs:complexType>
     <xs:complexType name="TERM_BINDING_ITEM">
         <xs:sequence>
-            <xs:element name="value" type="CODE_PHRASE"/>
+            <xs:element name="value" type="xs:anyURI"/>
         </xs:sequence>
         <xs:attribute name="code" type="xs:string" use="required"/>
     </xs:complexType>

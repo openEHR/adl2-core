@@ -20,6 +20,7 @@
 
 package org.openehr.adl.parser;
 
+import org.antlr.runtime.tree.CommonTree;
 import org.openehr.adl.antlr.AdlLexer;
 import org.openehr.adl.antlr.AdlParser;
 import org.openehr.adl.parser.tree.AdlTreeParser;
@@ -61,7 +62,7 @@ public class AdlDeserializer {
                 AdlParser parser = new ErrorThrowingAdlParser(tokenStream);
                 AdlParser.adl_return adlReturn = parser.adl();
 
-                DifferentialArchetype archetype =  AdlTreeParser.build(tokenStream, adlReturn.getTree(), rmModel);
+                DifferentialArchetype archetype =  AdlTreeParser.build(tokenStream, (CommonTree) adlReturn.getTree(), rmModel);
                 AdlParserPostprocessor.postprocess(archetype);
                 return archetype;
             } catch (RecognitionException e) {

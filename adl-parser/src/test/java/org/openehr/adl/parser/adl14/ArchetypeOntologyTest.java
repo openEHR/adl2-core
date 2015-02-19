@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Map;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.openehr.adl.util.TestUtils.assertCodePhrase;
 
 public class ArchetypeOntologyTest extends ParserTestBase {
@@ -58,7 +59,7 @@ public class ArchetypeOntologyTest extends ParserTestBase {
         assertEquals("term bindings wrong", "SNOMED-CT", termBinding.getTerminology());
         List<TermBindingItem> tbis = termBinding.getItems();
         TermBindingItem tbi = tbis.get(0);
-        assertCodePhrase(tbi.getValue(), "SNOMED-CT", "123456");
+        assertThat(tbi.getValue()).isEqualTo("SNOMED-CT::123456");
 
         List<ConstraintBindingSet> constrBindings = ontology.getConstraintBindings();
         ConstraintBindingSet constrBinding = constrBindings.get(0);

@@ -34,9 +34,9 @@ public class ErrorThrowingAdlParser extends AdlParser {
         super(input);
     }
 
-    public ErrorThrowingAdlParser(TokenStream input, RecognizerSharedState state) {
-        super(input, state);
-    }
+//    public ErrorThrowingAdlParser(TokenStream input, RecognizerSharedState state) {
+//        super(input, state);
+//    }
 
     @SuppressWarnings("RefusedBequest")
     @Override

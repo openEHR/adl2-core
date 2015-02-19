@@ -114,7 +114,7 @@ public class AmObjectFactory {
         return result;
     }
 
-    public static TermBindingItem newTermBindingItem(String code, CodePhrase value) {
+    public static TermBindingItem newTermBindingItem(String code, String value) {
         TermBindingItem result = new TermBindingItem();
         result.setCode(code);
         result.setValue(value);

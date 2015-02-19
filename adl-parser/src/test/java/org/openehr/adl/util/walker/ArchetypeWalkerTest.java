@@ -108,7 +108,7 @@ public class ArchetypeWalkerTest extends ParserTestBase {
                 visits.add(item.getClass().getSimpleName() + "[" + ((ArchetypeTerm) item).getCode() + "]");
             } else if (item instanceof TermBindingItem) {
                 final TermBindingItem tbi = (TermBindingItem) item;
-                visits.add(item.getClass().getSimpleName() + "[" + tbi.getCode() + "/" + toCodeString(tbi.getValue()) + "]");
+                visits.add(item.getClass().getSimpleName() + "[" + tbi.getCode() + "/" + tbi.getValue() + "]");
             } else if (item instanceof TermBindingSet) {
                 visits.add(item.getClass().getSimpleName() + "[" + ((TermBindingSet) item).getTerminology() + "]");
             } else if (item instanceof CodeDefinitionSet) {

@@ -36,7 +36,7 @@ import java.util.Map;
 public class ArchetypeWrapper {
     private final Archetype archetype;
     // terminology, code -> value
-    private final Map<String, Map<String, CodePhrase>> terminologyBindings;
+    private final Map<String, Map<String, String>> terminologyBindings;
     // language, code, id(text/description) -> value
     private final Map<String, Map<String, Map<String, String>>> terminologyDefinitions;
     private final Map<String, Map<String, Map<String, String>>> constraintDefinitions;
@@ -63,11 +63,11 @@ public class ArchetypeWrapper {
         return result;
     }
 
-    private Map<String, Map<String, CodePhrase>> parseTerminologyBindings(ArchetypeOntology ontology) {
-        Map<String, Map<String, CodePhrase>> terminologyBindings = new LinkedHashMap<>();
+    private Map<String, Map<String, String>> parseTerminologyBindings(ArchetypeOntology ontology) {
+        Map<String, Map<String, String>> terminologyBindings = new LinkedHashMap<>();
 
         for (TermBindingSet tbs : ontology.getTermBindings()) {
-            Map<String, CodePhrase> codePhrases = new LinkedHashMap<>();
+            Map<String, String> codePhrases = new LinkedHashMap<>();
             for (TermBindingItem tbi : tbs.getItems()) {
                 codePhrases.put(tbi.getCode(), tbi.getValue());
             }
@@ -137,8 +137,8 @@ public class ArchetypeWrapper {
     }
 
     @Nullable
-    public CodePhrase getTerminologyBinding(String terminology, String code) {
-        Map<String, CodePhrase> singleTerminologyBinding = terminologyBindings.get(terminology);
+    public String getTerminologyBinding(String terminology, String code) {
+        Map<String, String> singleTerminologyBinding = terminologyBindings.get(terminology);
         if (singleTerminologyBinding == null) return null;
         return singleTerminologyBinding.get(code);
     }

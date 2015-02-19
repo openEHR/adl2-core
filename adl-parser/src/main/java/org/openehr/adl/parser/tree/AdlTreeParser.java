@@ -32,6 +32,7 @@ import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -297,8 +298,8 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
 
         Map<String, Tree> termBindingItem = dadl.parseAdlMap(tTermBindingItem);
         for (Map.Entry<String, Tree> entry : termBindingItem.entrySet()) {
-            List<CodePhrase> codePhraseList = parseTermBindingsValue((CommonTree) entry.getValue());
-            for (CodePhrase codePhrase : codePhraseList) {
+            List<String> codePhraseList = parseTermBindingsValue((CommonTree) entry.getValue());
+            for (String codePhrase : codePhraseList) {
                 TermBindingItem tbi = new TermBindingItem();
                 tbi.setCode(entry.getKey());
                 tbi.setValue(codePhrase);
@@ -307,16 +308,22 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         }
     }
 
-    private List<CodePhrase> parseTermBindingsValue(CommonTree tTermBindings) {
+    private List<String> parseTermBindingsValue(CommonTree tTermBindings) {
         if (tTermBindings.getType() == AdlParser.AST_CODE_PHRASE_LIST) {
-            return parseCodePhraseList(tTermBindings);
-        } else if (tTermBindings.getType() == AdlParser.AST_TEXT_CONTAINER) {
+//            return new ArrayList<>();
+            List<String> result = new ArrayList<>();
+            List<CodePhrase> cps =  parseCodePhraseList(tTermBindings);
+            for (CodePhrase cp : cps) {
+                result.add(cp.getTerminologyId().getValue()+"::"+cp.getCodeString());
+            }
+            return result;
+        }
+        if (tTermBindings.getType() == AdlParser.AST_TEXT_CONTAINER) {
             String url = collectText(tTermBindings);
-            int slash = url.lastIndexOf("/");
-            CodePhrase cp = new CodePhrase();
-            cp.setTerminologyId(newTerminologyId(url.substring(0, slash)));
-            cp.setCodeString(url.substring(slash + 1));
-            return Lists.newArrayList(cp);
+            return Lists.newArrayList(url);
+        }
+        if (tTermBindings.getType() == AdlParser.AST_STRING_LIST) {
+            return  collectStringList(tTermBindings);
         }
         throw new AdlTreeParserException("Unknown term binding value type: " + AdlParser.tokenNames[tTermBindings.getType()],
                 tTermBindings.getToken());

@@ -46,7 +46,7 @@ public class TermBindingsFeatureTest {
         assertThat(tb).hasSize(2);
         assertThat(tb.get(0).getTerminology()).isEqualTo("AIR93(1.0.0)");
         assertThat(tb.get(0).getItems().get(0).getCode()).isEqualTo("ac2");
-        assertCodePhrase(tb.get(0).getItems().get(0).getValue(), "http://air93.org", "MZN-SIF-Dihanje-Kašelj");
+        assertThat(tb.get(0).getItems().get(0).getValue()).isEqualTo("http://air93.org/MZN-SIF-Dihanje-Kašelj");
     }
 
     @Test
@@ -60,9 +60,9 @@ public class TermBindingsFeatureTest {
         assertThat(tb.get(0).getItems().get(0).getCode()).isEqualTo("id5");
 
         assertTermBindingItem(tb.get(0).getItems().get(0),
-                newTermBindingItem("id5", newCodePhrase(newTerminologyId("http://LNC205.org/id"), "9272-6")));
+                newTermBindingItem("id5", "http://LNC205.org/id/9272-6"));
         assertTermBindingItem(tb.get(0).getItems().get(1),
-                newTermBindingItem("id7", newCodePhrase(newTerminologyId("http://LNC205.org/id"), "9271-8")));
+                newTermBindingItem("id7", "http://LNC205.org/id/9271-8"));
 
     }
 
@@ -74,8 +74,7 @@ public class TermBindingsFeatureTest {
         assertThat(tb).hasSize(1);
 
         assertTermBindingItem(tb.get(0).getItems().get(0),
-                newTermBindingItem("/data[id3]/events[id4]/data[id2]/items[id5]",
-                        newCodePhrase(newTerminologyId("http://LNC205.org/id"), "9272-6")));
+                newTermBindingItem("/data[id3]/events[id4]/data[id2]/items[id5]", "http://LNC205.org/id/9272-6"));
 
     }
 
@@ -96,7 +95,7 @@ public class TermBindingsFeatureTest {
 
     private void assertTermBindingItem(TermBindingItem actual, TermBindingItem expected) {
         assertThat(actual.getCode()).isEqualTo(expected.getCode());
-        assertCodePhrase(actual.getValue(), expected.getValue().getTerminologyId().getValue(), expected.getValue().getCodeString());
+        assertThat(actual.getValue()).isEqualTo(expected.getValue());
     }
 
 

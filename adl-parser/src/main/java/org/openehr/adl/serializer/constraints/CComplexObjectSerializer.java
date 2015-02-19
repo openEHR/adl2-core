@@ -89,9 +89,11 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             appendCardinality(cattr.getCardinality());
             builder.append("} ");
         }
-        builder.append("matches ");
-        buildAttributeChildConstraints(cattr);
-        builder.append("");
+        if (!cattr.getChildren().isEmpty()) {
+            builder.append("matches ");
+            buildAttributeChildConstraints(cattr);
+            builder.append("");
+        }
     }
 
     private void buildTuple(CAttributeTuple cAttributeTuple) {

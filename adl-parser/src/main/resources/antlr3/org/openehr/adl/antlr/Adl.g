@@ -423,7 +423,7 @@ adlObjectProperty:
 adlCodePhraseValueList:
 	adlCodePhraseValue (',' adlCodePhraseValue)* -> ^(AST_CODE_PHRASE_LIST adlCodePhraseValue+);
 adlCodePhraseValue
-	: '[' tid=codeIdentifier '::' code=codeIdentifier ']' -> ^(AST_CODE_PHRASE $tid $code)
+	: '[' tid=codeIdentifier '::' code=codeIdentifier ']' -> ^(AST_CODE_PHRASE $tid $code) 
 	;
 adlMapValue:
 	( adlMapValueEntry )+ -> ^(AST_ADL_MAP adlMapValueEntry+);
@@ -442,7 +442,7 @@ booleanList:	bool (',' bool)* -> ^(AST_BOOLEAN_LIST bool+);
 codeIdentifier:
 		codeIdentifierPart+ -> ^(AST_TEXT codeIdentifierPart+);
 codeIdentifierPart:
-		(identifier | number |ISO_DATE_TIME | ISO_DATE | '.'| '-' | '(' | ')') ;
+		(identifier | number |ISO_DATE_TIME | ISO_DATE | '.'| '-' | '(' | ')' | ':' | '/') ;
 
 identifier:
 	nameIdentifier | typeIdentifier;

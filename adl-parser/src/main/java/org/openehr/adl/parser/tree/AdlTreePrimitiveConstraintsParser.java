@@ -20,13 +20,13 @@
 
 package org.openehr.adl.parser.tree;
 
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.openehr.adl.antlr.AdlParser;
 import org.openehr.adl.parser.RuntimeRecognitionException;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.util.AdlUtils;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
 
@@ -49,7 +49,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
     private final AdlTreeDAdlParser dadl;
 
     public AdlTreePrimitiveConstraintsParser(CommonTokenStream tokenStream, CommonTree adlTree,
-            AdlTreeParserState state, AdlTreeDAdlParser dadl, RmModel rmModel) {
+                                             AdlTreeParserState state, AdlTreeDAdlParser dadl, RmModel rmModel) {
         super(tokenStream, adlTree, state, rmModel);
         this.dadl = dadl;
     }
@@ -159,16 +159,26 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
+    private String collectTextOrStar(Tree tString) {
+        String text = collectText(tString);
+        if (text!=null && text.equals("*")) {
+            return null;
+        }
+        return text;
+    }
+
     // Date
     private CDate parseCDateInterval(Tree tConstraint) {
         Tree tInterval = child(tConstraint, 0, AdlParser.AST_DATE_INTERVAL_CONSTRAINT);
         CDate result = new CDate();
 
+        String low = collectTextOrStar(tInterval.getChild(0));
+        String high = collectTextOrStar(tInterval.getChild(1));
         result.setRange(newIntervalOfDate(
-                collectText(tInterval.getChild(0)),
-                collectText(tInterval.getChild(1)),
-                tInterval.getChild(2).getType() == AdlParser.TRUE,
-                tInterval.getChild(3).getType() == AdlParser.TRUE));
+                low,
+                high,
+                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
+                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
 
         result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
         return result;
@@ -196,11 +206,13 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         Tree tInterval = child(tConstraint, 0, AdlParser.AST_TIME_INTERVAL_CONSTRAINT);
         CTime result = new CTime();
 
+        String low = collectTextOrStar(tInterval.getChild(0));
+        String high = collectTextOrStar(tInterval.getChild(1));
         result.setRange(newIntervalOfTime(
-                collectText(tInterval.getChild(0)),
-                collectText(tInterval.getChild(1)),
-                tInterval.getChild(2).getType() == AdlParser.TRUE,
-                tInterval.getChild(3).getType() == AdlParser.TRUE));
+                low,
+                high,
+                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
+                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
 
         result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
         return result;
@@ -228,11 +240,13 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         Tree tInterval = child(tConstraint, 0, AdlParser.AST_DATE_TIME_INTERVAL_CONSTRAINT);
         CDateTime result = new CDateTime();
 
+        String low = collectTextOrStar(tInterval.getChild(0));
+        String high = collectTextOrStar(tInterval.getChild(1));
         result.setRange(newIntervalOfDateTime(
-                collectText(tInterval.getChild(0)),
-                collectText(tInterval.getChild(1)),
-                tInterval.getChild(2).getType() == AdlParser.TRUE,
-                tInterval.getChild(3).getType() == AdlParser.TRUE));
+                low,
+                high,
+                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
+                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
 
         result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
         return result;
@@ -354,20 +368,20 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         String highStr = collectText(tNumberInterval.getChild(1));
 
         try {
-            Integer low = lowStr != null ? Integer.parseInt(lowStr) : null;
-            Integer high = highStr != null ? Integer.parseInt(highStr) : null;
+            Integer low = (lowStr != null && !lowStr.equals("*")) ? Integer.parseInt(lowStr) : null;
+            Integer high = (highStr != null && !highStr.equals("*")) ? Integer.parseInt(highStr) : null;
 
-            interval = newIntervalOfInteger(low, high, lowerIncluded, upperIncluded);
+            interval = newIntervalOfInteger(low, high, lowerIncluded && low != null, upperIncluded && high != null);
 
         } catch (NumberFormatException e) {
             if (mustBeInteger) {
                 throw new AdlTreeParserException("Expected interval of integer, found interval of real", tokenOf(tNumberInterval));
             }
 
-            Float low = lowStr != null ? Float.parseFloat(lowStr) : null;
-            Float high = highStr != null ? Float.parseFloat(highStr) : null;
+            Float low = (lowStr != null && !lowStr.equals("*")) ? Float.parseFloat(lowStr) : null;
+            Float high = (highStr != null && !highStr.equals("*")) ? Float.parseFloat(highStr) : null;
 
-            interval = newIntervalOfReal(low, high, lowerIncluded, upperIncluded);
+            interval = newIntervalOfReal(low, high, lowerIncluded && low != null, upperIncluded && high != null);
         }
         return interval;
     }

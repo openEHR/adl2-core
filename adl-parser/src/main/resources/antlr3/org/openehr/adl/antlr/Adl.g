@@ -321,10 +321,10 @@ cardinality:
 
 numberIntervalConstraint:
 	// range
-	'|'  ('>' '=')? number '..' ('<' '=')? number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT number number TRUE TRUE) |
-	'|'  '>'        number '..' ('<' '=')? number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT number number FALSE TRUE) |
-	'|'  ('>' '=')? number '..' '<'        number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT number number TRUE FALSE) |
-	'|'  '>'        number '..' '<'        number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT number number FALSE FALSE) |
+	'|'  ('>' '=')? numberOrStar '..' ('<' '=')? numberOrStar '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT numberOrStar numberOrStar TRUE TRUE) |
+	'|'  '>'        numberOrStar '..' ('<' '=')? numberOrStar '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT numberOrStar numberOrStar FALSE TRUE) |
+	'|'  ('>' '=')? numberOrStar '..' '<'        numberOrStar '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT numberOrStar numberOrStar TRUE FALSE) |
+	'|'  '>'        numberOrStar '..' '<'        numberOrStar '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT numberOrStar numberOrStar FALSE FALSE) |
 	// relative to single value 
 	'|' val=      number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT $val $val TRUE TRUE) |
 	'|' ('>' '=') number '|' -> ^(AST_NUMBER_INTERVAL_CONSTRAINT number AST_NULL TRUE FALSE ) |
@@ -334,10 +334,10 @@ numberIntervalConstraint:
 	;
 dateIntervalConstraint:
 	// range
-	'|'  ('>' '=')? ISO_DATE '..' ('<' '=')? ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT ISO_DATE ISO_DATE TRUE TRUE) |
-	'|'  '>'        ISO_DATE '..' ('<' '=')? ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT ISO_DATE ISO_DATE FALSE TRUE) |
-	'|'  ('>' '=')? ISO_DATE '..' '<'        ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT ISO_DATE ISO_DATE TRUE FALSE) |
-	'|'  '>'        ISO_DATE '..' '<'        ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT ISO_DATE ISO_DATE FALSE FALSE) |
+	'|'  ('>' '=')? dateOrStar '..' ('<' '=')? dateOrStar '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT dateOrStar dateOrStar TRUE TRUE) |
+	'|'  '>'        dateOrStar '..' ('<' '=')? dateOrStar '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT dateOrStar dateOrStar FALSE TRUE) |
+	'|'  ('>' '=')? dateOrStar '..' '<'        dateOrStar '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT dateOrStar dateOrStar TRUE FALSE) |
+	'|'  '>'        dateOrStar '..' '<'        dateOrStar '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT dateOrStar dateOrStar FALSE FALSE) |
 	// relative to single value 
 	'|' val=      ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT $val $val TRUE TRUE) |
 	'|' ('>' '=') ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT ISO_DATE AST_NULL TRUE FALSE ) |
@@ -345,12 +345,16 @@ dateIntervalConstraint:
 	'|' ('<' '=') ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT AST_NULL ISO_DATE FALSE TRUE ) |
 	'|' '<'       ISO_DATE '|' -> ^(AST_DATE_INTERVAL_CONSTRAINT AST_NULL ISO_DATE FALSE FALSE ) 
 	;
+	
+dateOrStar
+	:		ISO_DATE | '*';
+	
 timeIntervalConstraint:
 	// range
-	'|'  ('>' '=')? ISO_TIME '..' ('<' '=')? ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT ISO_TIME ISO_TIME TRUE TRUE) |
-	'|'  '>'        ISO_TIME '..' ('<' '=')? ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT ISO_TIME ISO_TIME FALSE TRUE) |
-	'|'  ('>' '=')? ISO_TIME '..' '<'        ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT ISO_TIME ISO_TIME TRUE FALSE) |
-	'|'  '>'        ISO_TIME '..' '<'        ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT ISO_TIME ISO_TIME FALSE FALSE) |
+	'|'  ('>' '=')? timeOrStar '..' ('<' '=')? timeOrStar '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT timeOrStar timeOrStar TRUE TRUE) |
+	'|'  '>'        timeOrStar '..' ('<' '=')? timeOrStar '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT timeOrStar timeOrStar FALSE TRUE) |
+	'|'  ('>' '=')? timeOrStar '..' '<'        timeOrStar '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT timeOrStar timeOrStar TRUE FALSE) |
+	'|'  '>'        timeOrStar '..' '<'        timeOrStar '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT timeOrStar timeOrStar FALSE FALSE) |
 	// relative to single value 
 	'|' val=      ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT $val $val TRUE TRUE) |
 	'|' ('>' '=') ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT ISO_TIME AST_NULL TRUE FALSE ) |
@@ -359,12 +363,15 @@ timeIntervalConstraint:
 	'|' '<'       ISO_TIME '|' -> ^(AST_TIME_INTERVAL_CONSTRAINT AST_NULL ISO_TIME FALSE FALSE ) 
 	;
 	
+timeOrStar
+	:	ISO_TIME | '*';	
+	
 dateTimeIntervalConstraint:
 	// range
-	'|'  ('>' '=')? ISO_DATE_TIME '..' ('<' '=')? ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT ISO_DATE_TIME ISO_DATE_TIME TRUE TRUE) |
-	'|'  '>'        ISO_DATE_TIME '..' ('<' '=')? ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT ISO_DATE_TIME ISO_DATE_TIME FALSE TRUE) |
-	'|'  ('>' '=')? ISO_DATE_TIME '..' '<'        ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT ISO_DATE_TIME ISO_DATE_TIME TRUE FALSE) |
-	'|'  '>'        ISO_DATE_TIME '..' '<'        ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT ISO_DATE_TIME ISO_DATE_TIME FALSE FALSE) |
+	'|'  ('>' '=')? dateTimeOrStar '..' ('<' '=')? dateTimeOrStar '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT dateTimeOrStar dateTimeOrStar TRUE TRUE) |
+	'|'  '>'        dateTimeOrStar '..' ('<' '=')? dateTimeOrStar '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT dateTimeOrStar dateTimeOrStar FALSE TRUE) |
+	'|'  ('>' '=')? dateTimeOrStar '..' '<'        dateTimeOrStar '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT dateTimeOrStar dateTimeOrStar TRUE FALSE) |
+	'|'  '>'        dateTimeOrStar '..' '<'        dateTimeOrStar '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT dateTimeOrStar dateTimeOrStar FALSE FALSE) |
 	// relative to single value 
 	'|' val=      ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT $val $val TRUE TRUE) |
 	'|' ('>' '=') ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT ISO_DATE_TIME AST_NULL TRUE FALSE ) |
@@ -372,13 +379,16 @@ dateTimeIntervalConstraint:
 	'|' ('<' '=') ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT AST_NULL ISO_DATE_TIME FALSE TRUE ) |
 	'|' '<'       ISO_DATE_TIME '|' -> ^(AST_DATE_TIME_INTERVAL_CONSTRAINT AST_NULL ISO_DATE_TIME FALSE FALSE ) 
 	;
+
+dateTimeOrStar
+	:	ISO_DATE_TIME|'*';	
 	
 durationIntervalConstraint:
 	// range
-	'|'  ('>' '=')? DURATION '..' ('<' '=')? DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT DURATION DURATION TRUE TRUE) |
-	'|'  '>'        DURATION '..' ('<' '=')? DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT DURATION DURATION FALSE TRUE) |
-	'|'  ('>' '=')? DURATION '..' '<'        DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT DURATION DURATION TRUE FALSE) |
-	'|'  '>'        DURATION '..' '<'        DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT DURATION DURATION FALSE FALSE) |
+	'|'  ('>' '=')? durationOrStar '..' ('<' '=')? durationOrStar '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT durationOrStar durationOrStar TRUE TRUE) |
+	'|'  '>'        durationOrStar '..' ('<' '=')? durationOrStar '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT durationOrStar durationOrStar FALSE TRUE) |
+	'|'  ('>' '=')? durationOrStar '..' '<'        durationOrStar '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT durationOrStar durationOrStar TRUE FALSE) |
+	'|'  '>'        durationOrStar '..' '<'        durationOrStar '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT durationOrStar durationOrStar FALSE FALSE) |
 	// relative to single value 
 	'|' val=        DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT $val $val TRUE TRUE) |
 	'|' ('>' '=')   DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT DURATION AST_NULL TRUE FALSE ) |
@@ -386,6 +396,9 @@ durationIntervalConstraint:
 	'|' ('<' '=')   DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT AST_NULL DURATION FALSE TRUE ) |
 	'|' '<'         DURATION '|' -> ^(AST_DURATION_INTERVAL_CONSTRAINT AST_NULL DURATION FALSE FALSE ) 
 	;
+	
+durationOrStar
+	:	DURATION|'*';	
 	
 		
 
@@ -459,6 +472,9 @@ rmPath: '/'? pathSegment ('/' pathSegment)* -> ^(AST_TEXT);
 
 url:
 	identifier ':' (codeIdentifierPart|'_'|'.'|'='|'?'|'-'|'/'|'&'|';'| UNICODE_CHAR)+ -> AST_TEXT;
+
+numberOrStar:
+	number | '*';
 
 number:
 	'-'? INTEGER ('.' INTEGER)? -> AST_NUMBER;

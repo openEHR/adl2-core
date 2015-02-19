@@ -141,6 +141,13 @@ public class BasicTypesTest extends ParserTestBase {
 
         assertCDate(list.get(21), null, greaterEqual(date("2004-09-20")), null,
                 "2005-10-30");
+
+
+        // partially unbounded interval
+        assertCDate(list.get(24), null, newIntervalOfDate("2004-09-20", null), null,
+                null);
+        assertCDate(list.get(25), null, newIntervalOfDate(null, "2004-09-20"), null,
+                null);
     }
 
     /**
@@ -345,6 +352,11 @@ public class BasicTypesTest extends ParserTestBase {
         assertCReal(list.get(18), newIntervalOfReal(0.0, 100.0, true, false), null, null);
 
         assertCReal(list.get(19), newIntervalOfReal(0.0, 100.0, false, false), null, null);
+
+        // partially unbounded intervals
+        assertCReal(list.get(20), newIntervalOfReal(0.0, null, true, false), null, null);
+        assertCReal(list.get(21), newIntervalOfReal(null, 3.0, false, true), null, null);
+
     }
 
     /**
@@ -397,6 +409,11 @@ public class BasicTypesTest extends ParserTestBase {
         assertCInteger(list.get(18), newIntervalOfInteger(0, 100, true, false), null, null);
 
         assertCInteger(list.get(19), newIntervalOfInteger(0, 100, false, false), null, null);
+
+        // partially unbounded intervals
+        assertCInteger(list.get(20), newIntervalOfInteger(0, null, true, false), null, null);
+        assertCInteger(list.get(21), newIntervalOfInteger(null, 3, false, true), null, null);
+
     }
 
     /**

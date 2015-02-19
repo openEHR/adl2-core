@@ -34,14 +34,24 @@ public class CDateTimeSerializer extends ConstraintSerializer<CDateTime> {
 
     @Override
     public void serialize(CDateTime cobj) {
+        boolean constrained=false;
+
         if (cobj.getPattern() != null) {
             builder.append(cobj.getPattern());
+            constrained=true;
         }
         if (cobj.getRange() != null) {
             builder.append(AmMixins.of(cobj.getRange()).toString());
+            constrained=true;
         }
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());
+            constrained=true;
         }
+
+        if (!constrained) {
+            builder.append("*");
+        }
+
     }
 }

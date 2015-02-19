@@ -35,12 +35,15 @@ public class CRealSerializer extends ConstraintSerializer<CReal> {
 
     @Override
     public void serialize(CReal cobj) {
+        boolean constrained = false;
+
         if (cobj.getRange() != null) {
             builder.append("|")
                     .append(firstNonNull(cobj.getRange().getLower(), "0.0"))
                     .append("..")
                     .append(firstNonNull(cobj.getRange().getUpper(), "*"))
                     .append("|");
+            constrained = true;
         }
         if (!cobj.getList().isEmpty()) {
             for (int i = 0; i < cobj.getList().size(); i++) {
@@ -50,9 +53,16 @@ public class CRealSerializer extends ConstraintSerializer<CReal> {
                     builder.append(", ");
                 }
             }
+            constrained = true;
         }
         if (cobj.getAssumedValue() != null) {
             builder.append(";").append(cobj.getAssumedValue());
+            constrained = true;
         }
+
+        if (!constrained) {
+            builder.append("*");
+        }
+
     }
 }

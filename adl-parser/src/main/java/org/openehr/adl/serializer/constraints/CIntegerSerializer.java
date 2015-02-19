@@ -37,6 +37,8 @@ public class CIntegerSerializer extends ConstraintSerializer<CInteger> {
 
     @Override
     public void serialize(CInteger cobj) {
+        boolean constrained=false;
+
         if (cobj.getRange() != null) {
             Integer lower = cobj.getRange().getLower();
             Integer upper = cobj.getRange().getUpper();
@@ -54,6 +56,7 @@ public class CIntegerSerializer extends ConstraintSerializer<CInteger> {
                         .append("|");
 
             }
+            constrained=true;
         }
         if (!cobj.getList().isEmpty()) {
             for (int i = 0; i < cobj.getList().size(); i++) {
@@ -63,10 +66,18 @@ public class CIntegerSerializer extends ConstraintSerializer<CInteger> {
                     builder.append(", ");
                 }
             }
+            constrained=true;
+
         }
         if (cobj.getAssumedValue() != null) {
             builder.append(";").append(cobj.getAssumedValue());
+            constrained=true;
         }
+
+        if (!constrained) {
+            builder.append("*");
+        }
+
     }
     private String getLowerOperator(final IntervalOfInteger range){
         if(range.isLowerIncluded()) {

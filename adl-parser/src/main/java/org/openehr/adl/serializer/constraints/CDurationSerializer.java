@@ -37,8 +37,10 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
 
     @Override
     public void serialize(CDuration cobj) {
+        boolean constrained=false;
         if (cobj.getPattern() != null) {
             builder.append(cobj.getPattern());
+            constrained=true;
         }
         if (cobj.getRange() != null) {
             builder.append("|").append(cobj.getRange().getLower());
@@ -46,9 +48,15 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
                 builder.append("..").append(cobj.getRange().getUpper());
             }
             builder.append("|");
+            constrained=true;
         }
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());
+            constrained=true;
+        }
+
+        if (!constrained) {
+            builder.append("*");
         }
     }
 }

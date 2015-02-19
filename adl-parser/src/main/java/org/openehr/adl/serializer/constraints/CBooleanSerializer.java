@@ -39,6 +39,8 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
 
     @Override
     public void serialize(CBoolean cobj) {
+        boolean constrained=false;
+
         List<String> valids = new ArrayList<>();
         if (cobj.isTrueValid()) {
             valids.add("True");
@@ -47,7 +49,14 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
             valids.add("False");
         }
 
-        builder.append(Joiner.on(", ").join(valids));
+
+        if (!valids.isEmpty()) {
+            builder.append(Joiner.on(", ").join(valids));
+            constrained=true;
+        }
+        if (!constrained) {
+            builder.append("*");
+        }
 
 
     }

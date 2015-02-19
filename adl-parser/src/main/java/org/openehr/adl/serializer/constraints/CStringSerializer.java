@@ -33,9 +33,11 @@ public class CStringSerializer extends ConstraintSerializer<CString> {
 
     @Override
     public void serialize(CString cobj) {
+        boolean constrained=false;
+
         if (cobj.getPattern()!=null) {
             builder.append(cobj.getPattern());
-        }
+            constrained=true;        }
         if (!cobj.getList().isEmpty()) {
             for (int i = 0; i < cobj.getList().size(); i++) {
                 String item = cobj.getList().get(i);
@@ -44,9 +46,14 @@ public class CStringSerializer extends ConstraintSerializer<CString> {
                     builder.append(", ");
                 }
             }
+            constrained=true;
         }
         if (cobj.getAssumedValue()!=null) {
             builder.append(";").text(cobj.getAssumedValue());
+            constrained=true;
+        }
+        if (!constrained) {
+            builder.append("*");
         }
     }
 }

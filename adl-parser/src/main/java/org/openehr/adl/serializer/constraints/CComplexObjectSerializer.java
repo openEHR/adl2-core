@@ -89,11 +89,8 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             appendCardinality(cattr.getCardinality());
             builder.append("} ");
         }
-        if (!cattr.getChildren().isEmpty()) {
-            builder.append("matches ");
-            buildAttributeChildConstraints(cattr);
-            builder.append("");
-        }
+        builder.append("matches ");
+        buildAttributeChildConstraints(cattr);
     }
 
     private void buildTuple(CAttributeTuple cAttributeTuple) {
@@ -130,14 +127,19 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
 
     private void buildAttributeChildConstraints(CAttribute cattr) {
         boolean indent = !cattr.getChildren().isEmpty() &&
-                         (cattr.getChildren().size() > 1 || !(cattr.getChildren().get(0) instanceof CPrimitiveObject));
+                (cattr.getChildren().size() > 1 || !(cattr.getChildren().get(0) instanceof CPrimitiveObject));
         builder.append("{");
         for (CObject cObject : cattr.getChildren()) {
             serializer.buildCObject(cObject);
         }
+        if (cattr.getChildren().isEmpty()) {
+            builder.append("*");
+        }
+
         if (indent) {
             builder.newline();
         }
+
         builder.append("}");
 
         if (!indent && !cattr.getChildren().isEmpty()) {
@@ -145,7 +147,6 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             if (commentText != null) {
                 builder.lineComment(commentText);
             }
-
         }
     }
 

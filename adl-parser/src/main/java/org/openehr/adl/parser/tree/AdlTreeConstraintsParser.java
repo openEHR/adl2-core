@@ -214,7 +214,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         result.setIsMultiple(cardinality!=null);
 
         if (attributeNameOrPath.startsWith("/")) {
-            assertAdlV15("path based attributes", attributeNode);
+//            assertAdlV15("path based attributes", attributeNode);
             String actualAttributeName = RmPath.valueOf(attributeNameOrPath).getAttribute();
             result.setRmAttributeName(actualAttributeName);
             result.setDifferentialPath(attributeNameOrPath);

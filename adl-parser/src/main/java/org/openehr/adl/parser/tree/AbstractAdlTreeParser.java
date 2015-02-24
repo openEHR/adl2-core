@@ -251,10 +251,10 @@ abstract class AbstractAdlTreeParser {
                 checkNotNull(collectText(tCodePhrase.getChild(1))));
     }
 
-    protected void assertAdlV15(String feature, Tree location) {
-        if (!isAdlV15()) {
-            throw new AdlTreeParserException("Feature requires adl 1.5: " + feature, tokenOf(location));
-        }
-    }
+//    protected void assertAdlV15(String feature, Tree location) {
+//        if (!isAdlV15()) {
+//            throw new AdlTreeParserException("Feature requires adl 1.5: " + feature, tokenOf(location));
+//        }
+//    }
 
 }

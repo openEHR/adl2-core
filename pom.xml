@@ -202,4 +202,22 @@
         </plugins>
 
     </build>
+    <profiles>
+        <profile>
+            <id>marand-local</id>
+            <distributionManagement>
+                <repository>
+                    <id>releases</id>
+                    <name>Internal Releases</name>
+                    <url>http://pehar.marand.si:8081/nexus/content/repositories/releases</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id>
+                    <name>Internal Snapshots</name>
+                    <url>http://pehar.marand.si:8081/nexus/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
 </project>

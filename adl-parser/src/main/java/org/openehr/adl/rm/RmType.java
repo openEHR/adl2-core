@@ -40,8 +40,6 @@ public final class RmType {
     private List<Class> rmClasses;
     private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
     private String dataAttribute;
-    private boolean finalType;
-    private Display display;
 
     public RmType(String rmType, Class rmClass, Class... otherRmClasses) {
         this.rmType = rmType;
@@ -98,14 +96,6 @@ public final class RmType {
         return rmType;
     }
 
-    public Display getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(Display display) {
-        this.display = display;
-    }
-
     public Map<String, RmTypeAttribute> getAttributes() {
         return attributesMap;
     }
@@ -135,14 +125,6 @@ public final class RmType {
         this.dataAttribute = dataAttribute;
     }
 
-    public boolean isFinalType() {
-        return finalType;
-    }
-
-    public void setFinalType(boolean finalType) {
-        this.finalType = finalType;
-    }
-
 
     public boolean isSubclassOf(String rmType) {
         RmType type = this;
@@ -166,6 +148,5 @@ public final class RmType {
     }
 
 
-    public static enum Display {display, transparent, none}
 
 }

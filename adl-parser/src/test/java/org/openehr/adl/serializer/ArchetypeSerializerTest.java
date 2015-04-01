@@ -90,6 +90,14 @@ public class ArchetypeSerializerTest {
         write(serialized, "TestSerializeQuantity.adl");
     }
 
+    @Test
+    public void testSerializeAttributes() throws Exception {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/openEHR-EHR-COMPOSITION.attributes.v1.adls");
+        String serialized = ArchetypeSerializer.serialize(archetype);
+        assertNotNull(serialized);
+        write(serialized, "TestSerializeAttribute.adls");
+    }
+
     /**
      * Write the ADL to target/{file) to inspect manually and try open with Archetype Editor
      *

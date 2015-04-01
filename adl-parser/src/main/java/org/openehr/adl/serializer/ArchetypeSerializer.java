@@ -20,12 +20,12 @@
 
 package org.openehr.adl.serializer;
 
+import com.google.common.base.Joiner;
 import org.openehr.adl.serializer.constraints.*;
 import org.openehr.adl.util.ArchetypeWrapper;
 import org.openehr.jaxb.am.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Marko Pipan
@@ -58,7 +58,7 @@ public class ArchetypeSerializer {
         constraintSerializers.put(CDuration.class, new CDurationSerializer(this));
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
         constraintSerializers.put(CDvQuantity.class, new CDvQuantitySerializer(this));
-        constraintSerializers.put(CCodePhrase.class, new CCodePhraseSerializer (this));
+        constraintSerializers.put(CCodePhrase.class, new CCodePhraseSerializer(this));
         constraintSerializers.put(CDvOrdinal.class, new CDvOrdinalSerializer(this));
         constraintSerializers.put(ArchetypeSlot.class, new ArchetypeSlotSerializer(this));
         constraintSerializers.put(ArchetypeInternalRef.class, new ArchetypeInternalRefSerializer(this));
@@ -80,12 +80,11 @@ public class ArchetypeSerializer {
             }
         }
 
-        if (archetype.getAdlVersion() != null) {
-            builder.append(" (adl_version=").append(archetype.getAdlVersion()).append(")");
-        }
+        appendHeaderAttributes();
+
         builder.newIndentedline().append(archetype.getArchetypeId().getValue()).unindent().newline();
 
-        if (archetype.getParentArchetypeId()!=null) {
+        if (archetype.getParentArchetypeId() != null) {
             builder.newline().append("specialize").newIndentedline()
                     .append(archetype.getParentArchetypeId().getValue())
                     .unindent().newline();
@@ -118,13 +117,13 @@ public class ArchetypeSerializer {
             builder.newline();
         }
 
-        if (archetype.getOntology()!=null) {
+        if (archetype.getOntology() != null) {
             //builder.newline().append("terminology").dadlBean(archetype.getOntology());
             builder.newline().append("ontology").dadlBean(archetype.getOntology());
             builder.newline();
         }
 
-        if ((archetype.getAnnotations()!=null && !archetype.getAnnotations().getItems().isEmpty())) {
+        if ((archetype.getAnnotations() != null && !archetype.getAnnotations().getItems().isEmpty())) {
             builder.newline().append("annotations");
             builder.dadlBean(archetype.getAnnotations());
             builder.newline();
@@ -133,12 +132,36 @@ public class ArchetypeSerializer {
         return builder.toString();
     }
 
+    private void appendHeaderAttributes() {
+        Map<String, String> attributes = new LinkedHashMap<>();
+        if (archetype.getAdlVersion() != null) {
+            attributes.put("adl_version", archetype.getAdlVersion());
+        }
+        if (archetype.getRmRelease() != null) {
+            attributes.put("rm_release", archetype.getRmRelease());
+        }
+        if (archetype.isIsGenerated()) {
+            attributes.put("generated", null); // null only adds the key
+        }
+        if (!attributes.isEmpty()) {
+            List<String> elements = new ArrayList<>();
+            for (Map.Entry<String, String> entry : attributes.entrySet()) {
+                String element = entry.getKey();
+                if (entry.getValue() != null) {
+                    element += "=" + entry.getValue();
+                }
+                elements.add(element);
+            }
+
+            builder.append(" (").append(Joiner.on("; ").join(elements)).append(")");
+        }
+    }
 
 
     public void buildCObject(CObject cobj) {
 
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
-        if (serializer!=null) {
+        if (serializer != null) {
             serializer.serialize(cobj);
         } else {
             throw new AssertionError("Unsupported constraint: " + cobj.getClass().getName());
@@ -147,7 +170,7 @@ public class ArchetypeSerializer {
 
     public String getSimpleCommentText(CObject cobj) {
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
-        if (serializer==null) return null;
+        if (serializer == null) return null;
         return serializer.getSimpleCommentText(cobj);
     }
 

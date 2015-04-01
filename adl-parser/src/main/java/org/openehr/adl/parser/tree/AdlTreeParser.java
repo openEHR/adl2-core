@@ -192,6 +192,10 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
                 target.setAdlVersion(adlVersion);
                 getState().setAdlVersion(adlVersion);
             }
+            target.setRmRelease(archetypeProperties.get("rm_release"));
+            if (archetypeProperties.containsKey("generated")) {
+                target.setIsGenerated(true);
+            }
             if (archetypeProperties.containsKey("uid")) {
                 target.setUid(newHierObjectId(archetypeProperties.get("uid")));
             }

@@ -22,8 +22,6 @@ package org.openehr.adl.parser.adl15;
 
 import org.openehr.adl.ParserTestBase;
 import org.openehr.jaxb.am.Archetype;
-import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
-import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -34,7 +32,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public class HeaderAttributesTest extends ParserTestBase {
     @Test
     public void testParseHeaderAttributes() {
-        Archetype archetype = parseArchetype("adl15/openEHR-EHR-COMPOSITION.attributes.v1.adls");
+        Archetype archetype = parseArchetype("adl15/openEHR-EHR-COMPOSITION.attributes_a.v1.adls");
 
         assertThat(archetype.getAdlVersion()).isEqualTo("1.5");
         assertThat(archetype.getRmRelease()).isEqualTo("1.0.2");

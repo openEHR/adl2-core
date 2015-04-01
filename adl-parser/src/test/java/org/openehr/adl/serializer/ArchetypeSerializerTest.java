@@ -92,7 +92,7 @@ public class ArchetypeSerializerTest {
 
     @Test
     public void testSerializeAttributes() throws Exception {
-        Archetype archetype = TestAdlParser.parseAdl("adl15/openEHR-EHR-COMPOSITION.attributes.v1.adls");
+        Archetype archetype = TestAdlParser.parseAdl("adl15/openEHR-EHR-COMPOSITION.attributes_a.v1.adls");
         String serialized = ArchetypeSerializer.serialize(archetype);
         assertNotNull(serialized);
         write(serialized, "TestSerializeAttribute.adls");

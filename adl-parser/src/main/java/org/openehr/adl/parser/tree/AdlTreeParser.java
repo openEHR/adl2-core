@@ -46,10 +46,10 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
     private final AdlTreeConstraintsParser constraints;
     private final AdlTreeDAdlParser dadl;
 
-    AdlTreeParser(CommonTokenStream tokenStream, CommonTree adlTree, RmModel rmModel) {
-        super(tokenStream, adlTree, new AdlTreeParserState(), rmModel);
-        dadl = new AdlTreeDAdlParser(tokenStream, adlTree, getState(), rmModel);
-        constraints = new AdlTreeConstraintsParser(tokenStream, adlTree, getState(), dadl, rmModel);
+    AdlTreeParser(CommonTokenStream tokenStream, CommonTree adlTree) {
+        super(tokenStream, adlTree, new AdlTreeParserState());
+        dadl = new AdlTreeDAdlParser(tokenStream, adlTree, getState());
+        constraints = new AdlTreeConstraintsParser(tokenStream, adlTree, getState(), dadl);
     }
 
     private DifferentialArchetype parseAdl() {
@@ -421,8 +421,8 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
     }
 
 
-    public static DifferentialArchetype build(CommonTokenStream tokenStream, CommonTree adlTree, RmModel rmModel) {
-        AdlTreeParser builder = new AdlTreeParser(tokenStream, adlTree, rmModel);
+    public static DifferentialArchetype build(CommonTokenStream tokenStream, CommonTree adlTree) {
+        AdlTreeParser builder = new AdlTreeParser(tokenStream, adlTree);
         return builder.parseAdl();
     }
 }

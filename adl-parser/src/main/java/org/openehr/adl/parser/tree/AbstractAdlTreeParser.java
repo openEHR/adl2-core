@@ -48,13 +48,11 @@ abstract class AbstractAdlTreeParser {
     protected final CommonTokenStream tokenStream;
     protected final CommonTree adlTree;
     protected final AdlTreeParserState state;
-    protected final RmModel rmModel;
 
-    AbstractAdlTreeParser(CommonTokenStream tokenStream, CommonTree adlTree, AdlTreeParserState state, RmModel rmModel) {
+    AbstractAdlTreeParser(CommonTokenStream tokenStream, CommonTree adlTree, AdlTreeParserState state) {
         this.tokenStream = tokenStream;
         this.adlTree = adlTree;
         this.state = state;
-        this.rmModel = rmModel;
     }
 
 

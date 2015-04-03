@@ -120,6 +120,8 @@ public class AdlUtils {
         target.setParentArchetypeId(source.getParentArchetypeId());
         target.setRevisionHistory(source.getRevisionHistory());
         target.setAnnotations(source.getAnnotations());
+        target.setIsGenerated(source.isIsGenerated());
+        target.setRmRelease(source.getRmRelease());
 
         target.getInvariants().addAll(source.getInvariants());
         target.getTranslations().addAll(source.getTranslations());

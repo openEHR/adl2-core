@@ -47,13 +47,13 @@ public class TestAdlParser {
         }
     }
     public static DifferentialArchetype parseAdlFromString(String adl){
-        return new AdlDeserializer(new OpenEhrRmModel()).parse(adl);
+        return new AdlDeserializer().parse(adl);
     }
 
 
     public static DifferentialArchetype parseAdl(String classpathResource) {
         String adl = readClasspathResource(classpathResource);
-        return new AdlDeserializer(new OpenEhrRmModel()).parse(adl);
+        return new AdlDeserializer().parse(adl);
     }
 
 }

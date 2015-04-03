@@ -49,8 +49,8 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
     private final AdlTreeDAdlParser dadl;
 
     public AdlTreePrimitiveConstraintsParser(CommonTokenStream tokenStream, CommonTree adlTree,
-                                             AdlTreeParserState state, AdlTreeDAdlParser dadl, RmModel rmModel) {
-        super(tokenStream, adlTree, state, rmModel);
+                                             AdlTreeParserState state, AdlTreeDAdlParser dadl) {
+        super(tokenStream, adlTree, state);
         this.dadl = dadl;
     }
 
@@ -448,7 +448,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
     private CCodePhrase parseCodePhraseConstraint(Tree tConstraint) {
 
         CCodePhrase result = new CCodePhrase();
-        result.setRmTypeName(rmModel.getRmTypeName(CodePhrase.class));
+        result.setRmTypeName("CODE_PHRASE");
 
         result.setTerminologyId(newTerminologyId(checkNotNull(collectText(tConstraint.getChild(0)))));
         Tree tCodeList = child(tConstraint, 1, AdlParser.AST_CODE_LIST);
@@ -465,7 +465,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
 
     private CTerminologyCode parseTerminologyCodeConstraint(Tree tConstraint) {
         CTerminologyCode result = new CTerminologyCode();
-        result.setRmTypeName(rmModel.getRmTypeName(CodePhrase.class));
+        result.setRmTypeName("CODE_PHRASE");
 
         result.setTerminologyId(checkNotNull(collectText(tConstraint.getChild(0))));
         Tree tCodeList = child(tConstraint, 1, AdlParser.AST_CODE_LIST);
@@ -488,7 +488,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         assertTokenType(tConstraint, AdlParser.AST_ORDINAL_CONSTRAINT);
 
         CDvOrdinal result = new CDvOrdinal();
-        result.setRmTypeName(rmModel.getRmTypeName(DvOrdinal.class));
+        result.setRmTypeName("DV_ORDINAL");
 
         Map<Integer, DvOrdinal> values = new HashMap<>();
 

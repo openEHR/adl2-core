@@ -35,8 +35,8 @@ import java.util.Map;
  */
 class AdlTreeDAdlParser extends AbstractAdlTreeParser {
     AdlTreeDAdlParser(CommonTokenStream tokenStream, CommonTree adlTree,
-            AdlTreeParserState state, RmModel rmModel) {
-        super(tokenStream, adlTree, state, rmModel);
+            AdlTreeParserState state) {
+        super(tokenStream, adlTree, state);
     }
 
     DAdlObject parseAdlObject(Tree tAdlObject) {

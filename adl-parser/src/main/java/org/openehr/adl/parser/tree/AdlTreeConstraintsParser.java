@@ -27,7 +27,6 @@ import org.antlr.runtime.tree.Tree;
 import org.openehr.adl.am.OperatorKind;
 import org.openehr.adl.antlr.AdlParser;
 import org.openehr.adl.parser.RuntimeRecognitionException;
-import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.adl.rm.RmTypes;
 import org.openehr.adl.util.AdlUtils;
@@ -44,7 +43,6 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.openehr.adl.am.AmObjectFactory.*;
-import static org.openehr.adl.rm.RmObjectFactory.newArchetypeId;
 import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 import static org.openehr.adl.util.AdlUtils.makeClone;
 
@@ -56,10 +54,10 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
     private final AdlTreePrimitiveConstraintsParser primitives;
 
     AdlTreeConstraintsParser(CommonTokenStream tokenStream, CommonTree adlTree,
-            AdlTreeParserState state, AdlTreeDAdlParser dadl, RmModel rmModel) {
-        super(tokenStream, adlTree, state, rmModel);
+                             AdlTreeParserState state, AdlTreeDAdlParser dadl) {
+        super(tokenStream, adlTree, state);
         this.dadl = dadl;
-        primitives = new AdlTreePrimitiveConstraintsParser(tokenStream, adlTree, state, dadl, rmModel);
+        primitives = new AdlTreePrimitiveConstraintsParser(tokenStream, adlTree, state, dadl);
     }
 
 
@@ -67,7 +65,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         CComplexObject result = new CComplexObject();
         int index = 0;
         if (tTypeDefinition.getChild(index).getType() == AdlParser.BEFORE ||
-            tTypeDefinition.getChild(index).getType() == AdlParser.AFTER) {
+                tTypeDefinition.getChild(index).getType() == AdlParser.AFTER) {
             Tree tLocation = tTypeDefinition.getChild(index);
             result.setSiblingOrder(newSiblingOrder(
                     tLocation.getType() == AdlParser.BEFORE,
@@ -211,7 +209,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
 
         final CAttribute result = new CAttribute();
         result.setCardinality(cardinality);
-        result.setIsMultiple(cardinality!=null);
+        result.setIsMultiple(cardinality != null);
 
         if (attributeNameOrPath.startsWith("/")) {
 //            assertAdlV15("path based attributes", attributeNode);
@@ -337,7 +335,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
 
     private CDvQuantity parseCDvQuantityConstraint(Tree tConstraint) {
         CDvQuantity result = new CDvQuantity();
-        result.setRmTypeName(rmModel.getRmTypeName(DvQuantity.class));
+        result.setRmTypeName("DV_QUANTITY");
 
         if (tConstraint.getType() == AdlParser.AST_NULL) return result;
 

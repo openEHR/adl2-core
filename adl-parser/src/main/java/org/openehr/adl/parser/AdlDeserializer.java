@@ -37,16 +37,6 @@ import org.openehr.jaxb.am.DifferentialArchetype;
  * @author markopi
  */
 public class AdlDeserializer {
-    private final RmModel rmModel;
-
-    /**
-     * Constructs an adl deserializer with a provided rm model.
-     * @param rmModel rm model to use
-     */
-    public AdlDeserializer(RmModel rmModel) {
-        this.rmModel = rmModel;
-    }
-
     /**
      * Parses an adl source into a differential archetype.
      *
@@ -62,7 +52,7 @@ public class AdlDeserializer {
                 AdlParser parser = new ErrorThrowingAdlParser(tokenStream);
                 AdlParser.adl_return adlReturn = parser.adl();
 
-                DifferentialArchetype archetype =  AdlTreeParser.build(tokenStream, (CommonTree) adlReturn.getTree(), rmModel);
+                DifferentialArchetype archetype =  AdlTreeParser.build(tokenStream, (CommonTree) adlReturn.getTree());
                 AdlParserPostprocessor.postprocess(archetype);
                 return archetype;
             } catch (RecognitionException e) {

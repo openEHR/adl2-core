@@ -32,7 +32,7 @@ import org.openehr.jaxb.am.FlatArchetype;
 abstract public class AbstractSpecializationTest {
     private static final String RESOURCE_PATTERN = "adl15/reference/features/specialisation/$.adls";
 
-    protected ArchetypeFlattener FLATTENER = new ArchetypeFlattener(new OpenEhrRmModel());
+    protected ArchetypeFlattener FLATTENER = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
     private DifferentialArchetype parse(String archetypeId) {
         String classpathResource = RESOURCE_PATTERN.replaceAll("\\$", archetypeId);

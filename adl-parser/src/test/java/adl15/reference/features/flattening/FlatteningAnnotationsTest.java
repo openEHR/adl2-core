@@ -45,7 +45,7 @@ public class FlatteningAnnotationsTest {
 
     @BeforeClass
     public void setup() {
-        flattener = new ArchetypeFlattener(new OpenEhrRmModel());
+        flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
     }
 
     @Test

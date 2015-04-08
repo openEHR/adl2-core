@@ -40,7 +40,7 @@ public class FlatteningFeaturesTest {
         DifferentialArchetype parent = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.flattening_parent_1.v1.adls");
         DifferentialArchetype specialized = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.override_to_multiple.v1.adls");
 
-        ArchetypeFlattener flattener = new ArchetypeFlattener(new OpenEhrRmModel());
+        ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
         FlatArchetype flatParent = flattener.flatten(null, parent);
         FlatArchetype flattened = flattener.flatten(flatParent, specialized);

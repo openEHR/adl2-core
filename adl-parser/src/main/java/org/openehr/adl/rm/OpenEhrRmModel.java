@@ -26,13 +26,30 @@ import java.util.List;
 
 /**
  * RM model representing OpenEHR objects
+ *
  * @author markopi
  */
 public class OpenEhrRmModel implements RmModel {
+    private static OpenEhrRmModel instance;
+
     private final RmTypeGraph rmTypeGraph;
 
-    public OpenEhrRmModel() {
+
+    /**
+     * Use OpenEhrRmModel.getInstance() instead
+     */
+    private OpenEhrRmModel() {
         rmTypeGraph = new RmTypeGraphBuilder().build();
+    }
+
+    public static OpenEhrRmModel getInstance() {
+        OpenEhrRmModel result = instance;
+        if (result == null) {
+            //noinspection deprecation
+            result = new OpenEhrRmModel();
+            instance = result;
+        }
+        return result;
     }
 
     public Class<?> getRmClass(String rmType) {
@@ -54,7 +71,7 @@ public class OpenEhrRmModel implements RmModel {
 
     @Override
     public boolean rmTypeExists(String rmType) {
-        return rmTypeGraph.tryGetNodeFromRmType(rmType)!=null;
+        return rmTypeGraph.tryGetNodeFromRmType(rmType) != null;
     }
 
     @Override
@@ -83,6 +100,4 @@ public class OpenEhrRmModel implements RmModel {
     public List<RmType> getAllTypes() {
         return Lists.newArrayList(rmTypeGraph.getAllNodes());
     }
-
-
 }

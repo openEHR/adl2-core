@@ -35,7 +35,7 @@ public class OpenEhrRmModelTest {
 
     @BeforeClass
     public void init() {
-        rmModel = new OpenEhrRmModel();
+        rmModel = OpenEhrRmModel.getInstance();
     }
 
     @Test

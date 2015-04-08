@@ -44,7 +44,7 @@ public class ArchetypeValidatorTest extends ParserTestBase {
 
     @BeforeTest
     public void setUp() throws Exception {
-        rmModel = new OpenEhrRmModel();
+        rmModel = OpenEhrRmModel.getInstance();
     }
 
     /**

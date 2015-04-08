@@ -44,7 +44,7 @@ public class ParentChildWithChoiceElementTest extends FlattenerTestBase{
     @BeforeClass
     public void init(){
 
-        final OpenEhrRmModel rmModel = new OpenEhrRmModel();
+        final OpenEhrRmModel rmModel = OpenEhrRmModel.getInstance();
         deserializer = new AdlDeserializer();
         flattener = new ArchetypeFlattener(rmModel);
     }

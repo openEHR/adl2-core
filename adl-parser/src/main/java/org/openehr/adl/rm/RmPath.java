@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @since 24.7.2013
  */
 public final class RmPath {
-    private static final Pattern SEGMENT_PATTERN = Pattern.compile("([a-zA-Z0-9_]*)(\\[((ac|at|id)[0-9.]+)\\])?");
+    private static final Pattern SEGMENT_PATTERN = Pattern.compile("([a-zA-Z0-9_]*)(\\[([^]]+)\\])?");
 
     @SuppressWarnings("ConstantConditions")
     public static final RmPath ROOT = new RmPath(null, "", null, null);

@@ -59,7 +59,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
         // inline of use_archetype node
         CArchetypeRoot evaluation = AmQuery.get(template, "content");
-        assertCArchetypeRoot(evaluation, "EVALUATION", null, OPTIONAL, 1, "openEHR-EHR-EVALUATION.alert.v1");
+        assertCArchetypeRoot(evaluation, "EVALUATION", "openEHR-EHR-EVALUATION.alert.v1", OPTIONAL, 1, "openEHR-EHR-EVALUATION.alert.v1");
 
         CDateTime value = AmQuery.get(template, "content/data/items[at0004]/value/value");
         assertCDateTime(value, "yyyy-??-??T??:??:??", null, null, null);
@@ -117,7 +117,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
         assertThat(enAnnotations.getLanguage()).isEqualTo("en");
         assertThat(enAnnotations.getItems()).hasSize(1);
         final ResourceAnnotationNodeItems enDescriptionAnnotation = enAnnotations.getItems().get(0);
-        assertThat(enDescriptionAnnotation.getPath()).isEqualTo("/content/data[at0001]/items[at0003]");
+        assertThat(enDescriptionAnnotation.getPath()).isEqualTo("/content[openEHR-EHR-EVALUATION.alert.v1]/data[at0001]/items[at0003]");
 
     }
 

@@ -288,9 +288,10 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         int index = 0;
         result.setRmTypeName(collectText(tArchetypeReference.getChild(index++)));
         if (isType(tArchetypeReference.getChild(index), AdlParser.AT_CODE_VALUE)) {
-            result.setNodeId(tArchetypeReference.getChild(index++).getText());
+            result.setSlotNodeId(tArchetypeReference.getChild(index++).getText());
         }
         result.setArchetypeRef(checkNotNull(collectText(tArchetypeReference.getChild(index++))));
+        result.setNodeId(result.getArchetypeRef());
 
         if (isType(tArchetypeReference.getChild(index), AdlParser.OCCURRENCES)) {
             result.setOccurrences(parseOccurrences(tArchetypeReference.getChild(index++).getChild(0)));

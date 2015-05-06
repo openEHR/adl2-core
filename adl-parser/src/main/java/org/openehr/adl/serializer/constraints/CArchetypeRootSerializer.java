@@ -37,10 +37,10 @@ public class CArchetypeRootSerializer extends ConstraintSerializer<CArchetypeRoo
         builder.append("use_archetype");
         builder.append(" ").append(cobj.getRmTypeName());
         builder.append("[");
-        if (cobj.getNodeId() != null) {
-            builder.append(cobj.getNodeId()).append(", ");
+        if (cobj.getSlotNodeId() != null) {
+            builder.append(cobj.getSlotNodeId()).append(", ");
         }
-        builder.append(cobj.getArchetypeRef());
+        builder.append(cobj.getNodeId());
         builder.append("]");
 
         builder.unindent();

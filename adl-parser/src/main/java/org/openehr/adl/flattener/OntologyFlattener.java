@@ -25,6 +25,7 @@ import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.StringDictionaryItem;
 import org.openehr.jaxb.rm.TranslationDetails;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,24 @@ public class OntologyFlattener {
         flattenCodeDefinitionSets(parent.getTerminologyExtracts(), specialized.getTerminologyExtracts());
         flattenTermBindingSets(parent.getTermBindings(), specialized.getTermBindings());
         flattenConstraintBindingSets(parent.getConstraintBindings(), specialized.getConstraintBindings());
+        flattenValueSets(parent.getValueSets(), specialized.getValueSets());
+    }
 
+    @Nullable
+    private ValueSetItem findValueSetItem(List<ValueSetItem> items, String code) {
+        for (ValueSetItem item : items) {
+            if (item.getId().equals(code)) return item;
+        }
+        return null;
+    }
+
+    private void flattenValueSets(List<ValueSetItem> parent, List<ValueSetItem> specialized) {
+        for (ValueSetItem parentItem : parent) {
+            ValueSetItem specializedItem = findValueSetItem(specialized, parentItem.getId());
+            if (specializedItem == null) {
+                specialized.add(parentItem);
+            }
+        }
     }
 
     private void flattenConstraintBindingSets(List<ConstraintBindingSet> parent, List<ConstraintBindingSet> specialized) {

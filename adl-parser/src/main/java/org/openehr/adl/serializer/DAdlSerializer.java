@@ -167,10 +167,9 @@ public class DAdlSerializer {
         } else if (item instanceof CodeDefinitionSet) {
             CodeDefinitionSet cds = (CodeDefinitionSet) item;
             serializeKey(cds.getLanguage());
-            builder.append("<").newIndentedline().append("items =  ");
+//            builder.append("<").newIndentedline().append("items =  ");
             serialize(cds.getItems());
-            builder.unindent().newline().append(">");
-            //builder.newline().append(">");
+//            builder.unindent().newline().append(">");
         } else if (item instanceof ArchetypeTerm) {
             ArchetypeTerm at = (ArchetypeTerm) item;
             serializeKey(at.getCode());
@@ -201,22 +200,23 @@ public class DAdlSerializer {
         } else if (item instanceof ConstraintBindingSet) {
             ConstraintBindingSet set = (ConstraintBindingSet) item;
             serializeKey(set.getTerminology());
-            builder.append("<").newIndentedline().append("items = <");
+            builder.append("<");
+//            builder.append("<").newIndentedline().append("items = <");
             serializeListMap(set.getItems());
-            builder.append(">");
-            builder.unindent().newline().append(">");
+//            builder.append(">").unindent();
+            builder.newline().append(">");
         } else if (item instanceof ConstraintBindingItem) {
             ConstraintBindingItem c = (ConstraintBindingItem) item;
             serializeKey(c.getCode());
-            //serializeItem(c.getValue());
             builder.append("<").append(c.getValue()).append(">");
         } else if (item instanceof TermBindingSet) {
             TermBindingSet t = (TermBindingSet) item;
             serializeKey(t.getTerminology());
-            builder.append("<").newIndentedline().append("items = <");
+            builder.append("<");
+//            builder.append("<").newIndentedline().append("items = <");
             serializeListMap(t.getItems());
-            builder.append(">");
-            builder.unindent().newline().append(">");
+//            builder.append(">").unindent();
+            builder.newline().append(">");
         } else if (item instanceof TermBindingItem) {
             TermBindingItem t = (TermBindingItem) item;
             serializeKey(t.getCode());

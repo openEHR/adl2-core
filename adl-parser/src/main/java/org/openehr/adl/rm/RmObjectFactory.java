@@ -83,35 +83,6 @@ public class RmObjectFactory {
         return result;
     }
 
-    public static ResourceDescription newResourceDescription(Map<String, String> originalAuthor, List<String> otherContributors,
-            String lifecycleState, List<ResourceDescriptionItem> details, String resourcePackageURI, Map<String, String> otherDetails,
-            AuthoredResource parent) {
-        ResourceDescription result = new ResourceDescription();
-        addStringDictionaryItems(result.getOriginalAuthor(), originalAuthor);
-        result.getOtherContributors().addAll(emptyIfNull(otherContributors));
-        result.setLifecycleState(lifecycleState);
-        result.getDetails().addAll(emptyIfNull(details));
-        result.setResourcePackageUri(resourcePackageURI);
-        addStringDictionaryItems(result.getOtherDetails(), otherDetails);
-        result.setParentResource(parent);
-        return result;
-    }
-
-
-    public static ResourceDescriptionItem newResourceDescriptionItem(CodePhrase lang, String purpose, List<String> keywords,
-            String use, String misuse, String copyright, Map<String, String> originalResourceURI, Map<String, String> otherDetails) {
-        ResourceDescriptionItem result = new ResourceDescriptionItem();
-        result.setLanguage(lang);
-        result.setPurpose(purpose);
-        result.getKeywords().addAll(emptyIfNull(keywords));
-        result.setUse(use);
-        result.setMisuse(misuse);
-        result.setCopyright(copyright);
-        addStringDictionaryItems(result.getOriginalResourceUri(), originalResourceURI);
-        addStringDictionaryItems(result.getOtherDetails(), otherDetails);
-        return result;
-    }
-
 
     public static IntervalOfInteger newIntervalOfInteger(@Nullable Integer lower, @Nullable Integer upper, boolean lowerIncluded,
             boolean upperIncluded) {

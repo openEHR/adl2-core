@@ -138,6 +138,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
     private ResourceDescription parseDescription(Tree tDescription) {
         DAdlObject description = dadl.parseAdlObject(tDescription);
         ResourceDescription result = new ResourceDescription();
+        result.setCopyright(collectString(description.tryGet("copyright")));
 
         result.setLifecycleState(collectString(description.tryGet("lifecycle_state")));
         parseStringDictionaryItems(result.getOriginalAuthor(), description.tryGet("original_author"));
@@ -157,7 +158,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
             DAdlObject objItem = dadl.parseAdlObject(entry.getValue());
 
             ResourceDescriptionItem item = new ResourceDescriptionItem();
-            item.setCopyright(collectString(objItem.tryGet("copyright")));
+            //item.setCopyright(collectString(objItem.tryGet("copyright")));
             item.setUse(collectString(objItem.tryGet("use")));
             item.setMisuse(collectString(objItem.tryGet("misuse")));
             item.setPurpose(collectString(objItem.tryGet("purpose")));

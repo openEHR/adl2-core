@@ -45,6 +45,7 @@
         <xs:sequence>
             <xs:element name="original_author" type="StringDictionaryItem" maxOccurs="unbounded"/>
             <xs:element name="other_contributors" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="copyright" type="xs:string" minOccurs="0"/>
             <xs:element name="lifecycle_state" type="xs:string"/>
             <xs:element name="resource_package_uri" type="xs:string" minOccurs="0"/>
             <xs:element name="other_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
@@ -59,7 +60,6 @@
             <xs:element name="keywords" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="use" type="xs:string" minOccurs="0"/>
             <xs:element name="misuse" type="xs:string" minOccurs="0"/>
-            <xs:element name="copyright" type="xs:string" minOccurs="0"/>
             <xs:element name="original_resource_uri" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="other_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>

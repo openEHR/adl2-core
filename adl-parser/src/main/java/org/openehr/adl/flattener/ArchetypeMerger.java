@@ -64,7 +64,7 @@ class ArchetypeMerger {
         flattenCObject(RmPath.ROOT, null, flatParent.getDefinition(), specialized.getDefinition());
 
 
-        mergeOntologies(flatParent.getOntology(), specialized.getOntology());
+        mergeOntologies(flatParent.getTerminology(), specialized.getTerminology());
         if (flatParent.getAnnotations() != null) {
             if (specialized.getAnnotations() == null) {
                 specialized.setAnnotations(new ResourceAnnotations());
@@ -74,7 +74,7 @@ class ArchetypeMerger {
     }
 
 
-    private void mergeOntologies(ArchetypeOntology parent, ArchetypeOntology specialized) {
+    private void mergeOntologies(ArchetypeTerminology parent, ArchetypeTerminology specialized) {
         new OntologyFlattener(parent, specialized).flatten();
     }
 

@@ -44,10 +44,10 @@ public class ArchetypeWrapper {
 
     public ArchetypeWrapper(Archetype archetype) {
         this.archetype = archetype;
-        terminologyBindings = parseTerminologyBindings(archetype.getOntology());
-        terminologyDefinitions = parseCodeDefinitionSet(archetype.getOntology().getTermDefinitions());
-        constraintDefinitions = parseCodeDefinitionSet(archetype.getOntology().getConstraintDefinitions());
-        valueSets = parseValueSets(archetype.getOntology().getValueSets());
+        terminologyBindings = parseTerminologyBindings(archetype.getTerminology());
+        terminologyDefinitions = parseCodeDefinitionSet(archetype.getTerminology().getTermDefinitions());
+        constraintDefinitions = parseCodeDefinitionSet(archetype.getTerminology().getConstraintDefinitions());
+        valueSets = parseValueSets(archetype.getTerminology().getValueSets());
 
     }
 
@@ -63,7 +63,7 @@ public class ArchetypeWrapper {
         return result;
     }
 
-    private Map<String, Map<String, String>> parseTerminologyBindings(ArchetypeOntology ontology) {
+    private Map<String, Map<String, String>> parseTerminologyBindings(ArchetypeTerminology ontology) {
         Map<String, Map<String, String>> terminologyBindings = new LinkedHashMap<>();
 
         for (TermBindingSet tbs : ontology.getTermBindings()) {

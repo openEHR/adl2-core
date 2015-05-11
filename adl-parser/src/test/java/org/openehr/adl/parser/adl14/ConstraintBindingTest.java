@@ -40,7 +40,7 @@ public class ConstraintBindingTest extends ParserTestBase {
     @Test
     public void testConstraintBindingWithMultiTerminologies() throws Exception {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.constraint_binding.test.adl");
-        List<ConstraintBindingSet> list = archetype.getOntology().getConstraintBindings();
+        List<ConstraintBindingSet> list = archetype.getTerminology().getConstraintBindings();
 
         assertEquals("unexpected number of onotology binding", 2, list.size());
 

@@ -42,7 +42,7 @@ public class TermBindingsFeatureTest {
     public void testConstraintBindingMultiple() {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/term_bindings/openEHR-EHR-OBSERVATION.constraint_binding_multiple.v1.adls");
 
-        final List<TermBindingSet> tb = archetype.getOntology().getTermBindings();
+        final List<TermBindingSet> tb = archetype.getTerminology().getTermBindings();
         assertThat(tb).hasSize(2);
         assertThat(tb.get(0).getTerminology()).isEqualTo("AIR93(1.0.0)");
         assertThat(tb.get(0).getItems().get(0).getCode()).isEqualTo("ac2");
@@ -52,7 +52,7 @@ public class TermBindingsFeatureTest {
     @Test
     public void testTermBindingsBasic() {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/term_bindings/openEHR-EHR-OBSERVATION.term_bindings_basic.adls");
-        final List<TermBindingSet> tb = archetype.getOntology().getTermBindings();
+        final List<TermBindingSet> tb = archetype.getTerminology().getTermBindings();
         assertThat(tb).hasSize(1);
         assertThat(tb.get(0).getTerminology()).isEqualTo("LNC205");
 
@@ -70,7 +70,7 @@ public class TermBindingsFeatureTest {
     @Test
     public void testTermBindingsPaths() {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/term_bindings/openEHR-EHR-OBSERVATION.term_bindings_paths.adls");
-        final List<TermBindingSet> tb = archetype.getOntology().getTermBindings();
+        final List<TermBindingSet> tb = archetype.getTerminology().getTermBindings();
         assertThat(tb).hasSize(1);
 
         assertTermBindingItem(tb.get(0).getItems().get(0),
@@ -82,7 +82,7 @@ public class TermBindingsFeatureTest {
     @Test(enabled=false)
     public void testTermBindingsPathsUseRefs() {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/term_bindings/openEHR-EHR-OBSERVATION.term_bindings_paths_use_refs.v1.adls");
-        final List<TermBindingSet> tb = archetype.getOntology().getTermBindings();
+        final List<TermBindingSet> tb = archetype.getTerminology().getTermBindings();
         assertThat(tb).hasSize(2);
 
 //        assertTermBindingItem(tb.get(0).getItems().get(0),

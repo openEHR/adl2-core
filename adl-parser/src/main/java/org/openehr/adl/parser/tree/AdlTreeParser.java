@@ -79,7 +79,7 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
                     break;
                 case AdlParser.ONTOLOGY:
                 case AdlParser.TERMINOLOGY:
-                    result.setOntology(parseOntology(child.getChild(0)));
+                    result.setTerminology(parseOntology(child.getChild(0)));
                     break;
                 case AdlParser.ANNOTATIONS:
                     result.setAnnotations(new ResourceAnnotations());
@@ -211,8 +211,8 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         }
     }
 
-    private ArchetypeOntology parseOntology(Tree tOntology) {
-        ArchetypeOntology result = new ArchetypeOntology();
+    private ArchetypeTerminology parseOntology(Tree tOntology) {
+        ArchetypeTerminology result = new ArchetypeTerminology();
 
         DAdlObject ontology = dadl.parseAdlObject(tOntology);
 

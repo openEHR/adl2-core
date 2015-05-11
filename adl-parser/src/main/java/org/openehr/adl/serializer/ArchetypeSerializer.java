@@ -117,9 +117,9 @@ public class ArchetypeSerializer {
             builder.newline();
         }
 
-        if (archetype.getOntology() != null) {
+        if (archetype.getTerminology() != null) {
             //builder.newline().append("terminology").dadlBean(archetype.getOntology());
-            builder.newline().append("ontology").dadlBean(archetype.getOntology());
+            builder.newline().append("terminology").dadlBean(archetype.getTerminology());
             builder.newline();
         }
 

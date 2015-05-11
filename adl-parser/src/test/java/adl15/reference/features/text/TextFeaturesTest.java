@@ -40,7 +40,7 @@ public class TextFeaturesTest {
     @Test
     public void testQuotedStrings() {
         Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/text/openEHR-EHR-CLUSTER.quoted_strings.v1.adls");
-        CodeDefinitionSet cds = archetype.getOntology().getTermDefinitions().get(0);
+        CodeDefinitionSet cds = archetype.getTerminology().getTermDefinitions().get(0);
 
         assertArchetypeTerm(cds.getItems().get(0), "id1", "unknown", "unknown");
         assertArchetypeTerm(cds.getItems().get(1), "id2", "a\\b", "a\"b");

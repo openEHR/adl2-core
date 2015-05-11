@@ -43,7 +43,7 @@ public class MultiLanguageTest extends ParserTestBase {
 
         Archetype archetype = parseArchetype("adl14/adl-test-entry.multi_language.test.adl");
         List<CodeDefinitionSet> list =
-                archetype.getOntology().getTermDefinitions();
+                archetype.getTerminology().getTermDefinitions();
 
         assertEquals("expected number of termDefnitionsList", 2, list.size());
 
@@ -64,7 +64,7 @@ public class MultiLanguageTest extends ParserTestBase {
 
         Archetype archetype = parseArchetype("adl14/adl-test-entry.multi_language.test.adl");
         List<CodeDefinitionSet> list =
-                archetype.getOntology().getConstraintDefinitions();
+                archetype.getTerminology().getConstraintDefinitions();
         assertEquals("expected number of constraintDefinitionsList", 2, list.size());
 
         CodeDefinitionSet defs = list.get(0);

@@ -35,10 +35,10 @@ import java.util.Map;
  * @author markopi
  */
 public class OntologyFlattener {
-    private final ArchetypeOntology parent;
-    private final ArchetypeOntology specialized;
+    private final ArchetypeTerminology parent;
+    private final ArchetypeTerminology specialized;
 
-    public OntologyFlattener(ArchetypeOntology parent, ArchetypeOntology specialized) {
+    public OntologyFlattener(ArchetypeTerminology parent, ArchetypeTerminology specialized) {
         this.parent = parent;
         this.specialized = specialized;
     }

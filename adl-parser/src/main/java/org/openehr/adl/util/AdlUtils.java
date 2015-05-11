@@ -115,7 +115,7 @@ public class AdlUtils {
         target.setAdlVersion(source.getAdlVersion());
         target.setConcept(source.getConcept());
         target.setDescription(source.getDescription());
-        target.setOntology(source.getOntology());
+        target.setTerminology(source.getTerminology());
         target.setOriginalLanguage(source.getOriginalLanguage());
         target.setParentArchetypeId(source.getParentArchetypeId());
         target.setRevisionHistory(source.getRevisionHistory());

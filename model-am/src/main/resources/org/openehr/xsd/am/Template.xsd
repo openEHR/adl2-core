@@ -68,7 +68,7 @@
 
     <xs:complexType name="FLAT_ARCHETYPE_ONTOLOGY">
         <xs:complexContent>
-            <xs:extension base="ARCHETYPE_ONTOLOGY">
+            <xs:extension base="ARCHETYPE_TERMINOLOGY">
                 <xs:attribute name="archetype_id" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>

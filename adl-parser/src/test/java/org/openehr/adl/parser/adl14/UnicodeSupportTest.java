@@ -66,7 +66,7 @@ public class UnicodeSupportTest extends ParserTestBase {
      */
     @Test
     public void testParsingWithChineseText() throws Exception {
-        ArchetypeTerm term = termToMap(codeToMap(archetype.getOntology().getTermDefinitions()).get("zh").getItems()).get("at0000");
+        ArchetypeTerm term = termToMap(codeToMap(archetype.getTerminology().getTermDefinitions()).get("zh").getItems()).get("at0000");
 
         //ArchetypeTerm term = archetype.getOntology().termDefinition("zh", "at0000");
         assertNotNull("definition in zh not found", term);
@@ -94,7 +94,7 @@ public class UnicodeSupportTest extends ParserTestBase {
      */
     @Test
     public void testParsingWithSwedishText() throws Exception {
-        ArchetypeTerm term = termToMap(codeToMap(archetype.getOntology().getTermDefinitions()).get("sv").getItems()).get("at0000");
+        ArchetypeTerm term = termToMap(codeToMap(archetype.getTerminology().getTermDefinitions()).get("sv").getItems()).get("at0000");
 
         assertNotNull("definition in sv not found", term);
 

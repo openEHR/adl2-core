@@ -40,7 +40,7 @@ public class ArchetypeUncommonTermKeysTest extends ParserTestBase {
     @Test
     public void testArchetypeUncommonTerm() throws Exception {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.archetype_uncommonkeys.test.adl");
-        Map<String, CodeDefinitionSet> termMap = codeToMap(archetype.getOntology().getTermDefinitions());
+        Map<String, CodeDefinitionSet> termMap = codeToMap(archetype.getTerminology().getTermDefinitions());
         ArchetypeTerm aterm = termMap.get("en").getItems().get(0);
         Map<String, String> dict = dictToMap(aterm.getItems());
 

@@ -63,8 +63,8 @@ public class ParserTestBase {
         return result;
     }
 
-    protected ArchetypeTerm getTermDefinition(ArchetypeOntology ontology, String lang, String atCode) {
-        for (CodeDefinitionSet cds : ontology.getTermDefinitions()) {
+    protected ArchetypeTerm getTermDefinition(ArchetypeTerminology terminology, String lang, String atCode) {
+        for (CodeDefinitionSet cds : terminology.getTermDefinitions()) {
             if (lang == null || cds.getLanguage().equals(lang)) {
                 for (ArchetypeTerm at : cds.getItems()) {
                     if (at.getCode().equals(atCode)) return at;

@@ -85,8 +85,8 @@ public class ArchetypeWalker<C extends AmVisitContext> {
             return new UpdatingIterator(((CComplexObject) parent).getAttributes());
         } else if (parent instanceof CAttribute) {
             return new UpdatingIterator(((CAttribute) parent).getChildren());
-        } else if (parent instanceof ArchetypeOntology) {
-            ArchetypeOntology ontology = (ArchetypeOntology) parent;
+        } else if (parent instanceof ArchetypeTerminology) {
+            ArchetypeTerminology ontology = (ArchetypeTerminology) parent;
             return new UpdatingIterator(
                     ontology.getConstraintBindings(),
                     ontology.getConstraintDefinitions(),
@@ -129,9 +129,9 @@ public class ArchetypeWalker<C extends AmVisitContext> {
         }
     }
 
-    public static <C extends AmVisitContext> void walkOntology(AmVisitor<AmObject, C> visitor, ArchetypeOntology ontology, C context) {
+    public static <C extends AmVisitContext> void walkTerminology(AmVisitor<AmObject, C> visitor, ArchetypeTerminology terminology, C context) {
         ArchetypeWalker<C> walker = new ArchetypeWalker<>(visitor, context);
-        Action<?> action = walker.walk(ontology);
+        Action<?> action = walker.walk(terminology);
         if (action.act != Action.Act.next) {
             throw new AssertionError("Cannot remove or replace root ontology object");
         }

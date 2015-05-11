@@ -39,7 +39,7 @@ public class ValueSetFeaturesTest {
         Archetype archetype = TestAdlParser.parseAdl(
                 "adl15/reference/features/value_sets/openEHR-EHR-OBSERVATION.internal_value_set.v1.adls");
 
-        final List<ValueSetItem> valueSets = archetype.getOntology().getValueSets();
+        final List<ValueSetItem> valueSets = archetype.getTerminology().getValueSets();
         assertThat(valueSets).hasSize(6);
         assertValueSetItem(valueSets.get(0), "ac1", "at1001", "at1002", "at1003", "at1004", "at1015");
         assertValueSetItem(valueSets.get(1), "ac2", "at1045", "at1046");

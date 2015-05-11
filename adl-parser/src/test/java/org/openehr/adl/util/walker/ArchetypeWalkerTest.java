@@ -56,10 +56,10 @@ public class ArchetypeWalkerTest extends ParserTestBase {
         Archetype archetype = parseArchetype("adl15/walker/adl-test-entry.walk_order.v1.adls");
 
         final OntologyListVisitor listVisitor = new OntologyListVisitor();
-        ArchetypeWalker.walkOntology(listVisitor, archetype.getOntology(), new AmVisitContext());
+        ArchetypeWalker.walkTerminology(listVisitor, archetype.getTerminology(), new AmVisitContext());
 
         assertThat(listVisitor.visits).containsExactly(
-                "ArchetypeOntology",
+                "ArchetypeTerminology",
                 "TermBindingSet[SNOMED_CT]", "TermBindingItem[at0000/snomed_ct::1000339]",
                 "TermBindingSet[ICD10]", "TermBindingItem[at0000/icd10::1000]", "TermBindingItem[at0000/icd10::1001]",
                 "CodeDefinitionSet[en]", "ArchetypeTerm[at0000]", "ArchetypeTerm[at0001]", "ArchetypeTerm[at10002]");
@@ -71,14 +71,14 @@ public class ArchetypeWalkerTest extends ParserTestBase {
 
         // removes TermBindingSet[ICD10] (with children) and replaces ArchetypeTerm[at0001] with ArchetypeTerm[at0999]
         final ManipulatingOntologyListVisitor manipulatingVisitor = new ManipulatingOntologyListVisitor();
-        ArchetypeWalker.walkOntology(manipulatingVisitor, archetype.getOntology(), new AmVisitContext());
+        ArchetypeWalker.walkTerminology(manipulatingVisitor, archetype.getTerminology(), new AmVisitContext());
 
 
         final OntologyListVisitor listVisitor = new OntologyListVisitor();
-        ArchetypeWalker.walkOntology(listVisitor, archetype.getOntology(), new AmVisitContext());
+        ArchetypeWalker.walkTerminology(listVisitor, archetype.getTerminology(), new AmVisitContext());
 
         assertThat(listVisitor.visits).containsExactly(
-                "ArchetypeOntology",
+                "ArchetypeTerminology",
                 "TermBindingSet[SNOMED_CT]", "TermBindingItem[at0000/snomed_ct::1000339]",
                 "CodeDefinitionSet[en]", "ArchetypeTerm[at0000]", "ArchetypeTerm[at0999]", "ArchetypeTerm[at10002]");
 

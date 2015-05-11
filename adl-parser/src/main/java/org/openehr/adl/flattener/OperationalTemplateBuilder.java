@@ -23,7 +23,6 @@ package org.openehr.adl.flattener;
 import com.google.common.collect.Sets;
 import org.openehr.adl.FlatArchetypeProvider;
 import org.openehr.adl.am.AmQuery;
-import org.openehr.adl.util.ArchetypeWrapper;
 import org.openehr.adl.util.walker.AbstractAmVisitor;
 import org.openehr.adl.util.walker.AmConstraintContext;
 import org.openehr.adl.util.walker.AmVisitContext;
@@ -78,7 +77,7 @@ public class OperationalTemplateBuilder {
         for (Map.Entry<String, FlatArchetype> entry : state.containedArchetypes.entrySet()) {
             String archetypeId = entry.getKey();
             FlatArchetype archetype = entry.getValue();
-            ArchetypeOntology source = archetype.getOntology();
+            ArchetypeTerminology source = archetype.getTerminology();
 
             FlatArchetypeOntology dest = new FlatArchetypeOntology();
             dest.setArchetypeId(archetypeId);
@@ -95,13 +94,13 @@ public class OperationalTemplateBuilder {
 
         // remove unneeded languages
         Set<String> existingLanguages = new HashSet<>();
-        for (CodeDefinitionSet cds : target.getOntology().getTermDefinitions()) {
+        for (CodeDefinitionSet cds : target.getTerminology().getTermDefinitions()) {
             existingLanguages.add(cds.getLanguage());
         }
 
         LanguageRemovingVisitor visitor = new LanguageRemovingVisitor(existingLanguages);
         for (FlatArchetypeOntology archetypeOntology : target.getComponentOntologies()) {
-            ArchetypeWalker.walkOntology(visitor, archetypeOntology, new AmVisitContext());
+            ArchetypeWalker.walkTerminology(visitor, archetypeOntology, new AmVisitContext());
         }
 
     }

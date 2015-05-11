@@ -49,7 +49,7 @@ public class TermBindingTest extends ParserTestBase {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.term_binding.test.adl");
 
         // verify the first term binding
-        TermBindingSet binding = archetype.getOntology().getTermBindings().get(0);
+        TermBindingSet binding = archetype.getTerminology().getTermBindings().get(0);
         assertEquals("wrong binding terminology", "SNOMED_CT", binding.getTerminology());
 
         TermBindingItem item = binding.getItems().get(0);
@@ -59,7 +59,7 @@ public class TermBindingTest extends ParserTestBase {
         assertEquals("wrong term termid", "snomed_ct::1000339", item.getValue());
 
         // verify the second term binding
-        binding = archetype.getOntology().getTermBindings().get(1);
+        binding = archetype.getTerminology().getTermBindings().get(1);
         assertEquals("wrong binding terminology", "ICD10", binding.getTerminology());
 
         item = binding.getItems().get(0);
@@ -88,7 +88,7 @@ public class TermBindingTest extends ParserTestBase {
     public void testPathBasedBinding() throws Exception {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.term_binding2.test.adl");
 
-        TermBindingSet binding = archetype.getOntology().getTermBindings().get(0);
+        TermBindingSet binding = archetype.getTerminology().getTermBindings().get(0);
         assertEquals("wrong binding terminology", "LNC205", binding.getTerminology());
 
         //TermBindingItem item = binding.getItems().get(0);
@@ -103,7 +103,7 @@ public class TermBindingTest extends ParserTestBase {
     public void testPathBasedBindingWithinInternalReference() throws Exception {
         Archetype archetype = parseArchetype("adl14/openEHR-EHR-OBSERVATION.test_internal_ref_binding.v1.adl");
 
-        TermBindingSet binding = archetype.getOntology().getTermBindings().get(0);
+        TermBindingSet binding = archetype.getTerminology().getTermBindings().get(0);
         assertEquals("wrong binding terminology", "DDB00", binding.getTerminology());
 
         ListMultimap<String, String> items = termsToMultimap(binding.getItems());

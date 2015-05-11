@@ -35,7 +35,7 @@ public class ArchetypeOntologyTest extends ParserTestBase {
     @Test
     public void testParseTermDefinition() throws Exception {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.archetype_ontology.test.adl");
-        ArchetypeOntology ontology = archetype.getOntology();
+        ArchetypeTerminology ontology = archetype.getTerminology();
 
         ArchetypeTerm term = getTermDefinition(ontology, "en", "at0000");
         Map<String, String> map = dictToMap(term.getItems());
@@ -53,7 +53,7 @@ public class ArchetypeOntologyTest extends ParserTestBase {
     public void testBindings() throws Exception {
         Archetype archetype = parseArchetype("adl14/adl-test-entry.archetype_bindings.test.adl");
 
-        ArchetypeOntology ontology = archetype.getOntology();
+        ArchetypeTerminology ontology = archetype.getTerminology();
         List<TermBindingSet> termBindings = ontology.getTermBindings();
         TermBindingSet termBinding = termBindings.get(0);
         assertEquals("term bindings wrong", "SNOMED-CT", termBinding.getTerminology());

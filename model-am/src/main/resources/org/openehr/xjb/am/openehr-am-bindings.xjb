@@ -342,8 +342,8 @@
         <jxb:bindings node="//xsd:complexType[@name='C_TERMINOLOGY_CODE']">
             <jxb:class name="CTerminologyCode" implClass="CTerminologyCode"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_ONTOLOGY']">
-            <jxb:class name="ArchetypeOntology" implClass="ArchetypeOntology"/>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_TERMINOLOGY']">
+            <jxb:class name="ArchetypeTerminology" implClass="ArchetypeTerminology"/>
         </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='CodeDefinitionSet']"></jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_TERM']">

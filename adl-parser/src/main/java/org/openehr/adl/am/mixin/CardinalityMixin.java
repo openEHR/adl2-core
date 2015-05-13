@@ -20,32 +20,21 @@
 
 package org.openehr.adl.am.mixin;
 
-import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.am.Cardinality;
-import org.openehr.jaxb.rm.Interval;
-import org.openehr.jaxb.rm.MultiplicityInterval;
-
-import static org.openehr.adl.am.mixin.AmMixinsInternal.create;
 
 /**
  * @author markopi
  */
-public class AmMixins {
-
-    public static MultiplicityIntervalMixin of(MultiplicityInterval from) {
-        return create(from);
+public class CardinalityMixin extends AbstractAmMixin<Cardinality> {
+    public CardinalityMixin(Cardinality self) {
+        super(self);
     }
 
-    public static <T extends Interval, V extends Comparable> IntervalMixin<T, V> of(T from) {
-        return create(from);
-    }
-
-    public static CAttributeMixin of(CAttribute from) {
-        return create(from);
-    }
-
-    public static CardinalityMixin of(Cardinality from) {
-        return create(from);
+    public boolean isEqualTo(Cardinality other) {
+        if (other == null) return false;
+        if (other.isIsOrdered() != self.isIsOrdered()) return false;
+        if (other.isIsUnique() != self.isIsUnique()) return false;
+        return AmMixins.of(other.getInterval()).isEqualTo(self.getInterval());
     }
 
 }

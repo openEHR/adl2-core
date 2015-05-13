@@ -23,7 +23,9 @@ package adl15.reference.features.flattening;
 import org.openehr.adl.am.AmQuery;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
+import org.openehr.adl.serializer.ArchetypeSerializerTest;
 import org.openehr.adl.util.TestAdlParser;
+import org.openehr.jaxb.am.CComplexObject;
 import org.openehr.jaxb.am.CTerminologyCode;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.openehr.jaxb.am.FlatArchetype;
@@ -47,5 +49,16 @@ public class FlatteningFeaturesTest {
 
         CTerminologyCode cr = AmQuery.get(flattened, "/data[id2]/events[id3]/data[id4]/items[id5]/value/defining_code");
         assertThat(cr.getCodeList().get(0)).isEqualTo("at0.2");
+    }
+
+    @Test
+    public void testOccurrences() {
+        DifferentialArchetype specialized = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.demo.v1.adls");
+
+        ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+
+        FlatArchetype flat = flattener.flatten(null, specialized);
+
+        CComplexObject cHeading = AmQuery.get(flat.getDefinition(), "/data[id2]/events[id3]/data[id4]/items[id5]");
     }
 }

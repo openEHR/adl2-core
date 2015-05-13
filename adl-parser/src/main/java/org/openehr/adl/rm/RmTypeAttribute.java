@@ -20,6 +20,7 @@
 
 package org.openehr.adl.rm;
 
+import org.openehr.jaxb.am.Cardinality;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -34,14 +35,16 @@ public class RmTypeAttribute {
     private final String attributeName;
     private final String propertyName;
     private final MultiplicityInterval existence;
+    private final Cardinality cardinality;
 
     public RmTypeAttribute(String attributeName, String propertyName, RmType owner, RmType targetType,
-            MultiplicityInterval existence) {
+            MultiplicityInterval existence, Cardinality cardinality) {
         this.attributeName = attributeName;
         this.propertyName = propertyName;
         this.existence = existence;
         this.owner = checkNotNull(owner);
         this.targetType = targetType;
+        this.cardinality=cardinality;
     }
 
     public String getAttributeName() {
@@ -66,5 +69,9 @@ public class RmTypeAttribute {
 
     public MultiplicityInterval getExistence() {
         return existence;
+    }
+
+    public Cardinality getCardinality() {
+        return cardinality;
     }
 }

@@ -21,15 +21,18 @@
 package org.openehr.adl.rm;
 
 import org.openehr.jaxb.am.CTerminologyCode;
-import org.openehr.jaxb.rm.*;
+import org.openehr.jaxb.am.Cardinality;
+import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.openehr.rm.RmObject;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlType;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkState;
+import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 
 /**
  * @author markopi
@@ -89,11 +92,28 @@ class RmTypeGraphBuilder {
                 RmType type = rmClassMappings.get(attribute.getTargetType());
 
                 resultAttributes.add(new RmTypeAttribute(attribute.getAttribute(), attribute.getProperty().getName(), rmType, type,
-                        attribute.getOccurrences()));
+                        buildExistence(attribute.getOccurrences()), buildCardinality(attribute)));
             }
             rmType.setAttributes(resultAttributes);
             processed.add(rmType);
         }
+    }
+
+    private MultiplicityInterval buildExistence(MultiplicityInterval occurrences) {
+        MultiplicityInterval result = newMultiplicityInterval(occurrences.getLower(), occurrences.getUpper());
+        return result;
+    }
+
+    @Nullable
+    private Cardinality buildCardinality(RmBeanReflector.RmAttribute attribute) {
+        if (attribute.getOccurrences().getUpper() != null && attribute.getOccurrences().getUpper() == 1) {
+            return null;
+        }
+        Cardinality result = new Cardinality();
+        result.setInterval(newMultiplicityInterval(null, null));
+        result.setIsOrdered(true);
+        result.setIsUnique(false);
+        return result;
     }
 
     // Adds a RmType to builder, checks for duplicates

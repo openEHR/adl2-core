@@ -104,7 +104,7 @@ public class ArchetypeSerializerTest {
      * @param adl  the string representation of Archetype
      * @param file the filename
      */
-    private void write(String adl, String file) {
+    public static void write(String adl, String file) {
         try {
             FileUtils.forceMkdir(new File("target"));
             FileWriter writer = new FileWriter(new File("target/" + file));

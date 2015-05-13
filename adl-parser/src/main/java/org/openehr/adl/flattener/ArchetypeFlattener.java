@@ -21,6 +21,7 @@
 package org.openehr.adl.flattener;
 
 import org.openehr.adl.rm.RmModel;
+import org.openehr.adl.rm.RmModelException;
 import org.openehr.adl.rm.RmTypeAttribute;
 import org.openehr.adl.util.AdlUtils;
 import org.openehr.jaxb.am.*;
@@ -73,7 +74,11 @@ public class ArchetypeFlattener {
     private void fillDefaultOccurrences(CAttribute parentAttr, CObject cobj) {
         if (cobj.getOccurrences() == null) {
             if (parentAttr != null) {
-                cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getExistence()));
+                if (parentAttr.getCardinality() != null) {
+                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getCardinality().getInterval()));
+                } else {
+                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getExistence()));
+                }
             } else {
                 cobj.setOccurrences(newMultiplicityInterval(1, 1));
             }
@@ -95,9 +100,19 @@ public class ArchetypeFlattener {
     }
 
     private void fillDefaultExistence(CComplexObject parentConstraint, CAttribute attribute) {
-        if (attribute.getExistence() == null) {
-            RmTypeAttribute typeAttribute = rmModel.getRmAttribute(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
-            attribute.setExistence(AdlUtils.makeClone(typeAttribute.getExistence()));
+        if (attribute.getExistence() == null || attribute.getCardinality() == null) {
+            RmTypeAttribute typeAttribute = null;
+            try {
+                typeAttribute = rmModel.getRmAttribute(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
+                if (attribute.getExistence() == null) {
+                    attribute.setExistence(AdlUtils.makeClone(typeAttribute.getExistence()));
+                }
+                if (attribute.getCardinality() == null) {
+                    attribute.setCardinality(AdlUtils.makeClone(typeAttribute.getCardinality()));
+                }
+            } catch (RmModelException e) {
+                attribute.setExistence(newMultiplicityInterval(0, 1));
+            }
         }
         for (CObject cObject : attribute.getChildren()) {
             fillDefaultOccurrences(attribute, cObject);

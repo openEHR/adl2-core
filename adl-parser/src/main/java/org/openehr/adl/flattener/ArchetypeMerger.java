@@ -297,7 +297,9 @@ class ArchetypeMerger {
     private void flattenCObject(RmPath path, @Nullable CAttribute container, CObject parent, CObject specialized) {
         specialized.setNodeId(first(specialized.getNodeId(), parent.getNodeId()));
         specialized.setRmTypeName(first(specialized.getRmTypeName(), parent.getRmTypeName()));
-        specialized.setOccurrences(first(specialized.getOccurrences(), parent.getOccurrences()));
+        if (specialized.getNodeId()!=null && specialized.getNodeId().equals(parent.getNodeId())) {
+            specialized.setOccurrences(first(specialized.getOccurrences(), parent.getOccurrences()));
+        }
 
         // todo what to do on bad rm type?
         if (!rmModel.rmTypeExists(parent.getRmTypeName())) {

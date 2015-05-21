@@ -87,9 +87,12 @@ package org.openehr.adl.antlr;
 
 adl: header specialize? concept? language? description? definition? ontology? annotations? EOF! ;
 	
+alphanumeric
+	:	(identifier|INTEGER);
+	
 archetypeId
 	: (identifier ('.' identifier)* '::')?
-	  identifier ('-'|identifier)+ '.' (identifier|'-')+ '.' identifier ('.' INTEGER)* 
+	  identifier ('-'|identifier)+ '.' (alphanumeric | '-')+ '.' identifier ('.' INTEGER)* 
 	  ('-' identifier)? -> AST_ARCHETYPE_ID
 	
 	;

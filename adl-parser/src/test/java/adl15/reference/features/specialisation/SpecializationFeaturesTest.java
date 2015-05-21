@@ -59,20 +59,21 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
 
     }
 
-    @Test
-    public void testExistenceOrOccurrence0ExcludesNode() {
-        FlatArchetype archetype = getArchetype("openEHR-EHR-OBSERVATION.exist_occ_0");
-        assertThat(AmQuery.find(archetype, "/data[id3]/events[id4]/data")).isNotNull();
-        // this attribute must be removed
-        assertThat(AmQuery.find(archetype, "/data[id3]/events[id4]/state")).isNull();
-
-        // assert allow_archetype type is removed
-        CComplexObject cobj = AmQuery.get(archetype, "/protocol[id21]");
-        assertThat(cobj.getAttributes()).hasSize(1);
-        assertThat(cobj.getAttributes().get(0).getRmAttributeName()).isEqualTo("items");
-        assertThat(cobj.getAttributes().get(0).getChildren()).hasSize(1);
-        assertThat(cobj.getAttributes().get(0).getChildren().get(0).getNodeId()).isEqualTo("id22");
-    }
+    // nodes should only be excluded on templates, or not even there?
+//    @Test
+//    public void testExistenceOrOccurrence0ExcludesNode() {
+//        FlatArchetype archetype = getArchetype("openEHR-EHR-OBSERVATION.exist_occ_0");
+//        assertThat(AmQuery.find(archetype, "/data[id3]/events[id4]/data")).isNotNull();
+//        // this attribute must be removed
+//        assertThat(AmQuery.find(archetype, "/data[id3]/events[id4]/state")).isNull();
+//
+//        // assert allow_archetype type is removed
+//        CComplexObject cobj = AmQuery.get(archetype, "/protocol[id21]");
+//        assertThat(cobj.getAttributes()).hasSize(1);
+//        assertThat(cobj.getAttributes().get(0).getRmAttributeName()).isEqualTo("items");
+//        assertThat(cobj.getAttributes().get(0).getChildren()).hasSize(1);
+//        assertThat(cobj.getAttributes().get(0).getChildren().get(0).getNodeId()).isEqualTo("id22");
+//    }
 
     @Test
     public void testNarrowDvQuantity() {

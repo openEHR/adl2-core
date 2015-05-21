@@ -229,9 +229,11 @@ class ArchetypeMerger {
                 if (pair.parent != null) {
                     flattenCObject(childPath, specialized, pair.parent, pair.specialized);
                 }
-                if (pair.specialized.getOccurrences() == null || !isEmptyInterval(pair.specialized.getOccurrences())) {
+                // node removal on occurrences=0 should be done only for operational template (maybe)
+//                if (pair.specialized.getOccurrences() == null || !isEmptyInterval(pair.specialized.getOccurrences())) {
+//                    result.add(pair.specialized);
+//                }
                     result.add(pair.specialized);
-                }
             } else {
                 result.add(makeClone(checkNotNull(pair.parent)));
             }

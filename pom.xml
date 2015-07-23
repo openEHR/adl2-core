@@ -19,6 +19,7 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehr.adl2-core</groupId>
@@ -31,7 +32,7 @@
         <guava.version>18.0</guava.version>
         <testng.version>6.8.8</testng.version>
         <jackson.version>2.4.3</jackson.version>
-        <antlr.version>3.5.2</antlr.version>
+        <antlr.version>4.5.1</antlr.version>
     </properties>
     <scm>
         <developerConnection>scm:git:gitolite@git.marand.si:thinkehr-adl</developerConnection>
@@ -82,9 +83,11 @@
             <!-- antlr -->
             <dependency>
                 <groupId>org.antlr</groupId>
-                <artifactId>antlr-runtime</artifactId>
+                <artifactId>antlr4-runtime</artifactId>
                 <version>${antlr.version}</version>
             </dependency>
+
+            <!-- Apache Commons -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
@@ -143,19 +146,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.antlr</groupId>
-                    <artifactId>antlr3-maven-plugin</artifactId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
                     <version>${antlr.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>antlr</goal>
-                            </goals>
-                            <configuration>
-                                <verbose>true</verbose>
-                                <sourceDirectory>${basedir}/src/main/resources/antlr3</sourceDirectory>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

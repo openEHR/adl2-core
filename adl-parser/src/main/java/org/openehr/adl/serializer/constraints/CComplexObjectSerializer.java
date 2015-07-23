@@ -126,13 +126,15 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
     }
 
     private void buildAttributeChildConstraints(CAttribute cattr) {
-        boolean indent = !cattr.getChildren().isEmpty() &&
-                (cattr.getChildren().size() > 1 || !(cattr.getChildren().get(0) instanceof CPrimitiveObject));
+        List<CObject> children = filterNonEmptyChildren(cattr.getChildren());
+
+        boolean indent = !children.isEmpty() &&
+                (children.size() > 1 || !(children.get(0) instanceof CPrimitiveObject));
         builder.append("{");
-        for (CObject cObject : cattr.getChildren()) {
+        for (CObject cObject : children) {
             serializer.buildCObject(cObject);
         }
-        if (cattr.getChildren().isEmpty()) {
+        if (children.isEmpty()) {
             builder.append("*");
         }
 
@@ -142,12 +144,22 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
 
         builder.append("}");
 
-        if (!indent && !cattr.getChildren().isEmpty()) {
-            String commentText = serializer.getSimpleCommentText(cattr.getChildren().get(0));
+        if (!indent && !children.isEmpty()) {
+            String commentText = serializer.getSimpleCommentText(children.get(0));
             if (commentText != null) {
                 builder.lineComment(commentText);
             }
         }
+    }
+
+    private List<CObject> filterNonEmptyChildren(List<CObject> children) {
+        List<CObject> result = new ArrayList<>();
+        for (CObject child : children) {
+            if (!serializer.isEmpty(child)) {
+                result.add(child);
+            }
+        }
+        return result;
     }
 
     private void appendCardinality(Cardinality card) {

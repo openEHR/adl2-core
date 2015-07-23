@@ -157,7 +157,11 @@ public class ArchetypeSerializer {
         }
     }
 
+    public boolean isEmpty(CObject cobj) {
+        ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
+        return serializer!=null?serializer.isEmpty(cobj):false;
 
+    }
     public void buildCObject(CObject cobj) {
 
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());

@@ -21,6 +21,7 @@
 package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.serializer.ArchetypeSerializer;
+import org.openehr.jaxb.am.CObject;
 import org.openehr.jaxb.am.CTerminologyCode;
 
 /**
@@ -81,6 +82,10 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
         builder.unindent().newline();
     }
 
+    @Override
+    public boolean isEmpty(CTerminologyCode cobj) {
+        return cobj.getCodeList().isEmpty() && cobj.getAssumedValue()==null && cobj.getTerminologyId()==null;
+    }
 
     @Override
     public String getSimpleCommentText(CTerminologyCode cobj) {

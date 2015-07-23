@@ -41,4 +41,8 @@ abstract public class ConstraintSerializer<T extends CObject> {
     public String getSimpleCommentText(T cobj) {
         return null;
     }
+
+    public boolean isEmpty(T cobj) {
+        return false;
+    }
 }

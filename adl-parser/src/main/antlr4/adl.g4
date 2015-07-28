@@ -48,7 +48,7 @@ archetypePropertyList:
 	;
 
 archetypeProperty:
-	identifier ('=' val=archetypePropertyValue)?
+	identifier ('=' archetypePropertyValue)?
 	;
 archetypePropertyValue:
 	archetypePropertyValuePart*;
@@ -74,7 +74,7 @@ description:	DESCRIPTION adlObjectValue;
 definition:	DEFINITION typeConstraint;
 
 typeConstraint
-	: orderConstraint? typeIdentifierWithGenerics atCode? occurrences? typeValueConstraint
+	: orderConstraint? typeIdentifierWithGenerics atCode? occurrences? typeValueConstraint?
 	| USE_NODE typeIdentifierWithGenerics atCode? occurrences? rmPath
 	| archetypeSlotConstraint
 	| archetypeReferenceConstraint
@@ -162,7 +162,7 @@ archetypeSlotSingleConstraint:
 
 
 archetypeReferenceConstraint
-	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences? typeValueConstraint
+	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences? typeValueConstraint?
 	;
 
 

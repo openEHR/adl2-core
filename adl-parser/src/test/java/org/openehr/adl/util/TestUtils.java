@@ -23,6 +23,8 @@ package org.openehr.adl.util;
 import org.openehr.jaxb.am.ArchetypeTerm;
 import org.openehr.jaxb.rm.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +85,14 @@ public class TestUtils {
             result.put(item.getId(), item.getValue());
         }
         return result;
+    }
+
+    public static InputStream getResource(String resource) throws IOException {
+        InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream(resource);
+        if (inputStream==null) {
+            throw new IOException("Missing classpath resource: " + resource);
+        }
+        return inputStream;
     }
 
 }

@@ -80,6 +80,14 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <arguments>
+                        <argument>-package</argument>
+                        <argument>org.openehr.adl.antlr4.generated</argument>
+                    </arguments>
+                    <sourceDirectory>${basedir}/src/main/antlr4</sourceDirectory>
+                    <libDirectory>${basedir}/src/main/antlr4</libDirectory>
+                    <outputDirectory>${project.build.directory}/generated-sources/org/openehr/adl/antlr4/generated</outputDirectory>
+                    <visitor>true</visitor>
 
                 </configuration>
             </plugin>

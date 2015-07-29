@@ -20,25 +20,44 @@
 
 package org.openehr.adl.parser.tree;
 
+
 import org.antlr.v4.runtime.Token;
-import org.openehr.adl.parser.AdlParserException;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Tree;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * @author markopi
  */
-public class AdlTreeParserException extends AdlParserException {
-    private static final long serialVersionUID = -913705312822104455L;
+class DAdlObject {
+    private final Token startToken;
+    private final Map<String, ParseTree> properties;
 
-    public AdlTreeParserException(@Nullable Token location, String message, Object... params) {
-        super(createMessage(location, message, params));
+    DAdlObject(Token startToken, Map<String, ParseTree> properties) {
+        this.startToken = startToken;
+        this.properties = properties;
     }
 
-    private static String createMessage(@Nullable Token location, String message, Object... params) {
-        if (location != null) {
-            return location.getLine() + ":" + (location.getCharPositionInLine() + 1) + " " + String.format(message, params);
+    Tree get(String property) {
+        Tree result = properties.get(property);
+        if (result == null) {
+            throw new AdlTreeParserException(startToken, "Adl object does not contain required property: " + property);
         }
-        return String.format(message, params);
+        return result;
+    }
+
+    @Nullable
+    Tree tryGet(String property) {
+        return properties.get(property);
+    }
+
+    boolean contains(String property) {
+        return properties.containsKey(property);
+    }
+
+    Map<String, ParseTree> getProperties() {
+        return properties;
     }
 }

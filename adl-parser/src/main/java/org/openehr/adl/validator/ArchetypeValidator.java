@@ -142,12 +142,14 @@ public class ArchetypeValidator {
                 try {
                     RmTypeAttribute rmAttribute = rmModel.getRmAttribute(
                             container.getRmTypeName(), attr.getRmAttributeName());
-                    if (!AmMixins.of(rmAttribute.getExistence()).contains(attr.getExistence())) {
-                        error(AqlValidationError.Level.ERROR,
-                                "Existence of attribute at %s/%s does not conform to RM model: %s is not contained in %s",
-                                context.getRmPath(), attr.getRmAttributeName(),
-                                AmMixins.of(attr.getExistence()), AmMixins.of(rmAttribute.getExistence())
-                             );
+                    if (attr.getExistence()!=null) {
+                        if (!AmMixins.of(rmAttribute.getExistence()).contains(attr.getExistence())) {
+                            error(AqlValidationError.Level.ERROR,
+                                    "Existence of attribute at %s/%s does not conform to RM model: %s is not contained in %s",
+                                    context.getRmPath(), attr.getRmAttributeName(),
+                                    AmMixins.of(attr.getExistence()), AmMixins.of(rmAttribute.getExistence())
+                            );
+                        }
                     }
                 } catch (RmModelException e) {
                     error(AqlValidationError.Level.ERROR, e.getMessage());

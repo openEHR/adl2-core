@@ -1,0 +1,89 @@
+archetype (adl_version=1.5.1; rm_release=2.0.2; generated)
+  CIMI-CORE-PARTY.party.v1.0.0
+
+language
+  original_language = <[ISO_639-1::en]>
+
+description
+  original_author = <
+    ["name"] = <"Patrick Langford">
+    ["organisation"] = <"Intermountain Healthcare">
+    ["email"] = <"patrick@neuronsong.com">
+    ["date"] = <"10/06/2014">
+  >
+  details = <
+    ["en"] = <
+      language = <[ISO_639-1::en]>
+      purpose = <"Archetype for CIMI 'party' concept">
+      use = <"Use for party.">
+      keywords = <"party">
+    >
+  >
+  lifecycle_state = <"unmanaged">
+  other_contributors = <"Linda Bird <lbi@ihtsdo.org>","Joey Coyle <joey@xcoyle.com>","Stan Huff <Stan.Huff@imail.org>","Harold Solbrig <Solbrig.Harold@mayo.edu>","Thomas Beale <thomas.beale@oceaninformatics.com>">
+  custodian_namespace = <"org.opencimi">
+  custodian_organisation = <"Clinical Information Modeling Initiative <http://opencimi.org>">
+  licence = <"Creative Commons CC-BY <https://creativecommons.org/licenses/by/3.0/>">
+  copyright = <"Copyright (c) Clinical Information Modelling Initiative <http://opencimi.org>">
+  ip_acknowledgements = <
+    ["loinc"] = <"This content from LOINC® is copyright © 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use">
+    ["snomed"] = <"This specification includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. 'SNOMED' and 'SNOMED CT' are registered trademarks of the IHTSDO (www.ihtsdo.org). Use of any SNOMED CT content (including codes, identifiers, terms, expressions or derivatives) in any operational system (including any Data Creation System or Data Analysis System as defined in the SNOMED CT Affiliate License Agreement) is subject to the terms and conditions of the SNOMED CT Affiliate License (www.ihtsdo.org/license.pdf) or to a written variation to that agreement that has been agreed and formally executed between the IHTSDO and the Affiliate Licensee.">
+  >
+
+definition
+  PARTY[id1] matches { -- Party
+    details matches {
+      ITEM_GROUP[id2] matches {  -- Identifier
+        item matches {
+          ELEMENT[id3] occurrences matches {1} matches { -- Value
+            value existence matches {1} matches {
+              IDENTIFIER[id9]
+            }
+            null_flavor existence matches {0}
+          }
+        }
+      }
+      use_archetype ITEM_GROUP [id4, CIMI-CORE-ITEM_GROUP.party_name.v1] -- Name
+      use_archetype ITEM_GROUP [id5, CIMI-CORE-ITEM_GROUP.address.v2] -- Address
+      use_archetype ITEM_GROUP [id6, CIMI-CORE-ITEM_GROUP.electronic_contact.v1] -- Contact
+      ELEMENT[id7] occurrences matches {1} matches { -- Party type
+        value existence matches {1} matches {
+          CODED_TEXT[id10]
+        }
+        null_flavor existence matches {0}
+      }
+    }
+    relationship matches {
+      use_archetype PARTY_RELATIONSHIP [id8, CIMI-CORE-PARTY_RELATIONSHIP.party_relationship.v1] -- Relationship
+    }
+  }
+
+terminology
+  term_definitions = <
+    ["en"] = <
+      ["id1"] = <
+        text = <"Party">
+      >
+      ["id2"] = <
+        text = <"Identifier">
+      >
+      ["id3"] = <
+        text = <"Value">
+      >
+      ["id4"] = <
+        text = <"Name">
+      >
+      ["id5"] = <
+        text = <"Address">
+      >
+      ["id6"] = <
+        text = <"Contact">
+      >
+      ["id7"] = <
+        text = <"Party type">
+      >
+      ["id8"] = <
+        text = <"Relationship">
+      >
+    >
+  >

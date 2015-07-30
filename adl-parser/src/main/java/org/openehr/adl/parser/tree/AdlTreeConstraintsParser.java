@@ -149,7 +149,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         if (tAttribute.getChild(index).getType() == AdlParser.EXISTENCE) {
             existence = parseMultiplicityInterval(tAttribute.getChild(index++).getChild(0));
         } else {
-            existence = newMultiplicityInterval(1, 1);
+            existence = null;
         }
 
         for (String attributeName : attributeNames) {
@@ -197,7 +197,7 @@ class AdlTreeConstraintsParser extends AbstractAdlTreeParser {
         if (isType(tAttribute.getChild(index), AdlParser.EXISTENCE)) {
             existence = parseMultiplicityInterval(tAttribute.getChild(index++).getChild(0));
         } else {
-            existence = newMultiplicityInterval(1, 1);
+            existence = null;
         }
 
         final Cardinality cardinality;

@@ -64,60 +64,60 @@ public class ArchetypeFlattener {
             merger.merge(flatParent, result);
         }
 
-        fillDefaultOccurrences(null, result.getDefinition());
+//        fillDefaultOccurrences(null, result.getDefinition());
 
 
         return result;
     }
 
 
-    private void fillDefaultOccurrences(CAttribute parentAttr, CObject cobj) {
-        if (cobj.getOccurrences() == null) {
-            if (parentAttr != null) {
-                if (parentAttr.getCardinality() != null) {
-                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getCardinality().getInterval()));
-                } else {
-                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getExistence()));
-                }
-            } else {
-                cobj.setOccurrences(newMultiplicityInterval(1, 1));
-            }
-        }
-
-        if (cobj instanceof CComplexObject) {
-            CComplexObject complexObj = (CComplexObject) cobj;
-            for (CAttribute attribute : complexObj.getAttributes()) {
-                fillDefaultExistence(complexObj, attribute);
-            }
-            for (CAttributeTuple cAttributeTuple : complexObj.getAttributeTuples()) {
-                for (CObjectTuple cObjectTuple : cAttributeTuple.getChildren()) {
-                    for (CPrimitiveObject cPrimitiveObject : cObjectTuple.getMembers()) {
-                        fillDefaultOccurrences(null, cPrimitiveObject);
-                    }
-                }
-            }
-        }
-    }
-
-    private void fillDefaultExistence(CComplexObject parentConstraint, CAttribute attribute) {
-        if (attribute.getExistence() == null || attribute.getCardinality() == null) {
-            RmTypeAttribute typeAttribute = null;
-            try {
-                typeAttribute = rmModel.getRmAttribute(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
-                if (attribute.getExistence() == null) {
-                    attribute.setExistence(AdlUtils.makeClone(typeAttribute.getExistence()));
-                }
-                if (attribute.getCardinality() == null) {
-                    attribute.setCardinality(AdlUtils.makeClone(typeAttribute.getCardinality()));
-                }
-            } catch (RmModelException e) {
-                attribute.setExistence(newMultiplicityInterval(0, 1));
-            }
-        }
-        for (CObject cObject : attribute.getChildren()) {
-            fillDefaultOccurrences(attribute, cObject);
-        }
-    }
+//    private void fillDefaultOccurrences(CAttribute parentAttr, CObject cobj) {
+//        if (cobj.getOccurrences() == null) {
+//            if (parentAttr != null) {
+//                if (parentAttr.getCardinality() != null) {
+//                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getCardinality().getInterval()));
+//                } else {
+//                    cobj.setOccurrences(AdlUtils.makeClone(parentAttr.getExistence()));
+//                }
+//            } else {
+//                cobj.setOccurrences(newMultiplicityInterval(1, 1));
+//            }
+//        }
+//
+//        if (cobj instanceof CComplexObject) {
+//            CComplexObject complexObj = (CComplexObject) cobj;
+//            for (CAttribute attribute : complexObj.getAttributes()) {
+//                fillDefaultExistence(complexObj, attribute);
+//            }
+//            for (CAttributeTuple cAttributeTuple : complexObj.getAttributeTuples()) {
+//                for (CObjectTuple cObjectTuple : cAttributeTuple.getChildren()) {
+//                    for (CPrimitiveObject cPrimitiveObject : cObjectTuple.getMembers()) {
+//                        fillDefaultOccurrences(null, cPrimitiveObject);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private void fillDefaultExistence(CComplexObject parentConstraint, CAttribute attribute) {
+//        if (attribute.getExistence() == null || attribute.getCardinality() == null) {
+//            RmTypeAttribute typeAttribute = null;
+//            try {
+//                typeAttribute = rmModel.getRmAttribute(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
+//                if (attribute.getExistence() == null) {
+//                    attribute.setExistence(AdlUtils.makeClone(typeAttribute.getExistence()));
+//                }
+//                if (attribute.getCardinality() == null) {
+//                    attribute.setCardinality(AdlUtils.makeClone(typeAttribute.getCardinality()));
+//                }
+//            } catch (RmModelException e) {
+//                attribute.setExistence(newMultiplicityInterval(0, 1));
+//            }
+//        }
+//        for (CObject cObject : attribute.getChildren()) {
+//            fillDefaultOccurrences(attribute, cObject);
+//        }
+//    }
 
 
 }

@@ -53,7 +53,6 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             builder.append("} ");
         }
         if (cobj.getAttributes().isEmpty() && cobj.getAttributeTuples().isEmpty()) {
-            builder.append("matches {*}");
             builder.lineComment(serializer.getArchetypeWrapper().getTermText(cobj.getNodeId()));
         } else {
             builder.append("matches {");
@@ -83,15 +82,22 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
         } else {
             builder.append(cattr.getDifferentialPath());
         }
-        builder.append(" ");
-        if (cattr.getCardinality() != null) {
-            builder.append("cardinality matches {");
-            appendCardinality(cattr.getCardinality());
-            builder.append("} ");
+        if (cattr.getExistence() != null) {
+            builder.append(" existence matches {");
+            ArchetypeSerializeUtils.buildOccurrences(builder, cattr.getExistence());
+            builder.append("}");
         }
-        builder.append("matches ");
-        buildAttributeChildConstraints(cattr);
+        if (cattr.getCardinality() != null) {
+            builder.append(" cardinality matches {");
+            appendCardinality(cattr.getCardinality());
+            builder.append("}");
+        }
+        if (!cattr.getChildren().isEmpty()) {
+            builder.append(" matches ");
+            buildAttributeChildConstraints(cattr);
+        }
     }
+
 
     private void buildTuple(CAttributeTuple cAttributeTuple) {
         builder.tryNewLine();

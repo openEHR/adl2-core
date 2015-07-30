@@ -45,12 +45,12 @@ public class ChoiceMergeTest extends FlattenerTestBase {
 
         // specialized dvCount
         CComplexObject dvCount = (CComplexObject) choiceAttribute.getChildren().get(0);
-        assertCComplexObject(dvCount, "DV_COUNT", null, MANDATORY, 1);
+        assertCComplexObject(dvCount, "DV_COUNT", null, null, 1);
         assertCInteger(AmQuery.get(dvCount, "magnitude"), newIntervalOfInteger(2, null), null, null);
 
         // specialized dvProportion
         CComplexObject dvProportion = (CComplexObject) choiceAttribute.getChildren().get(1);
-        assertCComplexObject(dvProportion, "DV_PROPORTION", null, MANDATORY, 2);
+        assertCComplexObject(dvProportion, "DV_PROPORTION", null, null, 2);
         assertCReal(AmQuery.get(dvProportion, "numerator"), newIntervalOfReal(2.0, null, true, false), null, null);
         assertCReal(AmQuery.get(dvProportion, "denominator"), newIntervalOfReal(2.0, null, false, false), null, null);
     }

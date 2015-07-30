@@ -150,7 +150,7 @@ public class ParserTestBase {
     // assert CAttribute has expected values
     protected void assertCAttribute(CAttribute attr, String rmAttributeName,
             int children) {
-        assertCAttribute(attr, rmAttributeName, newIntervalOfInteger(1, 1),
+        assertCAttribute(attr, rmAttributeName, null,
                 null, children);
     }
 

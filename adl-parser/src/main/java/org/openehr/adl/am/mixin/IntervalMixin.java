@@ -66,7 +66,7 @@ abstract public class IntervalMixin<T extends Interval, V extends Comparable> ex
     }
 
     public boolean isEqualTo(T interval) {
-        if (interval==null) return false;
+        if (interval == null) return false;
         if (!Objects.equals(self.isLowerIncluded(), interval.isLowerIncluded())) return false;
         if (!Objects.equals(self.isUpperIncluded(), interval.isUpperIncluded())) return false;
         if (!Objects.equals(self.isLowerUnbounded(), interval.isLowerUnbounded())) return false;
@@ -80,15 +80,36 @@ abstract public class IntervalMixin<T extends Interval, V extends Comparable> ex
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(self.isLowerIncluded() ? "[" : "(");
-        if (!self.isLowerUnbounded()) {
-            result.append(getLower(self));
+        V lower = getLower(self);
+        V upper = getUpper(self);
+
+        if (lower == null && upper == null) {
+            result.append("*");
+        } else if (Objects.equals(lower, upper)) {
+            result.append(lower);
+        } else if (upper == null) {
+            result.append(">");
+            if (self.isLowerIncluded()) {
+                result.append("=");
+            }
+            result.append(lower);
+        } else if (lower == null) {
+            result.append("<");
+            if (self.isUpperIncluded()) {
+                result.append("=");
+            }
+            result.append(upper);
+        } else {
+            if (!self.isLowerIncluded()) {
+                result.append(">");
+            }
+            result.append(lower);
+            result.append("..");
+            if (!self.isUpperIncluded()) {
+                result.append("<");
+            }
+            result.append(upper);
         }
-        result.append(",");
-        if (!self.isUpperUnbounded()) {
-            result.append(getUpper(self));
-        }
-        result.append(self.isUpperIncluded() ? "]" : ")");
         return result.toString();
     }
 

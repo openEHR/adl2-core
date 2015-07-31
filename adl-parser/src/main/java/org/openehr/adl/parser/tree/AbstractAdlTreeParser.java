@@ -162,6 +162,15 @@ abstract class AbstractAdlTreeParser {
     }
 
     @Nullable
+    protected String collectText(Token token) {
+        if (token==null) return null;
+        if (token.getType()==adlLexer.STRING) {
+            return unescapeString(token.getText());
+        }
+        return token.getText();
+    }
+
+    @Nullable
     protected String collectText(ParseTree context) {
         if (context == null) return null;
         if (context instanceof TerminalNode) {

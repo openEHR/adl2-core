@@ -20,6 +20,7 @@
 
 package org.openehr.adl.serializer.constraints;
 
+import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CReal;
 
@@ -38,11 +39,7 @@ public class CRealSerializer extends ConstraintSerializer<CReal> {
         boolean constrained = false;
 
         if (cobj.getRange() != null) {
-            builder.append("|")
-                    .append(firstNonNull(cobj.getRange().getLower(), "0.0"))
-                    .append("..")
-                    .append(firstNonNull(cobj.getRange().getUpper(), "*"))
-                    .append("|");
+            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
             constrained = true;
         }
         if (!cobj.getList().isEmpty()) {
@@ -56,7 +53,7 @@ public class CRealSerializer extends ConstraintSerializer<CReal> {
             constrained = true;
         }
         if (cobj.getAssumedValue() != null) {
-            builder.append(";").append(cobj.getAssumedValue());
+            builder.append("; ").append(cobj.getAssumedValue());
             constrained = true;
         }
 

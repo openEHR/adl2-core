@@ -54,6 +54,12 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
             builder.append(Joiner.on(", ").join(valids));
             constrained=true;
         }
+
+        if (cobj.isAssumedValue() != null) {
+            builder.append("; ").append(cobj.isAssumedValue());
+            constrained = true;
+        }
+
         if (!constrained) {
             builder.append("*");
         }

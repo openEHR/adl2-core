@@ -42,7 +42,7 @@ public class CDateSerializer extends ConstraintSerializer<CDate> {
             constrained=true;
         }
         if (cobj.getRange() != null) {
-            builder.append(AmMixins.of(cobj.getRange()).toString());
+            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
             constrained=true;
         }
         if (cobj.getAssumedValue() != null) {

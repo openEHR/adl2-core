@@ -22,7 +22,9 @@ package org.openehr.adl.parser.tree;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.NotImplementedException;
+import org.openehr.adl.am.OperatorKind;
 import org.openehr.adl.antlr4.generated.adlParser;
+import org.openehr.adl.rm.RmTypes;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.openehr.adl.am.AmObjectFactory.newExprBinaryOperator;
+import static org.openehr.adl.am.AmObjectFactory.newExprLeaf;
 import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 
 /**
@@ -44,13 +48,62 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         final CObject result;
         if (context.complexObjectConstraint() != null) {
             result = parseComplexObject(context.complexObjectConstraint());
+        } else if (context.USE_NODE() != null) {
+            result = parseArchetypeInternalRef(context);
+        } else if (context.archetypeSlotConstraint() != null) {
+            result = parseArchetypeSlot(context.archetypeSlotConstraint());
         } else {
-            result = null;
+            throw new NotImplementedException();
         }
-        if (result != null) {
-            // todo remove null and check
-            result.setSiblingOrder(parseSiblingOrder(context.orderConstraint()));
+
+        result.setSiblingOrder(parseSiblingOrder(context.orderConstraint()));
+        return result;
+
+    }
+
+    private ArchetypeSlot parseArchetypeSlot(adlParser.ArchetypeSlotConstraintContext context) {
+        ArchetypeSlot result = new ArchetypeSlot();
+        result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
+        result.setNodeId(parseAtCode(context.atCode()));
+        result.setOccurrences(parseOccurrences(context.occurrences()));
+        if (context.archetypeSlotValueConstraint()!=null) {
+            adlParser.ArchetypeSlotValueConstraintContext cValue = context.archetypeSlotValueConstraint();
+            result.getIncludes().addAll(parseAssertions(cValue.include));
+            result.getExcludes().addAll(parseAssertions(cValue.exclude));
         }
+        return result;
+    }
+
+    private List<Assertion> parseAssertions(List<adlParser.ArchetypeSlotSingleConstraintContext> cAssertions) {
+        List<Assertion> result = new ArrayList<>();
+        for (adlParser.ArchetypeSlotSingleConstraintContext cAssertion : cAssertions) {
+            result.add(parseAssertion(cAssertion));
+        }
+        return result;
+    }
+
+    private Assertion parseAssertion(adlParser.ArchetypeSlotSingleConstraintContext cAssertion) {
+        Assertion result = new Assertion();
+        result.setStringExpression(collectText(cAssertion));
+        CPrimitiveObject cPrimitiveObject = primitives.parsePrimitiveValue(cAssertion.primitiveValueConstraint());
+        ExprBinaryOperator expr = newExprBinaryOperator(
+                RmTypes.ReferenceType.CONSTRAINT.toString(),
+                OperatorKind.OP_MATCHES,
+                false,
+                newExprLeaf(RmTypes.STRING, RmTypes.ReferenceType.ATTRIBUTE, collectText(cAssertion.rmPath())),
+                newExprLeaf(cPrimitiveObject.getRmTypeName(), RmTypes.ReferenceType.CONSTRAINT,
+                        cPrimitiveObject));
+        result.setExpression(expr);
+
+        return result;
+    }
+
+    private ArchetypeInternalRef parseArchetypeInternalRef(adlParser.TypeConstraintContext context) {
+        ArchetypeInternalRef result = new ArchetypeInternalRef();
+        result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
+        result.setNodeId(parseAtCode(context.atCode()));
+        result.setOccurrences(parseOccurrences(context.occurrences()));
+        result.setTargetPath(collectText(context.rmPath()));
         return result;
     }
 
@@ -58,11 +111,8 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         CComplexObject result = new CComplexObject();
         result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
         result.setNodeId(parseAtCode(context.atCode()));
-        if (context.occurrences() != null) {
-            result.setOccurrences(parseOccurrences(context.occurrences().occurrenceRange()));
-        }
+        result.setOccurrences(parseOccurrences(context.occurrences()));
         result.getAttributes().addAll(parseAttributeList(context.attributeListMatcher()));
-        // todo parseValueConstraint
         return result;
     }
 
@@ -102,7 +152,7 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
     }
 
     private List<CObject> parseMultiValue(adlParser.MultiValueConstraintContext context) {
-        if (context==null) return ImmutableList.of();
+        if (context == null) return ImmutableList.of();
 
         List<CObject> result = new ArrayList<>();
         for (adlParser.ValueConstraintContext valueConstraintContext : context.valueConstraint()) {
@@ -112,9 +162,9 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
     }
 
     private CObject parseValueConstraint(adlParser.ValueConstraintContext context) {
-        if (context.typeConstraint()!=null) {
+        if (context.typeConstraint() != null) {
             return parseTypeDefinition(context.typeConstraint());
-        } else if (context.primitiveValueConstraint()!=null) {
+        } else if (context.primitiveValueConstraint() != null) {
             return primitives.parsePrimitiveValue(context.primitiveValueConstraint());
         }
 
@@ -135,6 +185,12 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
+
+    private MultiplicityInterval parseOccurrences(adlParser.OccurrencesContext context) {
+        if (context == null) return null;
+        return parseOccurrences(context.occurrenceRange());
+
+    }
 
     private MultiplicityInterval parseOccurrences(adlParser.OccurrenceRangeContext context) {
         if (context == null) return null;

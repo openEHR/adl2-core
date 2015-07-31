@@ -44,10 +44,13 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
         builder.indent().newline()
                 .append("allow_archetype")
                 .append(" ")
-                .append(cobj.getRmTypeName()).append("[").append(cobj.getNodeId()).append("]")
-                .append(" occurrences matches {");
-        ArchetypeSerializeUtils.buildOccurrences(builder, cobj.getOccurrences());
-        builder.append("} matches { ");
+                .append(cobj.getRmTypeName()).append("[").append(cobj.getNodeId()).append("]");
+        if (cobj.getOccurrences()!=null) {
+            builder.append(" occurrences matches {");
+            ArchetypeSerializeUtils.buildOccurrences(builder, cobj.getOccurrences());
+            builder.append("}");
+        }
+        builder.append(" matches { ");
         boolean hasContent=false;
         if (cobj.getIncludes() != null && cobj.getIncludes().size() > 0) {
             hasContent=true;

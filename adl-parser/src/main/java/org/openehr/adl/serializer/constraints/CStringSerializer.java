@@ -33,27 +33,37 @@ public class CStringSerializer extends ConstraintSerializer<CString> {
 
     @Override
     public void serialize(CString cobj) {
-        boolean constrained=false;
+        boolean constrained = false;
 
-        if (cobj.getPattern()!=null) {
-            builder.append(cobj.getPattern());
-            constrained=true;        }
+        if (cobj.getPattern() != null) {
+            char patternChar = findPatternWrapperChar(cobj.getPattern());
+
+            builder.append(patternChar).append(cobj.getPattern()).append(patternChar);
+            constrained = true;
+        }
         if (!cobj.getList().isEmpty()) {
             for (int i = 0; i < cobj.getList().size(); i++) {
                 String item = cobj.getList().get(i);
                 builder.text(item);
-                if (i<cobj.getList().size()-1) {
+                if (i < cobj.getList().size() - 1) {
                     builder.append(", ");
                 }
             }
-            constrained=true;
+            constrained = true;
         }
-        if (cobj.getAssumedValue()!=null) {
-            builder.append(";").text(cobj.getAssumedValue());
-            constrained=true;
+        if (cobj.getAssumedValue() != null) {
+            builder.append("; ").text(cobj.getAssumedValue());
+            constrained = true;
         }
         if (!constrained) {
             builder.append("*");
         }
+    }
+
+    private char findPatternWrapperChar(String pattern) {
+        if (!pattern.contains("/")) {
+            return '/';
+        }
+        return '^';
     }
 }

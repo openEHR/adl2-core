@@ -37,4 +37,44 @@ public class Antlr4TreeParserTest {
 
         System.out.println(ArchetypeSerializer.serialize(archetype));
     }
+    @Test
+    public void printMixedTypes() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-EHR-EVALUATION.mixed_types.v1.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
+
+    @Test
+    public void printStructure() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-BOOK.structure_test1.v1.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
+
+    @Test
+    public void printPrimitiveMatchesAny() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-CAR.c_primitive_matches_any.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
+
+    @Test
+    public void printTypeIdentifiers() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-DADL.type_identifiers.v1.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
+
+    @Test
+    public void printAssumedTypes() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-WHOLE.assumed_types.v1.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
+    @Test
+    public void printBasicTypes() {
+        Archetype archetype = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-WHOLE.basic_types.v1.adls");
+
+        System.out.println(ArchetypeSerializer.serialize(archetype));
+    }
 }

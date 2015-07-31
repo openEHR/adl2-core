@@ -136,7 +136,7 @@ typeDefinitionConstraint:
 */
 
 primitiveValueConstraint
-	:  stringConstraint (';' STRING)?
+	:  stringConstraint (';' assumedValue=STRING)?
 	| numberConstraint (';' number)?
 	| booleanList (';' bool)?
 	| dateTimeConstraint (';' ISO_DATE_TIME)?
@@ -179,8 +179,7 @@ timeConstraint:
 
 
 durationConstraint
-	: DURATION '/' durationIntervalConstraint
-	| DURATION
+	: (pattern=DURATION) ('/' (durationIntervalConstraint|singleInterval=DURATION))?
 	| durationIntervalConstraint
 	;
 
@@ -236,88 +235,40 @@ cardinality:
 
 
 
-numberIntervalConstraint:
+numberIntervalConstraint
 	// range
-	'|'  ('>' '=')? numberOrStar '..' ('<' '=')? numberOrStar '|' |
-	'|'  '>'        numberOrStar '..' ('<' '=')? numberOrStar '|' |
-	'|'  ('>' '=')? numberOrStar '..' '<'        numberOrStar '|' |
-	'|'  '>'        numberOrStar '..' '<'        numberOrStar '|' |
+    : '|'  (gt='>' (gte='=')?)? (lower=number|'*') '..' (lt='<' (lte='=')?)? (upper=number|'*') '|'
 	// relative to single value
-	'|' val=      number '|'  |
-	'|' ('>' '=') number '|'  |
-	'|' '>'       number '|'  |
-	'|' ('<' '=') number '|'  |
-	'|' '<'       number '|'
-	;
-dateIntervalConstraint:
-	// range
-	'|'  ('>' '=')? dateOrStar '..' ('<' '=')? dateOrStar '|'  |
-	'|'  '>'        dateOrStar '..' ('<' '=')? dateOrStar '|'  |
-	'|'  ('>' '=')? dateOrStar '..' '<'        dateOrStar '|'  |
-	'|'  '>'        dateOrStar '..' '<'        dateOrStar '|'  |
-	// relative to single value
-	'|' val=      ISO_DATE '|'  |
-	'|' ('>' '=') ISO_DATE '|'  |
-	'|' '>'       ISO_DATE '|'  |
-	'|' ('<' '=') ISO_DATE '|'  |
-	'|' '<'       ISO_DATE '|'
+	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=number '|'
 	;
 
-dateOrStar
-	:		ISO_DATE | '*';
-
-timeIntervalConstraint:
+dateIntervalConstraint
 	// range
-	'|'  ('>' '=')? timeOrStar '..' ('<' '=')? timeOrStar '|'  |
-	'|'  '>'        timeOrStar '..' ('<' '=')? timeOrStar '|'  |
-	'|'  ('>' '=')? timeOrStar '..' '<'        timeOrStar '|'  |
-	'|'  '>'        timeOrStar '..' '<'        timeOrStar '|'  |
+    : '|'  (gt='>' (gte='=')?)? (lower=ISO_DATE|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_DATE|'*') '|'
 	// relative to single value
-	'|' val=      ISO_TIME '|'  |
-	'|' ('>' '=') ISO_TIME '|'  |
-	'|' '>'       ISO_TIME '|'  |
-	'|' ('<' '=') ISO_TIME '|'  |
-	'|' '<'       ISO_TIME '|'
+	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_DATE '|'
 	;
 
-timeOrStar
-	:	ISO_TIME | '*';
-
-dateTimeIntervalConstraint:
+timeIntervalConstraint
 	// range
-	'|'  ('>' '=')? dateTimeOrStar '..' ('<' '=')? dateTimeOrStar '|'  |
-	'|'  '>'        dateTimeOrStar '..' ('<' '=')? dateTimeOrStar '|'  |
-	'|'  ('>' '=')? dateTimeOrStar '..' '<'        dateTimeOrStar '|'  |
-	'|'  '>'        dateTimeOrStar '..' '<'        dateTimeOrStar '|'  |
+    : '|'  (gt='>' (gte='=')?)? (lower=ISO_TIME|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_TIME|'*') '|'
 	// relative to single value
-	'|' val=      ISO_DATE_TIME '|'  |
-	'|' ('>' '=') ISO_DATE_TIME '|'  |
-	'|' '>'       ISO_DATE_TIME '|'  |
-	'|' ('<' '=') ISO_DATE_TIME '|'  |
-	'|' '<'       ISO_DATE_TIME '|'
+	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_TIME '|'
 	;
 
-dateTimeOrStar
-	:	ISO_DATE_TIME|'*';
-
-durationIntervalConstraint:
+dateTimeIntervalConstraint
 	// range
-	'|'  ('>' '=')? durationOrStar '..' ('<' '=')? durationOrStar '|'  |
-	'|'  '>'        durationOrStar '..' ('<' '=')? durationOrStar '|'  |
-	'|'  ('>' '=')? durationOrStar '..' '<'        durationOrStar '|'  |
-	'|'  '>'        durationOrStar '..' '<'        durationOrStar '|'  |
+    : '|'  (gt='>' (gte='=')?)? (lower=ISO_DATE_TIME|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_DATE_TIME|'*') '|'
 	// relative to single value
-	'|' val=        DURATION '|'  |
-	'|' ('>' '=')   DURATION '|'  |
-	'|' '>'         DURATION '|'  |
-	'|' ('<' '=')   DURATION '|'  |
-	'|' '<'         DURATION '|'
+	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_DATE_TIME '|'
 	;
 
-durationOrStar
-	:	DURATION|'*';
-
-
+durationIntervalConstraint
+	// range
+    : '|'  (gt='>' (gte='=')?)? (lower=DURATION|'*') '..' (lt='<' (lte='=')?)? (upper=DURATION|'*') '|'
+	// relative to single value
+	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=DURATION '|'
+	;
 
 
 // Ontology

@@ -30,7 +30,6 @@ import org.openehr.jaxb.rm.StringDictionaryItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 import static org.openehr.adl.rm.RmObjectFactory.*;
 
@@ -38,6 +37,8 @@ import static org.openehr.adl.rm.RmObjectFactory.*;
  * @author markopi
  */
 public class AdlTreeParser extends AbstractAdlTreeParser {
+    private AdlTreeConstraintParser constraints = new AdlTreeConstraintParser();
+
     public DifferentialArchetype parseAdl(adlParser.AdlContext context) {
         DifferentialArchetype result = new DifferentialArchetype();
         parseArchetypeHeader(result, context.header());
@@ -53,6 +54,9 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         if (context.description() != null) {
             result.setDescription(parseDescription(context.description()));
         }
+        if (context.definition()!=null) {
+            result.setDefinition(constraints.parseComplexObject(context.definition().complexObjectConstraint()));
+        }
 
         if (context.ontology() != null) {
             result.setTerminology(parseOntology(context.ontology()));
@@ -60,13 +64,6 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
 
 //        for (Tree child : children(adlTree)) {
 //            switch (child.getType()) {
-//                case org.openehr.adl.antlr.AdlParser.DEFINITION:
-//                    result.setDefinition(constraints.parseTypeConstraint(child.getChild(0)));
-//                    break;
-//                case org.openehr.adl.antlr.AdlParser.ONTOLOGY:
-//                case org.openehr.adl.antlr.AdlParser.TERMINOLOGY:
-//                    result.setTerminology(parseOntology(child.getChild(0)));
-//                    break;
 //                case org.openehr.adl.antlr.AdlParser.ANNOTATIONS:
 //                    result.setAnnotations(new ResourceAnnotations());
 //                    parseAnnotations(result.getAnnotations().getItems(), child.getChild(0));
@@ -155,8 +152,8 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
     private ResourceDescription parseDescription(adlParser.DescriptionContext context) {
         ResourceDescription result = new ResourceDescription();
         adlParser.AdlObjectValueContext description = context.adlObjectValue();
-        result.setCopyright(collectText(getAdlPropertyOrNull(description, "copyright")));
-        result.setLifecycleState(collectText(getAdlPropertyOrNull(description, "lifecycle_state")));
+        result.setCopyright(collectString(getAdlPropertyOrNull(description, "copyright")));
+        result.setLifecycleState(collectString(getAdlPropertyOrNull(description, "lifecycle_state")));
         adlParser.AdlValueContext property = getAdlPropertyOrNull(description, "original_author");
         if (property != null) {
             parseStringDictionaryItems(result.getOriginalAuthor(), property.adlMapValue());
@@ -218,14 +215,14 @@ public class AdlTreeParser extends AbstractAdlTreeParser {
         if (context == null) return;
         List<adlParser.AdlMapValueEntryContext> entries = context.adlMapValueEntry();
         for (adlParser.AdlMapValueEntryContext entry : entries) {
-            target.add(newStringDictionaryItem(collectText(entry.STRING()), collectText(entry.adlValue())));
+            target.add(newStringDictionaryItem(collectText(entry.STRING()), collectString(entry.adlValue())));
         }
     }
     private void parseStringDictionaryItems(List<StringDictionaryItem> target, @Nullable adlParser.AdlObjectValueContext context) {
         if (context == null) return;
         List<adlParser.AdlObjectPropertyContext> entries = context.adlObjectProperty();
         for (adlParser.AdlObjectPropertyContext entry : entries) {
-            target.add(newStringDictionaryItem(collectText(entry.identifier()), collectText(entry.adlValue())));
+            target.add(newStringDictionaryItem(collectText(entry.identifier()), collectString(entry.adlValue())));
         }
     }
 

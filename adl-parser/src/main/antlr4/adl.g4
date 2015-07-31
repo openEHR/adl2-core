@@ -71,15 +71,18 @@ language:	LANGUAGE adlObjectValue;
 description:	DESCRIPTION adlObjectValue;
 
 // Constraint definition
-definition:	DEFINITION typeConstraint;
+definition:	DEFINITION complexObjectConstraint;
 
 typeConstraint
-	: orderConstraint? typeIdentifierWithGenerics atCode? occurrences? typeValueConstraint?
-	| USE_NODE typeIdentifierWithGenerics atCode? occurrences? rmPath
-	| archetypeSlotConstraint
-	| archetypeReferenceConstraint
-	| adlValueConstraint
+	: orderConstraint? complexObjectConstraint
+	| orderConstraint? USE_NODE typeIdentifierWithGenerics atCode? occurrences? rmPath
+	| orderConstraint? archetypeSlotConstraint
+	| orderConstraint? archetypeReferenceConstraint
+	| orderConstraint? adlValueConstraint
 	;
+
+complexObjectConstraint:
+    typeIdentifierWithGenerics atCode? occurrences? attributeListMatcher?;
 
 adlValueConstraint
 	: typeIdentifier adlValue
@@ -89,18 +92,14 @@ occurrences:
 	OCCURRENCES MATCHES '{' occurrenceRange '}';
 
 occurrenceRange
-	: INTEGER '..' INTEGER
-	| INTEGER '..' '*'
+	: lower=INTEGER '..' upper=INTEGER
+	| lower=INTEGER '..' '*'
 	| val=INTEGER
 	;
 
-negatableMatches
-	: '~' MATCHES
-	| MATCHES
-	;
 
-typeValueConstraint
-	: MATCHES '{' attributeListConstraint '}'
+attributeListMatcher
+	: MATCHES '{' attributeConstraint+ '}'
 	| MATCHES '{' '*' '}'
 	;
 
@@ -162,7 +161,7 @@ archetypeSlotSingleConstraint:
 
 
 archetypeReferenceConstraint
-	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences? typeValueConstraint?
+	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences? attributeListMatcher?
 	;
 
 
@@ -204,12 +203,10 @@ regularExpressionInner2: ( ~'^')*;
 
 
 
-attributeListConstraint:
-	 attributeConstraint+ ;
 
 
 attributeConstraint
-	: attributeIdentifier existence? cardinality? (negatableMatches '{' multiValueConstraint '}' )?
+	: attributeIdentifier existence? cardinality? ((negatedMatches='~')? MATCHES '{' multiValueConstraint '}' )?
 	|  tupleAttributeIdentifier existence? MATCHES '{' tupleChildConstraints '}'
 	;
 
@@ -373,7 +370,7 @@ nameIdentifier:
 	NAME_IDENTIFIER | keyword | AT_CODE_VALUE;
 
 typeIdentifierWithGenerics:
-	typeIdentifier ('<' typeIdentifier '>')? ;
+	mainType=typeIdentifier ('<' genericType=typeIdentifier '>')? ;
 
 typeIdentifier:
 	TYPE_IDENTIFIER ;

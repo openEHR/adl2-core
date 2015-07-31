@@ -58,6 +58,7 @@ public class AdlParserTest {
         parser.setTrace(true);
 
         parser.adl();
+
     }
 
 

@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.openehr.adl.antlr4.generated.adlLexer;
 import org.openehr.adl.antlr4.generated.adlParser;
 import org.openehr.jaxb.rm.CodePhrase;
 
@@ -104,7 +105,7 @@ abstract class AbstractAdlTreeParser {
     protected String collectString(@Nullable adlParser.OpenStringListContext tStringList) {
         if (tStringList == null) return null;
         // todo
-        return collectText(tStringList);
+        return unescapeString(collectText(tStringList));
 //        if (tStringList == null) return null;
 //        if (tStringList.getType() == AdlParser.STRING) {
 //            return unescapeString(tStringList.getText());
@@ -120,7 +121,7 @@ abstract class AbstractAdlTreeParser {
         List<String> result = new ArrayList<>();
         List<TerminalNode> contexts = tStringList.STRING();
         for (TerminalNode context : contexts) {
-            result.add(collectText(context));
+            result.add(unescapeString(collectText(context)));
         }
         return result;
     }
@@ -163,6 +164,12 @@ abstract class AbstractAdlTreeParser {
     @Nullable
     protected String collectText(ParseTree context) {
         if (context == null) return null;
+        if (context instanceof TerminalNode) {
+            TerminalNode tn = (TerminalNode) context;
+            if (tn.getSymbol().getType()== adlLexer.STRING) {
+                return unescapeString(tn.getText());
+            }
+        }
         return context.getText();
     }
 
@@ -173,6 +180,19 @@ abstract class AbstractAdlTreeParser {
         }
         return value;
     }
+
+    protected String collectString( adlParser.AdlValueContext adlValue) {
+        if (adlValue==null) {
+            return null;
+        }
+        return collectString(adlValue.openStringList());
+    }
+
+    protected String parseAtCode(adlParser.AtCodeContext context) {
+        if (context == null) return null;
+        return context.AT_CODE_VALUE().getText();
+    }
+
 
     protected adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlObjectValueContext adlContext, String name) {
         List<adlParser.AdlObjectPropertyContext> properties = adlContext.adlObjectProperty();

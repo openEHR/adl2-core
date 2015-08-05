@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.openehr.adl2-core</groupId>
         <artifactId>adl2-core</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>adl-parser</artifactId>
     <dependencies>
@@ -55,7 +55,7 @@
         <!-- antlr -->
         <dependency>
             <groupId>org.antlr</groupId>
-            <artifactId>antlr-runtime</artifactId>
+            <artifactId>antlr4-runtime</artifactId>
         </dependency>
         <!-- Apache commons -->
         <dependency>
@@ -67,18 +67,25 @@
         <plugins>
             <plugin>
                 <groupId>org.antlr</groupId>
-                <artifactId>antlr3-maven-plugin</artifactId>
+                <artifactId>antlr4-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>antlr</goal>
+                            <goal>antlr4</goal>
                         </goals>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <sourceDirectory>${basedir}/src/main/resources/antlr3</sourceDirectory>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <arguments>
+                        <argument>-package</argument>
+                        <argument>org.openehr.adl.antlr4.generated</argument>
+                    </arguments>
+                    <sourceDirectory>${basedir}/src/main/antlr4</sourceDirectory>
+                    <libDirectory>${basedir}/src/main/antlr4</libDirectory>
+                    <outputDirectory>${project.build.directory}/generated-sources/org/openehr/adl/antlr4/generated</outputDirectory>
+                    <visitor>true</visitor>
+                </configuration>
             </plugin>
         </plugins>
     </build>

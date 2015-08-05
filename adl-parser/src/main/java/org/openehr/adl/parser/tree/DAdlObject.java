@@ -20,42 +20,86 @@
 
 package org.openehr.adl.parser.tree;
 
-import org.antlr.runtime.Token;
-import org.antlr.runtime.tree.Tree;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import org.antlr.v4.runtime.Token;
+import org.openehr.adl.antlr4.generated.adlParser;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
+
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.collectText;
 
 /**
  * @author markopi
  */
 class DAdlObject {
     private final Token startToken;
-    private final Map<String, Tree> properties;
+    private final Map<String, adlParser.AdlValueContext> properties;
 
-    DAdlObject(Token startToken, Map<String, Tree> properties) {
+    DAdlObject(Token startToken, Map<String, adlParser.AdlValueContext> properties) {
         this.startToken = startToken;
         this.properties = properties;
     }
 
-    Tree get(String property) {
-        Tree result = properties.get(property);
+    static DAdlObject parse(adlParser.AdlObjectValueContext context) {
+        if (context == null) return new DAdlObject(null, ImmutableMap.<String, adlParser.AdlValueContext>of());
+
+        Map<String, adlParser.AdlValueContext> properties = Maps.newLinkedHashMap();
+        List<adlParser.AdlObjectPropertyContext> adlObjectProperties = context.adlObjectProperty();
+        for (adlParser.AdlObjectPropertyContext adlObjectProperty : adlObjectProperties) {
+            String name = adlObjectProperty.identifier().getText();
+            properties.put(name, adlObjectProperty.adlValue());
+
+        }
+        return new DAdlObject(context.start, properties);
+    }
+
+    adlParser.AdlValueContext get(String property) {
+        adlParser.AdlValueContext result = properties.get(property);
         if (result == null) {
-            throw new AdlTreeParserException("Adl object does not contain required property: " + property, startToken);
+            throw new AdlTreeParserException(startToken, "Adl object does not contain required property: " + property);
         }
         return result;
     }
 
     @Nullable
-    Tree tryGet(String property) {
+    adlParser.AdlValueContext tryGet(String property) {
         return properties.get(property);
+    }
+
+    @Nullable
+    String tryGetString(String property) {
+        adlParser.AdlValueContext prop = tryGet(property);
+        if (prop == null) return null;
+        return AdlTreeParserUtils.collectString(prop.openStringList());
+    }
+
+    @Nullable
+    Double tryGetDouble(String property) {
+        adlParser.AdlValueContext prop = tryGet(property);
+        if (prop == null) return null;
+        String str = collectText(prop.number());
+        if (str==null) return null;
+        return Double.valueOf(str);
+    }
+    @Nullable
+    Integer tryGetInteger(String property) {
+        adlParser.AdlValueContext prop = tryGet(property);
+        if (prop == null) return null;
+        String str = collectText(prop.number());
+        if (str==null) return null;
+        return Integer.valueOf(str);
     }
 
     boolean contains(String property) {
         return properties.containsKey(property);
     }
 
-    Map<String, Tree> getProperties() {
+    Map<String, adlParser.AdlValueContext> getProperties() {
         return properties;
     }
+
 }

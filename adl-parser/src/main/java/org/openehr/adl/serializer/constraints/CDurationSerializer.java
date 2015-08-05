@@ -27,6 +27,8 @@ import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CDuration;
 import org.openehr.jaxb.rm.IntervalOfDuration;
 
+import java.util.Objects;
+
 /**
  * @author Marko Pipan
  */
@@ -38,16 +40,16 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
     @Override
     public void serialize(CDuration cobj) {
         boolean constrained=false;
+
         if (cobj.getPattern() != null) {
             builder.append(cobj.getPattern());
             constrained=true;
         }
         if (cobj.getRange() != null) {
-            builder.append("|").append(cobj.getRange().getLower());
-            if(!cobj.getRange().getLower().equals(cobj.getRange().getUpper())){
-                builder.append("..").append(cobj.getRange().getUpper());
+            if (constrained) {
+                builder.append("/");
             }
-            builder.append("|");
+            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
             constrained=true;
         }
         if (cobj.getAssumedValue() != null) {

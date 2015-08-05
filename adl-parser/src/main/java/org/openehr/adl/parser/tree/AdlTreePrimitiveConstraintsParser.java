@@ -20,489 +20,354 @@
 
 package org.openehr.adl.parser.tree;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
-import org.openehr.adl.antlr.AdlParser;
-import org.openehr.adl.parser.RuntimeRecognitionException;
-import org.openehr.adl.rm.RmModel;
-import org.openehr.adl.util.AdlUtils;
+import com.google.common.collect.ImmutableList;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.openehr.adl.antlr4.generated.adlParser;
+import org.openehr.adl.rm.RmTypes;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
+import org.openehr.jaxb.rm.Interval;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.openehr.adl.am.AmObjectFactory.newCInteger;
-import static org.openehr.adl.am.AmObjectFactory.newCReal;
-import static org.openehr.adl.rm.RmObjectFactory.*;
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.*;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDate;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDuration;
 
 /**
  * @author markopi
  */
-public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
-    private final AdlTreeDAdlParser dadl;
-
-    public AdlTreePrimitiveConstraintsParser(CommonTokenStream tokenStream, CommonTree adlTree,
-                                             AdlTreeParserState state, AdlTreeDAdlParser dadl) {
-        super(tokenStream, adlTree, state);
-        this.dadl = dadl;
-    }
-
-    CPrimitiveObject parsePrimitiveValueConstraint(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_PRIMITIVE_VALUE_CONSTRAINT);
-
-        Tree tPrimitiveConstraint = tConstraint.getChild(0);
-        final CPrimitiveObject primitive;
-        switch (tPrimitiveConstraint.getType()) {
-            case AdlParser.AST_STRING_LIST:
-                primitive = parseCStringList(tConstraint);
-                break;
-            case AdlParser.AST_REGULAR_EXPRESSION:
-                primitive = parseCStringRegularExpression(tConstraint);
-                break;
-            case AdlParser.AST_NUMBER_INTERVAL_CONSTRAINT:
-                primitive = parseCNumberInterval(tConstraint);
-                break;
-            case AdlParser.AST_NUMBER_LIST:
-                primitive = parseCNumberList(tConstraint);
-                break;
-            case AdlParser.AST_BOOLEAN_LIST:
-                primitive = parseCBooleanList(tConstraint);
-                break;
-            case AdlParser.DATE_PATTERN:
-                primitive = parseCDatePattern(tConstraint);
-                break;
-            case AdlParser.ISO_DATE:
-                primitive = parseCDateIsoDate(tConstraint);
-                break;
-            case AdlParser.AST_DATE_INTERVAL_CONSTRAINT:
-                primitive = parseCDateInterval(tConstraint);
-                break;
-            case AdlParser.DATE_TIME_PATTERN:
-                primitive = parseCDateTimePattern(tConstraint);
-                break;
-            case AdlParser.ISO_DATE_TIME:
-                primitive = parseCDateTimeIsoDateTime(tConstraint);
-                break;
-            case AdlParser.AST_DATE_TIME_INTERVAL_CONSTRAINT:
-                primitive = parseCDateTimeInterval(tConstraint);
-                break;
-            case AdlParser.TIME_PATTERN:
-                primitive = parseCTimePattern(tConstraint);
-                break;
-            case AdlParser.ISO_TIME:
-                primitive = parseCTimeIsoTime(tConstraint);
-                break;
-            case AdlParser.AST_TIME_INTERVAL_CONSTRAINT:
-                primitive = parseCTimeInterval(tConstraint);
-                break;
-            case AdlParser.AST_DURATION_CONSTRAINT:
-                primitive = parseCDurationConstraint(tConstraint);
-                break;
-            case AdlParser.AST_CODE_LIST:
-                primitive = parseTerminologyCode(tPrimitiveConstraint);
-                break;
-            default:
-                throw new RuntimeRecognitionException(tPrimitiveConstraint);
+abstract class AdlTreePrimitiveConstraintsParser  {
+    static CPrimitiveObject parsePrimitiveValue(adlParser.PrimitiveValueConstraintContext context) {
+        if (context.stringConstraint() != null) {
+            return parseString(context.stringConstraint(), context.STRING());
         }
-
-        primitive.setOccurrences(newMultiplicityInterval(1, 1));
-        primitive.setRmTypeName(AdlUtils.getRmTypeName(primitive.getClass()));
-
-        return primitive;
+        if (context.booleanList() != null) {
+            return parseBoolean(context.booleanList(), context.bool());
+        }
+        if (context.numberConstraint() != null) {
+            return parseNumber(context.numberConstraint(), context.number());
+        }
+        if (context.dateConstraint() != null) {
+            return parseDate(context.dateConstraint(), context.ISO_DATE());
+        }
+        if (context.timeConstraint() != null) {
+            return parseTime(context.timeConstraint(), context.ISO_TIME());
+        }
+        if (context.dateTimeConstraint() != null) {
+            return parseDateTime(context.dateTimeConstraint(), context.ISO_DATE_TIME());
+        }
+        if (context.durationConstraint() != null) {
+            return parseDuration(context.durationConstraint(), context.DURATION());
+        }
+        if (context.codeIdentifierList()!=null) {
+            return parseCodeIdentifierList(context.codeIdentifierList());
+        }
+        throw new AssertionError();
     }
 
-    private CTerminologyCode parseTerminologyCode(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_CODE_LIST);
-
+    static CPrimitiveObject parseCodeIdentifierList(adlParser.CodeIdentifierListContext context) {
         CTerminologyCode result = new CTerminologyCode();
-        int i = 0;
-        while (tConstraint.getChildCount() > i && tConstraint.getChild(i).getType() == AdlParser.AST_TEXT) {
-            Tree tCode = child(tConstraint, i, AdlParser.AST_TEXT);
-            result.getCodeList().add(collectText(tCode));
-            i++;
+        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
+        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifier()) {
+            result.getCodeList().add(parseCodeIdentifier(cCodeIdentifier));
         }
-
         return result;
     }
 
-    private CDuration parseCDurationConstraint(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_PRIMITIVE_VALUE_CONSTRAINT);
-        Tree tDuration = child(tConstraint, 0, AdlParser.AST_DURATION_CONSTRAINT);
+    static String parseCodeIdentifier(adlParser.CodeIdentifierContext context) {
+        return collectNonNullText(context);
+    }
 
-        String duration = collectText(tDuration.getChild(0));
+    static CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
+        CDate result = new CDate();
+        result.setRmTypeName(RmTypes.DATE);
+        result.setPattern(collectText(context.DATE_PATTERN()));
+        if (context.ISO_DATE() != null) {
+            // should go to list attribute, but there is none on CDate class
+//            String dateStr = collectText(context.ISO_DATE());
+//            result.setRange(newIntervalOfDate(dateStr, dateStr));
+        }
+        if (context.dateIntervalConstraint() != null) {
+            result.setRange(parseDateInterval(context.dateIntervalConstraint()));
+        }
+        result.setAssumedValue(collectText(assumedValue));
+        return result;
+    }
+
+    static CDateTime parseDateTime(adlParser.DateTimeConstraintContext context, TerminalNode assumedValue) {
+        CDateTime result = new CDateTime();
+        result.setRmTypeName(RmTypes.DATE_TIME);
+        result.setPattern(collectText(context.DATE_TIME_PATTERN()));
+        if (context.ISO_DATE_TIME() != null) {
+            // should go to list attribute, but there is none on CDate class
+//            result.setPattern(collectText(context.ISO_DATE_TIME()));
+        }
+
+        if (context.dateTimeIntervalConstraint() != null) {
+            result.setRange(parseDateTimeInterval(context.dateTimeIntervalConstraint()));
+        }
+        result.setAssumedValue(collectText(assumedValue));
+        return result;
+    }
+
+    static CDuration parseDuration(adlParser.DurationConstraintContext context, TerminalNode assumedValue) {
         CDuration result = new CDuration();
-        if (duration != null) {
-            if (Pattern.compile("\\d").matcher(duration).find()) {
-                result.setDefaultValue(duration);
-            } else {
-                result.setPattern(duration);
-            }
+        result.setRmTypeName(RmTypes.DURATION);
+        if (context.pattern!=null) {
+            String s = context.pattern.getText();
+            result.setPattern(s);
         }
-        if (tDuration.getChild(1).getType() != AdlParser.AST_NULL) {
-            Tree tInterval = child(tDuration, 1, AdlParser.AST_DURATION_INTERVAL_CONSTRAINT);
-            result.setRange(newIntervalOfDuration(
-                    collectText(tInterval.getChild(0)),
-                    collectText(tInterval.getChild(1)),
-                    tInterval.getChild(2).getType() == AdlParser.TRUE,
-                    tInterval.getChild(3).getType() == AdlParser.TRUE));
+        if (context.singleInterval!=null) {
+            String s = context.singleInterval.getText();
+            result.setRange(newIntervalOfDuration(s, s));
+        } else if (context.durationIntervalConstraint() != null) {
+            result.setRange(parseDurationInterval(context.durationIntervalConstraint()));
+        }
+        result.setAssumedValue(collectText(assumedValue));
+        return result;
+    }
+
+    static CTime parseTime(adlParser.TimeConstraintContext context, TerminalNode assumedValue) {
+        CTime result = new CTime();
+        result.setRmTypeName(RmTypes.TIME);
+        result.setPattern(collectText(context.TIME_PATTERN()));
+        if (context.ISO_TIME() != null) {
+            // should go to list attribute, but there is none on CTime class
+//            result.setPattern(collectText(context.ISO_TIME()));
         }
 
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-
-        return result;
-    }
-
-    private String collectTextOrStar(Tree tString) {
-        String text = collectText(tString);
-        if (text!=null && text.equals("*")) {
-            return null;
+        if (context.timeIntervalConstraint() != null) {
+            result.setRange(parseTimeInterval(context.timeIntervalConstraint()));
         }
-        return text;
-    }
-
-    // Date
-    private CDate parseCDateInterval(Tree tConstraint) {
-        Tree tInterval = child(tConstraint, 0, AdlParser.AST_DATE_INTERVAL_CONSTRAINT);
-        CDate result = new CDate();
-
-        String low = collectTextOrStar(tInterval.getChild(0));
-        String high = collectTextOrStar(tInterval.getChild(1));
-        result.setRange(newIntervalOfDate(
-                low,
-                high,
-                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
-                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
-
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
+        result.setAssumedValue(collectText(assumedValue));
         return result;
     }
 
-    private CDate parseCDateIsoDate(Tree tConstraint) {
-        Tree tIsoDate = child(tConstraint, 0, AdlParser.ISO_DATE);
-        CDate result = new CDate();
-        String value = collectText(tIsoDate);
-        result.setDefaultValue(value);
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
+    static IntervalOfDate parseDateInterval(adlParser.DateIntervalConstraintContext c) {
+        String lower = collectText(c.lower);
+        String upper = collectText(c.upper);
+        String val = collectText(c.val);
+        TempInterval<String> temp = parseTempInterval(lower, upper, val, c.gt, c.gte, c.lt, c.lte);
+        IntervalOfDate interval = new IntervalOfDate();
+        temp.copyCommonTo(interval);
+        interval.setLower(temp.lower);
+        interval.setUpper(temp.upper);
+        return interval;
     }
 
-    private CDate parseCDatePattern(Tree tConstraint) {
-        Tree tDatePattern = child(tConstraint, 0, AdlParser.DATE_PATTERN);
-        CDate result = new CDate();
-        result.setPattern(collectText(tDatePattern));
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
+    static IntervalOfTime parseTimeInterval(adlParser.TimeIntervalConstraintContext c) {
+        String lower = collectText(c.lower);
+        String upper = collectText(c.upper);
+        String val = collectText(c.val);
+        TempInterval<String> temp = parseTempInterval(lower, upper, val, c.gt, c.gte, c.lt, c.lte);
+        IntervalOfTime interval = new IntervalOfTime();
+        temp.copyCommonTo(interval);
+        interval.setLower(temp.lower);
+        interval.setUpper(temp.upper);
+        return interval;
     }
 
-    // Time
-    private CTime parseCTimeInterval(Tree tConstraint) {
-        Tree tInterval = child(tConstraint, 0, AdlParser.AST_TIME_INTERVAL_CONSTRAINT);
-        CTime result = new CTime();
-
-        String low = collectTextOrStar(tInterval.getChild(0));
-        String high = collectTextOrStar(tInterval.getChild(1));
-        result.setRange(newIntervalOfTime(
-                low,
-                high,
-                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
-                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
-
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
+    static IntervalOfDateTime parseDateTimeInterval(adlParser.DateTimeIntervalConstraintContext c) {
+        String lower = collectText(c.lower);
+        String upper = collectText(c.upper);
+        String val = collectText(c.val);
+        TempInterval<String> temp = parseTempInterval(lower, upper, val, c.gt, c.gte, c.lt, c.lte);
+        IntervalOfDateTime interval = new IntervalOfDateTime();
+        temp.copyCommonTo(interval);
+        interval.setLower(temp.lower);
+        interval.setUpper(temp.upper);
+        return interval;
     }
 
-    private CTime parseCTimeIsoTime(Tree tConstraint) {
-        Tree tIsoTime = child(tConstraint, 0, AdlParser.ISO_TIME);
-        CTime result = new CTime();
-        String value = collectText(tIsoTime);
-        result.setDefaultValue(value);
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
+    static IntervalOfDuration parseDurationInterval(adlParser.DurationIntervalConstraintContext c) {
+        String lower = collectText(c.lower);
+        String upper = collectText(c.upper);
+        String val = collectText(c.val);
+        TempInterval<String> temp = parseTempInterval(lower, upper, val, c.gt, c.gte, c.lt, c.lte);
+        IntervalOfDuration interval = new IntervalOfDuration();
+        temp.copyCommonTo(interval);
+        interval.setLower(temp.lower);
+        interval.setUpper(temp.upper);
+        return interval;
     }
 
-    private CTime parseCTimePattern(Tree tConstraint) {
-        Tree tTimePattern = child(tConstraint, 0, AdlParser.TIME_PATTERN);
-        CTime result = new CTime();
-        result.setPattern(collectText(tTimePattern));
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
+    static Number parseNumber(adlParser.NumberContext number, boolean[] isInteger) {
+        if (number == null) return null;
+        try {
+            return Integer.parseInt(number.getText());
+        } catch (NumberFormatException e) {
+            isInteger[0] = false;
+            return Float.parseFloat(number.getText());
+        }
     }
 
-    // DateTime
-    private CDateTime parseCDateTimeInterval(Tree tConstraint) {
-        Tree tInterval = child(tConstraint, 0, AdlParser.AST_DATE_TIME_INTERVAL_CONSTRAINT);
-        CDateTime result = new CDateTime();
+    static CPrimitiveObject parseNumber(adlParser.NumberConstraintContext context, adlParser.NumberContext assumedValue) {
 
-        String low = collectTextOrStar(tInterval.getChild(0));
-        String high = collectTextOrStar(tInterval.getChild(1));
-        result.setRange(newIntervalOfDateTime(
-                low,
-                high,
-                tInterval.getChild(2).getType() == AdlParser.TRUE && low!=null,
-                tInterval.getChild(3).getType() == AdlParser.TRUE && high!=null));
+        //  array is just to simulate OUT parameter
+        boolean isInteger[] = {true};
 
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
-    }
-
-    private CDateTime parseCDateTimeIsoDateTime(Tree tConstraint) {
-        Tree tIsoDateDate = child(tConstraint, 0, AdlParser.ISO_DATE_TIME);
-        CDateTime result = new CDateTime();
-        String value = collectText(tIsoDateDate);
-        result.setDefaultValue(value);
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
-    }
-
-    private CDateTime parseCDateTimePattern(Tree tConstraint) {
-        Tree tDatePattern = child(tConstraint, 0, AdlParser.DATE_TIME_PATTERN);
-        CDateTime result = new CDateTime();
-        result.setPattern(collectText(tDatePattern));
-        result.setAssumedValue(parseAssumedTextValue(tConstraint.getChild(1)));
-        return result;
-    }
-
-    private CPrimitiveObject parseCNumberList(Tree tConstraint) {
-        Tree tNumberList = child(tConstraint, 0, AdlParser.AST_NUMBER_LIST);
-
-        boolean isInteger = true;
         List<Number> numbers = new ArrayList<>();
-        for (Tree tNumber : children(tNumberList)) {
-            try {
-                numbers.add(Integer.parseInt(collectText(tNumber)));
-            } catch (NumberFormatException e) {
-                isInteger = false;
-                numbers.add(Float.parseFloat(collectText(tNumber)));
+        Interval interval = null;
+
+        if (context.numberList() != null) {
+            for (adlParser.NumberContext number : context.numberList().number()) {
+                numbers.add(parseNumber(number, isInteger));
             }
+        } else if (context.numberIntervalConstraint() != null) {
+            interval = parseNumberInterval(context.numberIntervalConstraint(), isInteger);
         }
-        if (isInteger) {
+
+
+        if (isInteger[0]) {
             CInteger result = new CInteger();
-            if (numbers.size() == 1) {
-                result.setDefaultValue(numbers.get(0).intValue());
+            result.setRmTypeName(RmTypes.INTEGER);
+            if (interval != null) {
+                result.setRange((IntervalOfInteger) interval);
             }
             for (Number number : numbers) {
                 result.getList().add(number.intValue());
             }
-            result.setAssumedValue(parseAssumedValue(tConstraint.getChild(1), Integer.class));
+            if (assumedValue != null) {
+                result.setAssumedValue(parseNumber(assumedValue, isInteger).intValue());
+            }
             return result;
         } else {
             CReal result = new CReal();
-            if (numbers.size() == 1) {
-                result.setDefaultValue(numbers.get(0).floatValue());
+            result.setRmTypeName(RmTypes.REAL);
+            if (interval != null) {
+                result.setRange((IntervalOfReal) interval);
             }
             for (Number number : numbers) {
                 result.getList().add(number.floatValue());
             }
-            result.setAssumedValue(parseAssumedValue(tConstraint.getChild(1), Float.class));
+            if (assumedValue != null) {
+                result.setAssumedValue(parseNumber(assumedValue, isInteger).floatValue());
+            }
             return result;
+
         }
     }
 
-    private CString parseCStringRegularExpression(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_PRIMITIVE_VALUE_CONSTRAINT);
+    static <T> TempInterval<T> parseTempInterval(T lower, T upper, T val, Token gt, Token gte, Token lt, Token lte) {
+        TempInterval<T> result = new TempInterval<>();
 
-        CString result = new CString();
-        result.setPattern(collectRegularExpression(tConstraint.getChild(0)));
-        result.setAssumedValue(parseAssumedValue(tConstraint.getChild(1), String.class));
+        // map single val interval into upper/lower
+        if (val != null) {
+            if (gt == null && lt == null) { // fixed value
+                result.lower = val;
+                result.upper = val;
+            } else if (gt != null) {
+                result.lower = val;
+                result.upper = null;
+            } else {
+                result.lower = null;
+                result.upper = val;
+            }
+        } else { // directly map lower and upper
+            result.lower = lower;
+            result.upper = upper;
+        }
+
+        result.setLowerUnbounded(result.lower == null);
+        result.setLowerIncluded(result.lower != null && (gt == null || gte != null));
+        result.setUpperUnbounded(result.upper == null);
+        result.setUpperIncluded(result.upper != null && (lt == null || lte != null));
         return result;
     }
 
-    private CBoolean parseCBooleanList(Tree tConstraint) {
-        Tree tBooleanList = tConstraint.getChild(0);
+    static Interval parseNumberInterval(adlParser.NumberIntervalConstraintContext context) {
+        return parseNumberInterval(context, new boolean[]{true});
+
+    }
+
+    static Interval parseNumberInterval(adlParser.NumberIntervalConstraintContext context, boolean[] isInteger) {
+        Interval result;
+
+        Number lower = parseNumber(context.lower, isInteger);
+        Number upper = parseNumber(context.upper, isInteger);
+        Number val = parseNumber(context.val, isInteger);
+
+        TempInterval<Number> temp = parseTempInterval(lower, upper, val, context.gt, context.gte, context.lt, context.lte);
+
+        if (isInteger[0]) {
+            IntervalOfInteger interval = new IntervalOfInteger();
+            if (temp.lower != null) interval.setLower(temp.lower.intValue());
+            if (temp.upper != null) interval.setUpper(temp.upper.intValue());
+            result = interval;
+        } else {
+            IntervalOfReal interval = new IntervalOfReal();
+            if (temp.lower != null) interval.setLower(temp.lower.floatValue());
+            if (temp.upper != null) interval.setUpper(temp.upper.floatValue());
+            result = interval;
+        }
+
+        temp.copyCommonTo(result);
+        return result;
+    }
+
+    static CBoolean parseBoolean(adlParser.BooleanListContext context, adlParser.BoolContext assumedValue) {
         CBoolean result = new CBoolean();
-        List<Tree> booleanValues = children(tBooleanList);
-        for (Tree tree : booleanValues) {
-            switch (tree.getType()) {
-                case AdlParser.TRUE:
-                    result.setTrueValid(true);
-                    break;
-                case AdlParser.FALSE:
-                    result.setFalseValid(true);
-                    break;
-                default:
-                    throw new AdlTreeParserException("Unexpected value in boolean list: " + AdlParser.tokenNames[tree.getType()],
-                            tokenOf(tree));
+        result.setRmTypeName(RmTypes.BOOLEAN);
+        for (adlParser.BoolContext bool : context.bool()) {
+            if (bool.TRUE() != null) {
+                result.setTrueValid(true);
+            } else {
+                result.setFalseValid(true);
             }
         }
-        if (booleanValues.size() == 1) {
-            result.setDefaultValue(booleanValues.get(0).getType() == AdlParser.TRUE);
-        }
-        result.setAssumedValue(parseAssumedValue(tConstraint.getChild(1), Boolean.class));
-
-        return result;
-    }
-
-    private CPrimitiveObject parseCNumberInterval(Tree tConstraint) {
-        Interval interval = parseNumberInterval(tConstraint.getChild(0), false);
-
-        if (interval instanceof IntervalOfInteger) {
-            return newCInteger((IntervalOfInteger) interval, null, parseAssumedValue(tConstraint.getChild(1), Integer.class));
-        } else {
-            return newCReal((IntervalOfReal) interval, null, parseAssumedValue(tConstraint.getChild(1), Float.class));
-        }
-    }
-
-    private String collectRegularExpression(Tree tRegularExpression) {
-        assertTokenType(tRegularExpression, AdlParser.AST_REGULAR_EXPRESSION);
-
-        String result = checkNotNull(collectText(tRegularExpression));
-        result = result.substring(1, result.length() - 1);
-        return result;
-    }
-
-
-    private Interval parseNumberInterval(Tree tNumberInterval, boolean mustBeInteger) {
-        assertTokenType(tNumberInterval, AdlParser.AST_NUMBER_INTERVAL_CONSTRAINT);
-        boolean lowerIncluded = tNumberInterval.getChild(2).getType() == AdlParser.TRUE;
-        boolean upperIncluded = tNumberInterval.getChild(3).getType() == AdlParser.TRUE;
-
-        Interval interval;
-        String lowStr = collectText(tNumberInterval.getChild(0));
-        String highStr = collectText(tNumberInterval.getChild(1));
-
-        try {
-            Integer low = (lowStr != null && !lowStr.equals("*")) ? Integer.parseInt(lowStr) : null;
-            Integer high = (highStr != null && !highStr.equals("*")) ? Integer.parseInt(highStr) : null;
-
-            interval = newIntervalOfInteger(low, high, lowerIncluded && low != null, upperIncluded && high != null);
-
-        } catch (NumberFormatException e) {
-            if (mustBeInteger) {
-                throw new AdlTreeParserException("Expected interval of integer, found interval of real", tokenOf(tNumberInterval));
-            }
-
-            Float low = (lowStr != null && !lowStr.equals("*")) ? Float.parseFloat(lowStr) : null;
-            Float high = (highStr != null && !highStr.equals("*")) ? Float.parseFloat(highStr) : null;
-
-            interval = newIntervalOfReal(low, high, lowerIncluded && low != null, upperIncluded && high != null);
-        }
-        return interval;
-    }
-
-    private CString parseCStringList(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_PRIMITIVE_VALUE_CONSTRAINT);
-
-        final CString result = new CString();
-        final List<String> stringList = collectStringList(tConstraint.getChild(0));
-        if (stringList.size() == 1) {
-            result.setDefaultValue(stringList.get(0));
-        }
-        result.getList().addAll(stringList);
-
-        result.setAssumedValue(parseAssumedValue(tConstraint.getChild(1), String.class));
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nullable
-    private <T> T parseAssumedValue(Tree tAssumedValue, Class<T> primitiveClass) {
-        if (tAssumedValue == null) return null;
-        assertTokenType(tAssumedValue, AdlParser.AST_ASSUMED_VALUE_CONSTRAINT);
-
-        if (primitiveClass == String.class) {
-            return (T) collectString(tAssumedValue.getChild(0));
-        }
-        if (primitiveClass == Integer.class) {
-            String str = collectText(tAssumedValue.getChild(0));
-            return (T) (Integer) Integer.parseInt(str);
-        }
-        if (primitiveClass == Float.class) {
-            String str = collectText(tAssumedValue.getChild(0));
-            return (T) (Float) Float.parseFloat(str);
-        }
-        if (primitiveClass == Boolean.class) {
-            Tree t = tAssumedValue.getChild(0);
-            if (t.getType() == AdlParser.TRUE) return (T) Boolean.TRUE;
-            if (t.getType() == AdlParser.FALSE) return (T) Boolean.FALSE;
-            throw new AdlTreeParserException("Unexpected tree node: " + t.getText(), tokenOf(t));
-        }
-        throw new IllegalArgumentException("Unknown primitive class: " + primitiveClass.getName());
-    }
-
-    @Nullable
-    private String parseAssumedTextValue(@Nullable Tree tAssumedValue) {
-        if (tAssumedValue == null) return null;
-        assertTokenType(tAssumedValue, AdlParser.AST_ASSUMED_VALUE_CONSTRAINT);
-
-        return collectText(tAssumedValue.getChild(0));
-    }
-
-    // returns a CTerminologyCode if adl 1.5, else returns CCodePhrase
-    CObject parseCodeConstraint(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_CODE_PHRASE_CONSTRAINT);
-        if (isAdlV15()) {
-            return parseTerminologyCodeConstraint(tConstraint);
-        } else {
-            return parseCodePhraseConstraint(tConstraint);
-        }
-    }
-
-
-    private CCodePhrase parseCodePhraseConstraint(Tree tConstraint) {
-
-        CCodePhrase result = new CCodePhrase();
-        result.setRmTypeName("CODE_PHRASE");
-
-        result.setTerminologyId(newTerminologyId(checkNotNull(collectText(tConstraint.getChild(0)))));
-        Tree tCodeList = child(tConstraint, 1, AdlParser.AST_CODE_LIST);
-        for (Tree tCode : children(tCodeList)) {
-            result.getCodeList().add(collectText(tCode));
-        }
-
-        String assumedCode = parseAssumedTextValue(tConstraint.getChild(2));
-        if (assumedCode != null) {
-            result.setAssumedValue(newCodePhrase(result.getTerminologyId(), assumedCode));
+        if (assumedValue != null) {
+            result.setAssumedValue(assumedValue.TRUE() != null);
         }
         return result;
     }
 
-    private CTerminologyCode parseTerminologyCodeConstraint(Tree tConstraint) {
-        CTerminologyCode result = new CTerminologyCode();
-        result.setRmTypeName("CODE_PHRASE");
 
-        result.setTerminologyId(checkNotNull(collectText(tConstraint.getChild(0))));
-        Tree tCodeList = child(tConstraint, 1, AdlParser.AST_CODE_LIST);
-        for (Tree tCode : children(tCodeList)) {
-            result.getCodeList().add(collectText(tCode));
+    static CString parseString(adlParser.StringConstraintContext context, TerminalNode assumedValue) {
+        CString result = new CString();
+        result.setRmTypeName(RmTypes.STRING);
+        if (context.stringList() != null) {
+            result.getList().addAll(collectStringList(context.stringList()));
+        }
+        if (context.regularExpression() != null) {
+            result.setPattern(collectRegularExpression(context.regularExpression()));
         }
 
-        String assumedCode = parseAssumedTextValue(tConstraint.getChild(2));
-        if (assumedCode != null) {
-            result.setAssumedValue(toTerminologyCode(result.getTerminologyId(), assumedCode));
+        result.setAssumedValue(collectText(assumedValue));
+        return result;
+    }
+
+    static List<String> collectStringList(adlParser.StringListContext context) {
+        if (context == null) return ImmutableList.of();
+        List<String> result = new ArrayList<>();
+        for (TerminalNode node : context.STRING()) {
+            result.add(unescapeString(node.getText()));
         }
         return result;
     }
 
-    private String toTerminologyCode(String terminologyId, String codeString) {
-        return terminologyId + "::" + (codeString != null ? codeString : "");
+    static String collectRegularExpression(adlParser.RegularExpressionContext tRegularExpression) {
+        int start = tRegularExpression.start.getStartIndex();
+        int stop = tRegularExpression.stop.getStopIndex();
+        String result = tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start+1, stop-1));
+//        String result = collectNonNullText(tRegularExpression);
+//        result = result.substring(1, result.length() - 1);
+        return result;
     }
 
-    CDvOrdinal parseCDvOrdinalConstraint(Tree tConstraint) {
-        assertTokenType(tConstraint, AdlParser.AST_ORDINAL_CONSTRAINT);
+    private static class TempInterval<T> extends Interval {
+        T lower;
+        T upper;
 
-        CDvOrdinal result = new CDvOrdinal();
-        result.setRmTypeName("DV_ORDINAL");
-
-        Map<Integer, DvOrdinal> values = new HashMap<>();
-
-        for (Tree tItem : children(tConstraint.getChild(0))) {
-            Integer code = Integer.parseInt(collectText(tItem.getChild(0)));
-            CodePhrase phrase = parseCodePhrase(tItem.getChild(1));
-            DvOrdinal value = newDvOrdinal(code, phrase);
-            values.put(code, value);
-            result.getList().add(value);
+        void copyCommonTo(Interval target) {
+            target.setLowerUnbounded(isLowerUnbounded());
+            target.setLowerIncluded(isLowerIncluded());
+            target.setUpperUnbounded(isUpperUnbounded());
+            target.setUpperIncluded(isUpperIncluded());
         }
-        Integer assumedCode = parseAssumedValue(tConstraint.getChild(1), Integer.class);
-        if (assumedCode != null) {
-            result.setAssumedValue(values.get(assumedCode));
-        }
-        return result;
     }
 }

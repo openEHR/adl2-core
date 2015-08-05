@@ -25,6 +25,7 @@ import org.openehr.adl.am.AmQuery;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.ArchetypeConstraint;
 import org.openehr.jaxb.am.CCodePhrase;
+import org.openehr.jaxb.am.CTerminologyCode;
 import org.testng.annotations.Test;
 
 public class DvCodedTextTest extends ParserTestBase {
@@ -35,10 +36,10 @@ public class DvCodedTextTest extends ParserTestBase {
 
         ArchetypeConstraint node = AmQuery.find(archetype, "/category/defining_code");
         assertTrue("CCodePhrase expected, but got " + node.getClass(),
-                node instanceof CCodePhrase);
-        CCodePhrase ccp = (CCodePhrase) node;
+                node instanceof CTerminologyCode);
+        CTerminologyCode ccp = (CTerminologyCode) node;
         assertEquals("terminologyId wrong", "openehr",
-                ccp.getTerminologyId().getValue());
+                ccp.getTerminologyId());
         assertEquals("codeString wrong", "431", ccp.getCodeList().get(0));
     }
 }

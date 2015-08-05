@@ -38,6 +38,8 @@ class AmMixinsInternal {
 
     static {
         Map<Class<?>, Class<? extends AmMixin>> conf = ImmutableMap.<Class<?>, Class<? extends AmMixin>>builder()
+                .put(IntervalOfDate.class, IntervalOfDateMixin.class)
+                .put(IntervalOfTime.class, IntervalOfTimeMixin.class)
                 .put(IntervalOfDateTime.class, IntervalOfDateTimeMixin.class)
                 .put(IntervalOfInteger.class, IntervalOfIntegerMixin.class)
                 .put(IntervalOfReal.class, IntervalOfRealMixin.class)

@@ -74,7 +74,7 @@ public class CDurationTest extends ParserTestBase {
 
         // to supported newly added duration pattern
         assertCDuration(AmQuery.find(archetype, "/types[at0001]/items[at1009]/value"),
-                null, null, null, "PDTH");
+                "PDTH", null, null);
     }
 
     /**
@@ -84,11 +84,11 @@ public class CDurationTest extends ParserTestBase {
     public void testParseSingleDurationInverval() throws Exception {
         IntervalOfDuration interval = newIntervalOfDuration("PT10M", "PT10M");
         assertCDuration(AmQuery.find(archetype, "/types[at0001]/items[at1010]/value"),
-                null, interval, null, null);
+                null, interval, null);
 
         // test with assumed value
         assertCDuration(AmQuery.find(archetype, "/types[at0002]/items[at1010]/value"),
-                null, interval, "PT12M", null);
+                null, interval, "PT12M");
     }
 
     /**
@@ -115,7 +115,7 @@ public class CDurationTest extends ParserTestBase {
                 null, newIntervalOfDuration(null, "PT1h"), "P1d");
         // to supported newly added duration pattern
         assertCDuration(AmQuery.find(archetype, "/types[at0002]/items[at1006]/value"),
-                null, null, "P1d", "PDTH");
+                "PDTH", null, "P1d" );
     }
 
     /**
@@ -129,7 +129,7 @@ public class CDurationTest extends ParserTestBase {
 
 
         assertCDuration(AmQuery.find(archetype, "/types[at0001]/items[at1014]/value"),
-                null, interval, null, "PTS");
+                "PTS", interval, null);
 
     }
 

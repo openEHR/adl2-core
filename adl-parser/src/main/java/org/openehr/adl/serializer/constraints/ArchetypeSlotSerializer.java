@@ -45,15 +45,15 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
                 .append("allow_archetype")
                 .append(" ")
                 .append(cobj.getRmTypeName()).append("[").append(cobj.getNodeId()).append("]");
-        if (cobj.getOccurrences() != null) {
+        if (cobj.getOccurrences()!=null) {
             builder.append(" occurrences matches {");
             ArchetypeSerializeUtils.buildOccurrences(builder, cobj.getOccurrences());
             builder.append("}");
         }
         builder.append(" matches { ");
-        boolean hasContent = false;
+        boolean hasContent=false;
         if (cobj.getIncludes() != null && cobj.getIncludes().size() > 0) {
-            hasContent = true;
+            hasContent=true;
             builder.indent().newline()
                     .append("include")
                     .indent();
@@ -63,7 +63,7 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
             builder.unindent().unindent();
         }
         if (cobj.getExcludes() != null && cobj.getExcludes().size() > 0) {
-            hasContent = true;
+            hasContent=true;
             builder.indent().newline()
                     .append("exclude")
                     .indent();

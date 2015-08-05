@@ -286,8 +286,8 @@ public class ParserTestBase {
     }
 
     // full assertion with CDuration
-    protected void assertCDuration(Object obj, @Nullable String value, @Nullable IntervalOfDuration interval,
-            @Nullable String assumed, @Nullable String pattern) {
+    protected void assertCDuration(Object obj, @Nullable String pattern, @Nullable IntervalOfDuration interval,
+            @Nullable String assumed) {
 
         CDuration c = (CDuration) obj;
 //        assertEquals("list", value == null ? null : DvDuration.getInstance(value),
@@ -297,15 +297,10 @@ public class ParserTestBase {
         assertEquals("pattern wrong", pattern, c.getPattern());
     }
 
-    // without pattern
-    protected void assertCDuration(@Nullable Object obj, @Nullable String value, @Nullable IntervalOfDuration interval,
-            @Nullable String assumed) {
-        assertCDuration(obj, value, interval, assumed, null);
-    }
 
-    // without assumed value, pattern
-    protected void assertCDuration(@Nullable Object obj, @Nullable String value, @Nullable IntervalOfDuration interval) {
-        assertCDuration(obj, value, interval, null);
+    // without assumed value
+    protected void assertCDuration(@Nullable Object obj, @Nullable String pattern, @Nullable IntervalOfDuration interval) {
+        assertCDuration(obj, pattern, interval, null);
     }
 
     // fetch the first CPrimitive from the CAttribute

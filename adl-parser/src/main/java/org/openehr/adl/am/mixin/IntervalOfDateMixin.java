@@ -18,31 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.parser;
+package org.openehr.adl.am.mixin;
 
-import org.openehr.adl.antlr.AdlLexer;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.RecognizerSharedState;
+import org.openehr.jaxb.rm.IntervalOfDate;
+import org.openehr.jaxb.rm.IntervalOfDateTime;
 
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class ErrorThrowingAdlLexer extends AdlLexer {
-    public ErrorThrowingAdlLexer() {
+public class IntervalOfDateMixin<T extends IntervalOfDate> extends IntervalMixin<T, String>  {
+    public IntervalOfDateMixin(T self) {
+        super(self);
     }
 
-    public ErrorThrowingAdlLexer(CharStream input) {
-        super(input);
-    }
-
-    public ErrorThrowingAdlLexer(CharStream input, RecognizerSharedState state) {
-        super(input, state);
-    }
-
-    @SuppressWarnings("RefusedBequest")
     @Override
-    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
-        throw new RuntimeRecognitionException(e);
+    protected String getLower(T interval) {
+        return interval.getLower();
+    }
+
+    @Override
+    protected String getUpper(T interval) {
+        return interval.getUpper();
     }
 }

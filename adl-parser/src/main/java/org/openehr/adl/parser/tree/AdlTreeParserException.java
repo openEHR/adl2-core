@@ -20,48 +20,25 @@
 
 package org.openehr.adl.parser.tree;
 
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.Token;
+import org.openehr.adl.parser.AdlParserException;
 
 import javax.annotation.Nullable;
 
 /**
  * @author markopi
  */
-public class AdlTreeParserException extends RuntimeException {
-    private static final long serialVersionUID = -8043425736801540295L;
+public class AdlTreeParserException extends AdlParserException {
+    private static final long serialVersionUID = -913705312822104455L;
 
-    private final int line;
-    private final int charPositionInLine;
-    private final String tokenName;
-
-
-    public AdlTreeParserException(String message, @Nullable Token location) {
-        this(message, location, null);
-
+    public AdlTreeParserException(@Nullable Token location, String message, Object... params) {
+        super(createMessage(location, message, params));
     }
 
-    public AdlTreeParserException(String message, @Nullable Token location, @Nullable Exception cause) {
-        super(message, cause);
+    private static String createMessage(@Nullable Token location, String message, Object... params) {
         if (location != null) {
-            line = location.getLine();
-            charPositionInLine = location.getCharPositionInLine();
-            tokenName = location.getText();
-        } else {
-            line = -1;
-            charPositionInLine = -1;
-            tokenName = null;
+            return location.getLine() + ":" + (location.getCharPositionInLine() + 1) + " " + String.format(message, params);
         }
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public int getCharPositionInLine() {
-        return charPositionInLine;
-    }
-
-    public String getTokenName() {
-        return tokenName;
+        return String.format(message, params);
     }
 }

@@ -20,27 +20,26 @@
 
 package org.openehr.adl.parser;
 
-import org.openehr.adl.antlr.AdlParser;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.RecognizerSharedState;
-import org.antlr.runtime.TokenStream;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author markopi
  */
-public class ErrorThrowingAdlParser extends AdlParser {
+public class AccumulatingErrorListener extends BaseErrorListener {
+    private final List<String> errors = new ArrayList<>();
 
-    public ErrorThrowingAdlParser(TokenStream input) {
-        super(input);
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+        String contextError = (line + ":" + charPositionInLine + " " + msg);
+        errors.add(contextError);
     }
 
-//    public ErrorThrowingAdlParser(TokenStream input, RecognizerSharedState state) {
-//        super(input, state);
-//    }
-
-    @SuppressWarnings("RefusedBequest")
-    @Override
-    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
-        throw new RuntimeRecognitionException(e);
+    public List<String> getErrors() {
+        return errors;
     }
 }

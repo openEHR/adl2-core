@@ -89,6 +89,10 @@ public class AmObjectFactory {
     }
 
 
+    public static CAttribute newCAttribute(String name) {
+        return newCAttribute(name, null, null, null);
+    }
+
     public static CAttribute newCAttribute(String name, MultiplicityInterval existence, Cardinality cardinality,
             List<CObject> children) {
         CAttribute result = new CAttribute();

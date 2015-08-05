@@ -1,3 +1,23 @@
+/*
+ * ADL2-core
+ * Copyright (c) 2013-2014 Marand d.o.o. (www.marand.com)
+ *
+ * This file is part of ADL2-core.
+ *
+ * ADL2-core is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.openehr.adl.serializer;
 
 import com.google.common.collect.Iterators;
@@ -35,13 +55,13 @@ public class CCodePhraseSerializerTest extends CSerializer{
         assertThat(a).isNotNull();
 
         CObject child = a.getChildren().get(0);
-        assertThat(child).isInstanceOf(CCodePhrase.class);
+        assertThat(child).isInstanceOf(CTerminologyCode.class);
 
-        CCodePhrase codePhrase = (CCodePhrase) child;
+        CTerminologyCode codePhrase = (CTerminologyCode) child;
         assertThat(codePhrase.getCodeList().get(0)).isEqualTo("at0001");
         assertThat(codePhrase.getCodeList().get(1)).isEqualTo("at0002");
         assertThat(codePhrase.getAssumedValue()).as("Should be assumed value").isNotNull();
-        assertThat(codePhrase.getAssumedValue().getCodeString()).isEqualTo("at0002");
+        assertThat(codePhrase.getAssumedValue()).isEqualTo("at0002");
 
 
     }

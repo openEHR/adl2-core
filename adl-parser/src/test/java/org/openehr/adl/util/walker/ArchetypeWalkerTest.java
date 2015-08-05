@@ -61,7 +61,7 @@ public class ArchetypeWalkerTest extends ParserTestBase {
         assertThat(listVisitor.visits).containsExactly(
                 "ArchetypeTerminology",
                 "TermBindingSet[SNOMED_CT]", "TermBindingItem[at0000/snomed_ct::1000339]",
-                "TermBindingSet[ICD10]", "TermBindingItem[at0000/icd10::1000]", "TermBindingItem[at0000/icd10::1001]",
+                "TermBindingSet[ICD10]", "TermBindingItem[at0000/icd10::1000, icd10::1001]",
                 "CodeDefinitionSet[en]", "ArchetypeTerm[at0000]", "ArchetypeTerm[at0001]", "ArchetypeTerm[at10002]");
     }
 

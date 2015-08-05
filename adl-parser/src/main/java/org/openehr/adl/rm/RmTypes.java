@@ -37,6 +37,7 @@ public class RmTypes {
     public static final String TIME = "ISO8601_TIME";
     public static final String OBJECT = "OBJECT";
     public static final String RM_OBJECT = "RM_OBJECT";
+    public static final String CODE_PHRASE = "CODE_PHRASE";
 
     public enum ReferenceType {CONSTANT, ATTRIBUTE, FUNCTION, CONSTRAINT}
 

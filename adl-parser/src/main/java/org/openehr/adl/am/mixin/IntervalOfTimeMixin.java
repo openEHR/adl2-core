@@ -18,33 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openehr.adl.parser.tree;
+package org.openehr.adl.am.mixin;
+
+import org.openehr.jaxb.rm.IntervalOfDateTime;
+import org.openehr.jaxb.rm.IntervalOfTime;
 
 /**
- * @author markopi
+ * @author Marko Pipan
  */
-public class AdlTreeParserState {
-    private String adlVersion;
-    private boolean adlV15 = false;
-
-
-    public void setAdlVersion(String adlVersion) {
-        this.adlVersion = adlVersion;
-        String[] tokens = adlVersion.split("\\.");
-        if (tokens.length > 1) {
-            try {
-                adlV15 = Integer.parseInt(tokens[1]) >= 5;
-            } catch (NumberFormatException e) {
-                adlV15 = false;
-            }
-        }
+public class IntervalOfTimeMixin<T extends IntervalOfTime> extends IntervalMixin<T, String>  {
+    public IntervalOfTimeMixin(T self) {
+        super(self);
     }
 
-    public String getAdlVersion() {
-        return adlVersion;
+    @Override
+    protected String getLower(T interval) {
+        return interval.getLower();
     }
 
-    public boolean isAdlV15() {
-        return adlV15;
+    @Override
+    protected String getUpper(T interval) {
+        return interval.getUpper();
     }
 }

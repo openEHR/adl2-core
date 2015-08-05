@@ -125,12 +125,12 @@ public class TuplesFeaturesTest {
 
 
     private void assertOrdinalTuple(CObjectTuple cot, int value, String... symbols) {
-        assertThat(((CInteger) (cot.getMembers().get(0))).getDefaultValue()).isEqualTo(value);
-        assertThat(((CTerminologyCode) (cot.getMembers().get(1))).getCodeList()).isEqualTo(Arrays.asList(symbols));
+        assertThat(((CInteger) (cot.getMembers().get(0))).getList()).containsExactly(value);
+        assertThat(((CTerminologyCode) (cot.getMembers().get(1))).getCodeList()).containsExactly(symbols);
     }
 
     private void assertQuantityTuple(CObjectTuple cot, String units, IntervalOfReal expectedRange) {
-        assertThat(((CString) (cot.getMembers().get(0))).getDefaultValue()).isEqualTo(units);
+        assertThat(((CString) (cot.getMembers().get(0))).getList()).containsExactly(units);
 
         IntervalOfReal actualRange = ((CReal) (cot.getMembers().get(1))).getRange();
         assertThat(AmMixins.of(actualRange).isEqualTo(expectedRange));
@@ -139,7 +139,7 @@ public class TuplesFeaturesTest {
 
     private void assertStandardOrdinalAttr(CComplexObject cord, String nodeId, int value, String... symbol) {
         assertThat(cord.getNodeId()).isEqualTo(nodeId);
-        assertThat(((CInteger) AmQuery.get(cord, "value")).getDefaultValue()).isEqualTo(value);
-        assertThat(((CTerminologyCode) AmQuery.get(cord, "symbol/defining_code")).getCodeList()).isEqualTo(Arrays.asList(symbol));
+        assertThat(((CInteger) AmQuery.get(cord, "value")).getList()).containsExactly(value);
+        assertThat(((CTerminologyCode) AmQuery.get(cord, "symbol/defining_code")).getCodeList()).containsExactly(symbol);
     }
 }

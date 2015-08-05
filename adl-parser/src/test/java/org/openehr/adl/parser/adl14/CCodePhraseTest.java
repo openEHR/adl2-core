@@ -59,14 +59,14 @@ public class CCodePhraseTest extends ParserTestBase {
     public void testParseExternalCodes() throws Exception {
         node = AmQuery.find(archetype, "/types[at0001]/items[at10002]/value");
         String[] codes = {"F43.00", "F43.01", "F32.02"};
-        assertCCodePhrase(node, "icd10", codes, null);
+        assertCTerminologyCode(node, "icd10", codes, null);
     }
 
     @Test
     public void testParseExternalCodesWithAssumedValue() throws Exception {
         node = AmQuery.find(archetype, "/types[at0001]/items[at10005]/value");
         String[] codes = {"F43.00", "F43.01", "F32.02"};
-        assertCCodePhrase(node, "icd10", codes, "F43.00");
+        assertCTerminologyCode(node, "icd10", codes, "F43.00");
     }
 
     /**
@@ -78,14 +78,14 @@ public class CCodePhraseTest extends ParserTestBase {
     public void testParseLocalCodes() throws Exception {
         node = AmQuery.find(archetype, "/types[at0001]/items[at10003]/value");
         String[] codeList = {"at1311", "at1312", "at1313", "at1314", "at1315"};
-        assertCCodePhrase(node, "local", codeList, null);
+        assertCTerminologyCode(node, "local", codeList, null);
     }
 
     @Test
     public void testParseEmptyCodeList() throws Exception {
         node = AmQuery.find(archetype, "/types[at0001]/items[at10004]/value");
         String[] codeList = null;
-        assertCCodePhrase(node, "icd10", codeList, null);
+        assertCTerminologyCode(node, "icd10", codeList, null);
     }
 
 

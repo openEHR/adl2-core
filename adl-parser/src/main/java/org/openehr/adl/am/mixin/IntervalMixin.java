@@ -22,6 +22,7 @@ package org.openehr.adl.am.mixin;
 
 import org.openehr.jaxb.rm.Interval;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -37,8 +38,8 @@ abstract public class IntervalMixin<T extends Interval, V extends Comparable> ex
 
     abstract protected V getUpper(T interval);
 
-    public boolean contains(T other) {
-        return containsLower(other) && containsUpper(other);
+    public boolean contains(@Nullable T other) {
+        return other==null || (containsLower(other) && containsUpper(other));
     }
 
     private boolean containsLower(T other) {

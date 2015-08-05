@@ -20,8 +20,10 @@
 
 package org.openehr.adl.parser.tree;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang.NotImplementedException;
@@ -40,9 +42,9 @@ import static org.openehr.adl.rm.RmObjectFactory.newTerminologyId;
 /**
  * @author markopi
  */
-abstract class AbstractAdlTreeParser {
+abstract class AdlTreeParserUtils {
 
-    protected Token tokenOf(ParseTree tree) {
+    static Token tokenOf(ParseTree tree) {
         if (tree instanceof TerminalNode) {
             return ((TerminalNode) tree).getSymbol();
         } else if (tree instanceof ParserRuleContext) {
@@ -53,12 +55,12 @@ abstract class AbstractAdlTreeParser {
 
     }
 
-    protected String tokenName(ParseTree tree) {
+    static String tokenName(ParseTree tree) {
         Token token = tokenOf(tree);
         return token == null ? "null" : adlParser.VOCABULARY.getSymbolicName(token.getType());
     }
 
-    protected String unescapeString(String string) {
+    static String unescapeString(String string) {
         if (string.startsWith("\"") && string.endsWith("\"")) {
             string = string.substring(1, string.length() - 1);
         }
@@ -66,7 +68,7 @@ abstract class AbstractAdlTreeParser {
     }
 
 
-    protected void require(boolean condition, ParseTree location, String message, Object... parameters) {
+    static void require(boolean condition, ParseTree location, String message, Object... parameters) {
         if (!condition) {
             throw new AdlTreeParserException(tokenOf(location), message, parameters);
         }
@@ -74,12 +76,12 @@ abstract class AbstractAdlTreeParser {
 
 
     @Nullable
-    protected Integer parseNullableInteger(@Nullable ParseTree tNumber) {
+    static Integer parseNullableInteger(@Nullable ParseTree tNumber) {
         if (tNumber == null) return null;
         return parseInteger(tNumber);
     }
 
-    protected int parseInteger(ParseTree tNumber) {
+    static int parseInteger(ParseTree tNumber) {
         try {
             return Integer.parseInt(collectNonNullText(tNumber));
         } catch (NumberFormatException e) {
@@ -88,12 +90,12 @@ abstract class AbstractAdlTreeParser {
     }
 
     @Nullable
-    protected Double parseNullableFloat(@Nullable ParseTree tNumber) {
+    static Double parseNullableFloat(@Nullable ParseTree tNumber) {
         if (tNumber == null) return null;
         return parseFloat(tNumber);
     }
 
-    protected double parseFloat(ParseTree tNumber) {
+    static double parseFloat(ParseTree tNumber) {
         try {
             return Double.parseDouble(collectNonNullText(tNumber));
         } catch (NumberFormatException e) {
@@ -102,7 +104,7 @@ abstract class AbstractAdlTreeParser {
     }
 
     @Nullable
-    protected String collectString(@Nullable adlParser.OpenStringListContext tStringList) {
+    static String collectString(@Nullable adlParser.OpenStringListContext tStringList) {
         if (tStringList == null) return null;
         // todo
         return unescapeString(collectText(tStringList));
@@ -115,8 +117,8 @@ abstract class AbstractAdlTreeParser {
 //        return stringList.get(0);
     }
 
-    protected List<String> collectStringList(adlParser.OpenStringListContext tStringList) {
-        if (tStringList == null) return null;
+    static List<String> collectStringList(adlParser.OpenStringListContext tStringList) {
+        if (tStringList == null) return ImmutableList.of();
 
         List<String> result = new ArrayList<>();
         List<TerminalNode> contexts = tStringList.STRING();
@@ -127,33 +129,22 @@ abstract class AbstractAdlTreeParser {
     }
 
 
-    protected CodePhrase parseCodePhraseListSingleItem(adlParser.AdlCodePhraseValueListContext context) {
+    static CodePhrase parseCodePhraseListSingleItem(adlParser.AdlCodePhraseValueListContext context) {
         List<adlParser.AdlCodePhraseValueContext> phrases = context.adlCodePhraseValue();
         if (phrases.size() != 1)
             throw new AdlTreeParserException(tokenOf(context), "Expected exactly one code phrase in list");
         return parseCodePhrase(phrases.get(0));
     }
 
-    protected List<CodePhrase> parseCodePhraseList(ParseTree tCodePhraseList) {
-        // todo
-        throw new NotImplementedException();
-//        List<CodePhrase> result = new ArrayList<>();
-//
-//        for (Tree tCodePhrase : children(tCodePhraseList)) {
-//            result.add(parseCodePhrase(tCodePhrase));
-//        }
-//        return result;
 
-    }
-
-    protected CodePhrase parseCodePhrase(adlParser.AdlCodePhraseValueContext context) {
+    static CodePhrase parseCodePhrase(adlParser.AdlCodePhraseValueContext context) {
         return newCodePhrase(
                 newTerminologyId(collectNonNullText(context.tid)),
                 collectNonNullText(context.code));
     }
 
 
-    protected String collectNonNullText(ParseTree context) {
+    static String collectNonNullText(ParseTree context) {
         String result = collectText(context);
         if (result == null) {
             throw new AdlTreeParserException(tokenOf(context), "Text must not be null");
@@ -162,7 +153,7 @@ abstract class AbstractAdlTreeParser {
     }
 
     @Nullable
-    protected String collectText(Token token) {
+    static String collectText(Token token) {
         if (token==null) return null;
         if (token.getType()==adlLexer.STRING) {
             return unescapeString(token.getText());
@@ -170,8 +161,26 @@ abstract class AbstractAdlTreeParser {
         return token.getText();
     }
 
+    static String collectTextWithSpaces(ParserRuleContext context) {
+        int start = context.start.getStartIndex();
+        int stop = context.stop.getStopIndex();
+        return context.start.getInputStream().getText(new Interval(start, stop));
+
+    }
+
+    static String collectText(adlParser.AdlValueContext context) {
+        if (context==null) return null;
+        if (context.url()!=null) {
+            return collectText(context.url());
+        }
+        if (context.openStringList()!=null) {
+            return collectString(context.openStringList());
+        }
+        return collectText(context);
+    }
+
     @Nullable
-    protected String collectText(ParseTree context) {
+    static String collectText(ParseTree context) {
         if (context == null) return null;
         if (context instanceof TerminalNode) {
             TerminalNode tn = (TerminalNode) context;
@@ -182,7 +191,7 @@ abstract class AbstractAdlTreeParser {
         return context.getText();
     }
 
-    protected adlParser.AdlValueContext getAdlProperty(adlParser.AdlObjectValueContext adlContext, String name) {
+    static adlParser.AdlValueContext getAdlProperty(adlParser.AdlObjectValueContext adlContext, String name) {
         adlParser.AdlValueContext value = getAdlPropertyOrNull(adlContext, name);
         if (value == null) {
             throw new AdlTreeParserException(tokenOf(adlContext), "Missing required property: %s", name);
@@ -190,20 +199,20 @@ abstract class AbstractAdlTreeParser {
         return value;
     }
 
-    protected String collectString( adlParser.AdlValueContext adlValue) {
+    static String collectString( adlParser.AdlValueContext adlValue) {
         if (adlValue==null) {
             return null;
         }
         return collectString(adlValue.openStringList());
     }
 
-    protected String parseAtCode(adlParser.AtCodeContext context) {
+    static String parseAtCode(adlParser.AtCodeContext context) {
         if (context == null) return null;
         return context.AT_CODE_VALUE().getText();
     }
 
 
-    protected adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlObjectValueContext adlContext, String name) {
+    static adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlObjectValueContext adlContext, String name) {
         List<adlParser.AdlObjectPropertyContext> properties = adlContext.adlObjectProperty();
         for (adlParser.AdlObjectPropertyContext propertyContext : properties) {
             String identifier = collectNonNullText(propertyContext.identifier());
@@ -212,7 +221,7 @@ abstract class AbstractAdlTreeParser {
         return null;
     }
 
-    protected adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlMapValueContext adlContext, String name) {
+    static adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlMapValueContext adlContext, String name) {
         List<adlParser.AdlMapValueEntryContext> properties = adlContext.adlMapValueEntry();
         for (adlParser.AdlMapValueEntryContext propertyContext : properties) {
             String identifier = collectNonNullText(propertyContext.STRING());

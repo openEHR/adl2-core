@@ -40,7 +40,7 @@ public class ConstraintNarrowingTest extends FlattenerTestBase {
 
         CAttribute items = ((CComplexObject) AmQuery.get(flattened, "/data")).getAttributes().get(0);
 
-        assertCAttribute(items, "items", MANDATORY, newCardinality(false, false, MANDATORY_UNBOUNDED), 7);
+        assertCAttribute(items, "items", null, newCardinality(false, false, MANDATORY_UNBOUNDED), 7);
     }
 
     @Test(enabled = false, expectedExceptions = AdlFlattenerException.class)

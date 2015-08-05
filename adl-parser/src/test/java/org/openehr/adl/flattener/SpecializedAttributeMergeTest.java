@@ -36,11 +36,11 @@ public class SpecializedAttributeMergeTest extends FlattenerTestBase {
     public void testAttributeMerge() throws Exception {
 
         Archetype flattened = parseAndFlattenArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn.v1.adls");
-        assertCComplexObject(flattened.getDefinition(), "EVALUATION", "at0000.1", MANDATORY, 1);
+        assertCComplexObject(flattened.getDefinition(), "EVALUATION", "at0000.1", null, 1);
 
         CComplexObject itemList = (CComplexObject) flattened.getDefinition().getAttributes().get(0).getChildren().get(0);
         CAttribute items = itemList.getAttributes().get(0);
-        assertCAttribute(items, "items", MANDATORY, newCardinality(false, false, MANDATORY_UNBOUNDED), 7);
+        assertCAttribute(items, "items", null, newCardinality(false, false, MANDATORY_UNBOUNDED), 7);
     }
 
 

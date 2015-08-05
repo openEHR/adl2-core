@@ -39,18 +39,18 @@ public class UseNodeFeaturesTest {
         Archetype archetype = TestAdlParser.parseAdl(
                 "adl15/reference/features/use_node/openEHR-DEMOGRAPHIC-PERSON.use_node_occurrences.v1.adls");
         assertThat(AmMixins.of(AmQuery.get(archetype, "contacts[id6]/addresses[id7]").getOccurrences()).toString())
-                .isEqualTo("[0,1]");
+                .isEqualTo("0..1");
         assertThat(AmMixins.of(AmQuery.get(archetype, "contacts[id6]/addresses[id8]").getOccurrences()).toString())
-                .isEqualTo("[0,2]");
+                .isEqualTo("0..2");
         assertThat(AmQuery.get(archetype, "contacts[id6]/addresses[id9]").getOccurrences()).isNull();
 
 
         assertArchetypeInternalRef((ArchetypeInternalRef)AmQuery.get(archetype, "contacts[id10]/addresses[id11]"),
-                "/contacts[id6]/addresses[id7]", "[0,1]");
+                "/contacts[id6]/addresses[id7]", null);
         assertArchetypeInternalRef((ArchetypeInternalRef)AmQuery.get(archetype, "contacts[id10]/addresses[id12]"),
-                "/contacts[id6]/addresses[id8]", "[0,2]");
+                "/contacts[id6]/addresses[id8]", null);
         assertArchetypeInternalRef((ArchetypeInternalRef)AmQuery.get(archetype, "contacts[id10]/addresses[id13]"),
-                "/contacts[id6]/addresses[id9]", "[1,3]");
+                "/contacts[id6]/addresses[id9]", null);
 
 
     }

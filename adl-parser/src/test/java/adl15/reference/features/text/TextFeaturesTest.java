@@ -50,7 +50,7 @@ public class TextFeaturesTest {
         assertArchetypeTerm(cds.getItems().get(5), "ac1", "a\\b", "a\"b");
 
         CString cstring = AmQuery.get(archetype, "items[id3]/value/value");
-        assertThat(cstring.getDefaultValue()).isEqualTo("No quoting should happen here");
+        assertThat(cstring.getList()).containsExactly("No quoting should happen here");
     }
 
     @Test

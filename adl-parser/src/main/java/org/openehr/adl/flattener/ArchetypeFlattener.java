@@ -64,7 +64,7 @@ public class ArchetypeFlattener {
             merger.merge(flatParent, result);
         }
 
-        fillDefaultOccurrences(null, result.getDefinition());
+//        fillDefaultOccurrences(null, result.getDefinition());
 
 
         return result;

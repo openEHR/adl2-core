@@ -25,25 +25,26 @@ import org.apache.commons.lang.NotImplementedException;
 import org.openehr.adl.am.OperatorKind;
 import org.openehr.adl.antlr4.generated.adlParser;
 import org.openehr.adl.rm.RmTypes;
+import org.openehr.adl.util.AdlUtils;
 import org.openehr.jaxb.am.*;
-import org.openehr.jaxb.rm.MultiplicityInterval;
+import org.openehr.jaxb.rm.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static org.openehr.adl.am.AmObjectFactory.newExprBinaryOperator;
-import static org.openehr.adl.am.AmObjectFactory.newExprLeaf;
-import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
+import static org.openehr.adl.am.AmObjectFactory.*;
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.*;
+import static org.openehr.adl.parser.tree.AdlTreePrimitiveConstraintsParser.parseNumberInterval;
+import static org.openehr.adl.parser.tree.AdlTreePrimitiveConstraintsParser.parsePrimitiveValue;
+import static org.openehr.adl.rm.RmObjectFactory.*;
 
 /**
  * @author markopi
  */
-public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
-    private final AdlTreePrimitiveConstraintsParser primitives = new AdlTreePrimitiveConstraintsParser();
+abstract class AdlTreeConstraintParser {
 
-    private CObject parseTypeDefinition(adlParser.TypeConstraintContext context) {
+    private static CObject parseTypeDefinition(adlParser.TypeConstraintContext context) {
 
         final CObject result;
         if (context.complexObjectConstraint() != null) {
@@ -52,6 +53,10 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
             result = parseArchetypeInternalRef(context);
         } else if (context.archetypeSlotConstraint() != null) {
             result = parseArchetypeSlot(context.archetypeSlotConstraint());
+        } else if (context.adlValue() != null) {
+            result = parseAdlValueConstraint(context.adlValue());
+        } else if (context.archetypeReferenceConstraint() != null) {
+            result = parseArchetypeReference(context.archetypeReferenceConstraint());
         } else {
             throw new NotImplementedException();
         }
@@ -61,12 +66,90 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
 
     }
 
-    private ArchetypeSlot parseArchetypeSlot(adlParser.ArchetypeSlotConstraintContext context) {
+    private static CArchetypeRoot parseArchetypeReference(adlParser.ArchetypeReferenceConstraintContext context) {
+        CArchetypeRoot result = new CArchetypeRoot();
+        result.setRmTypeName(collectNonNullText(context.typeIdentifier()));
+        result.setArchetypeRef(collectNonNullText(context.archetypeId()));
+        result.setNodeId(result.getArchetypeRef());
+        result.setSlotNodeId(collectText(context.AT_CODE_VALUE()));
+        result.setOccurrences(parseOccurrences(context.occurrences()));
+        return result;
+    }
+
+    private static CObject parseAdlValueConstraint(adlParser.AdlValueContext context) {
+        String amType = collectText(context.typeIdentifier());
+        if ("C_DV_QUANTITY".equals(amType) || amType==null) {
+            return parseCDvQuantityConstraint(context);
+        } else if ("C_DV_ORDINAL".equals(amType)) {
+            return parseCDvOrdinalConstraint(context);
+        } else {
+            throw new AdlTreeParserException(context.start, "Bad adl value am type: %s", amType);
+        }
+    }
+
+    private static CObject parseCDvOrdinalConstraint(adlParser.AdlValueContext adlValueContext) {
+        CDvOrdinal result = new CDvOrdinal();
+        result.setRmTypeName("DV_ORDINAL");
+        return result;
+    }
+
+    private static CDvQuantity parseCDvQuantityConstraint(adlParser.AdlValueContext context) {
+        CDvQuantity result = new CDvQuantity();
+        result.setRmTypeName("DV_QUANTITY");
+        if (context == null) return result;
+
+        DAdlObject dQuantity = DAdlObject.parse(context.adlObjectValue());
+        adlParser.AdlValueContext dProperty = dQuantity.tryGet("property");
+        if (dProperty != null) {
+            result.setProperty(parseCodePhraseListSingleItem(dProperty.adlCodePhraseValueList()));
+        }
+        adlParser.AdlValueContext dItem = dQuantity.tryGet("list");
+        if (dItem != null && dItem.adlMapValue() != null) {
+            for (adlParser.AdlMapValueEntryContext entryContext : dItem.adlMapValue().adlMapValueEntry()) {
+                result.getList().add(parseCQuantityItem(entryContext.adlValue().adlObjectValue()));
+            }
+        }
+        adlParser.AdlValueContext dAssumedValue = dQuantity.tryGet("assumed_value");
+        if (dAssumedValue != null) {
+            result.setAssumedValue(parseDvQuantity(dAssumedValue.adlObjectValue()));
+        }
+
+        return result;
+    }
+
+    private static DvQuantity parseDvQuantity(adlParser.AdlObjectValueContext context) {
+        DvQuantity result = new DvQuantity();
+
+        DAdlObject dContext = DAdlObject.parse(context);
+        result.setUnits(dContext.tryGetString("units"));
+        Double tMagnitude = dContext.tryGetDouble("magnitude");
+        if (tMagnitude != null) result.setMagnitude(tMagnitude);
+        result.setPrecision(dContext.tryGetInteger("precision"));
+        return result;
+    }
+
+    private static CQuantityItem parseCQuantityItem(adlParser.AdlObjectValueContext context) {
+        CQuantityItem result = new CQuantityItem();
+
+        DAdlObject dContext = DAdlObject.parse(context);
+        result.setUnits(collectString(dContext.get("units").openStringList()));
+        adlParser.AdlValueContext pMagnitude = dContext.tryGet("magnitude");
+        if (pMagnitude != null) {
+            result.setMagnitude((IntervalOfReal) parseNumberInterval(pMagnitude.numberIntervalConstraint()));
+        }
+        adlParser.AdlValueContext pPrecision = dContext.tryGet("precision");
+        if (pPrecision != null) {
+            result.setPrecision((IntervalOfInteger) parseNumberInterval(pPrecision.numberIntervalConstraint()));
+        }
+        return result;
+    }
+
+    private static ArchetypeSlot parseArchetypeSlot(adlParser.ArchetypeSlotConstraintContext context) {
         ArchetypeSlot result = new ArchetypeSlot();
         result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
         result.setNodeId(parseAtCode(context.atCode()));
         result.setOccurrences(parseOccurrences(context.occurrences()));
-        if (context.archetypeSlotValueConstraint()!=null) {
+        if (context.archetypeSlotValueConstraint() != null) {
             adlParser.ArchetypeSlotValueConstraintContext cValue = context.archetypeSlotValueConstraint();
             result.getIncludes().addAll(parseAssertions(cValue.include));
             result.getExcludes().addAll(parseAssertions(cValue.exclude));
@@ -74,7 +157,7 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private List<Assertion> parseAssertions(List<adlParser.ArchetypeSlotSingleConstraintContext> cAssertions) {
+    private static List<Assertion> parseAssertions(List<adlParser.ArchetypeSlotSingleConstraintContext> cAssertions) {
         List<Assertion> result = new ArrayList<>();
         for (adlParser.ArchetypeSlotSingleConstraintContext cAssertion : cAssertions) {
             result.add(parseAssertion(cAssertion));
@@ -82,10 +165,10 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private Assertion parseAssertion(adlParser.ArchetypeSlotSingleConstraintContext cAssertion) {
+    private static Assertion parseAssertion(adlParser.ArchetypeSlotSingleConstraintContext cAssertion) {
         Assertion result = new Assertion();
-        result.setStringExpression(collectText(cAssertion));
-        CPrimitiveObject cPrimitiveObject = primitives.parsePrimitiveValue(cAssertion.primitiveValueConstraint());
+        result.setStringExpression(collectTextWithSpaces(cAssertion));
+        CPrimitiveObject cPrimitiveObject = parsePrimitiveValue(cAssertion.primitiveValueConstraint());
         ExprBinaryOperator expr = newExprBinaryOperator(
                 RmTypes.ReferenceType.CONSTRAINT.toString(),
                 OperatorKind.OP_MATCHES,
@@ -98,7 +181,7 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private ArchetypeInternalRef parseArchetypeInternalRef(adlParser.TypeConstraintContext context) {
+    private static ArchetypeInternalRef parseArchetypeInternalRef(adlParser.TypeConstraintContext context) {
         ArchetypeInternalRef result = new ArchetypeInternalRef();
         result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
         result.setNodeId(parseAtCode(context.atCode()));
@@ -107,25 +190,44 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    public CComplexObject parseComplexObject(adlParser.ComplexObjectConstraintContext context) {
+    public static CComplexObject parseComplexObject(adlParser.ComplexObjectConstraintContext context) {
         CComplexObject result = new CComplexObject();
         result.setRmTypeName(collectText(context.typeIdentifierWithGenerics()));
         result.setNodeId(parseAtCode(context.atCode()));
         result.setOccurrences(parseOccurrences(context.occurrences()));
-        result.getAttributes().addAll(parseAttributeList(context.attributeListMatcher()));
+        parseAttributeList(result, context.attributeListMatcher());
         return result;
     }
 
-    private List<CAttribute> parseAttributeList(adlParser.AttributeListMatcherContext context) {
-        if (context == null || context.attributeConstraint() == null) return ImmutableList.of();
-        List<CAttribute> result = new ArrayList<>();
+    private static void parseAttributeList(CComplexObject target, adlParser.AttributeListMatcherContext context) {
+        if (context == null || context.attributeConstraint() == null) return;
         for (adlParser.AttributeConstraintContext cAttribute : context.attributeConstraint()) {
-            result.add(parseAttribute(cAttribute));
+            if (cAttribute.attributeIdentifier() != null) {
+                target.getAttributes().add(parseAttribute(cAttribute));
+            } else if (cAttribute.tupleAttributeIdentifier() != null) {
+                target.getAttributeTuples().add(parseAttributeTuple(cAttribute));
+            } else {
+                throw new AssertionError();
+            }
+        }
+    }
+
+    private static CAttributeTuple parseAttributeTuple(adlParser.AttributeConstraintContext context) {
+        CAttributeTuple result = new CAttributeTuple();
+        for (adlParser.AttributeIdentifierContext cAttribute : context.tupleAttributeIdentifier().attributeIdentifier()) {
+            result.getMembers().add(newCAttribute(collectText(cAttribute.rmPath())));
+        }
+        for (adlParser.TupleChildConstraintContext cTuple : context.tupleChildConstraints().tupleChildConstraint()) {
+            CObjectTuple tuple = new CObjectTuple();
+            for (adlParser.PrimitiveValueConstraintContext cConstraint : cTuple.primitiveValueConstraint()) {
+                tuple.getMembers().add(parsePrimitiveValue(cConstraint));
+            }
+            result.getChildren().add(tuple);
         }
         return result;
     }
 
-    private CAttribute parseAttribute(adlParser.AttributeConstraintContext context) {
+    private static CAttribute parseAttribute(adlParser.AttributeConstraintContext context) {
         CAttribute result = new CAttribute();
 
         if (context.existence() != null) {
@@ -139,19 +241,19 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
             String rmPath = collectNonNullText(context.attributeIdentifier());
             if (rmPath.startsWith("/")) {
                 result.setDifferentialPath(rmPath);
+                result.setRmAttributeName(rmPath.substring(rmPath.lastIndexOf("/") + 1));
             } else {
                 result.setRmAttributeName(rmPath);
             }
 
             result.getChildren().addAll(parseMultiValue(context.multiValueConstraint()));
         } else {
-            throw new NotImplementedException("parse tuples");
-            // todo parse tuples
+            throw new AssertionError();
         }
         return result;
     }
 
-    private List<CObject> parseMultiValue(adlParser.MultiValueConstraintContext context) {
+    private static List<CObject> parseMultiValue(adlParser.MultiValueConstraintContext context) {
         if (context == null) return ImmutableList.of();
 
         List<CObject> result = new ArrayList<>();
@@ -161,17 +263,81 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private CObject parseValueConstraint(adlParser.ValueConstraintContext context) {
+    private static CObject parseValueConstraint(adlParser.ValueConstraintContext context) {
         if (context.typeConstraint() != null) {
             return parseTypeDefinition(context.typeConstraint());
-        } else if (context.primitiveValueConstraint() != null) {
-            return primitives.parsePrimitiveValue(context.primitiveValueConstraint());
+        }
+        if (context.primitiveValueConstraint() != null) {
+            return parsePrimitiveValue(context.primitiveValueConstraint());
+        }
+        if (context.codePhraseConstraint() != null) {
+            return parseCodePhrase(context.codePhraseConstraint());
+        }
+        if (context.ordinalConstraint() != null) {
+            return parseCDvOrdinalConstraint(context.ordinalConstraint());
         }
 
         throw new NotImplementedException();
     }
 
-    private Cardinality parseCardinality(adlParser.CardinalityContext context) {
+    private static CDvOrdinal parseCDvOrdinalConstraint(adlParser.OrdinalConstraintContext context) {
+        CDvOrdinal result = new CDvOrdinal();
+        result.setRmTypeName("DV_ORDINAL");
+        for (adlParser.OrdinalItemContext cOrdinalItem : context.ordinalItemList().ordinalItem()) {
+            result.getList().add(parseOrdinalItem(cOrdinalItem));
+        }
+        if (context.number() != null) {
+            int number = parseInteger(context.number());
+            for (DvOrdinal dvOrdinal : result.getList()) {
+                if (dvOrdinal.getValue() == number) {
+                    result.setAssumedValue(AdlUtils.makeClone(dvOrdinal));
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static DvOrdinal parseOrdinalItem(adlParser.OrdinalItemContext context) {
+        DvOrdinal result = new DvOrdinal();
+        result.setValue(parseInteger(context.number()));
+        CodePhrase code = parseCodePhrase(context.adlCodePhraseValue());
+        result.setSymbol(newDvCodedText(code.getCodeString(), code));
+        return result;
+    }
+
+    private static CodePhrase parseCodePhrase(adlParser.AdlCodePhraseValueContext context) {
+        return newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.code));
+    }
+
+    private static CTerminologyCode parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
+        CTerminologyCode result = new CTerminologyCode();
+        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
+
+        result.setTerminologyId(collectText(context.tid));
+        if (context.assumed!=null) {
+            result.setAssumedValue(collectText(context.assumed));
+        }
+        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
+            result.getCodeList().add(collectText(cCodeIdentifier));
+        }
+
+        return result;
+    }
+//    private static CCodePhrase parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
+//        CCodePhrase result = new CCodePhrase();
+//        result.setTerminologyId(newTerminologyId(collectText(context.tid)));
+//        if (context.assumed!=null) {
+//            result.setAssumedValue(newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.assumed)));
+//        }
+//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
+//            result.getCodeList().add(collectText(cCodeIdentifier));
+//        }
+//
+//        return result;
+//    }
+
+    private static Cardinality parseCardinality(adlParser.CardinalityContext context) {
         if (context == null) return null;
         Cardinality result = new Cardinality();
 
@@ -186,13 +352,13 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
     }
 
 
-    private MultiplicityInterval parseOccurrences(adlParser.OccurrencesContext context) {
+    private static MultiplicityInterval parseOccurrences(adlParser.OccurrencesContext context) {
         if (context == null) return null;
         return parseOccurrences(context.occurrenceRange());
 
     }
 
-    private MultiplicityInterval parseOccurrences(adlParser.OccurrenceRangeContext context) {
+    private static MultiplicityInterval parseOccurrences(adlParser.OccurrenceRangeContext context) {
         if (context == null) return null;
         if (context.val != null) {
             int val = Integer.parseInt(context.val.getText());
@@ -204,7 +370,7 @@ public class AdlTreeConstraintParser extends AbstractAdlTreeParser {
     }
 
     @Nullable
-    private SiblingOrder parseSiblingOrder(@Nullable adlParser.OrderConstraintContext context) {
+    private static SiblingOrder parseSiblingOrder(@Nullable adlParser.OrderConstraintContext context) {
         if (context == null) return null;
         SiblingOrder result = new SiblingOrder();
         result.setIsBefore(context.BEFORE() != null);

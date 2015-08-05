@@ -74,20 +74,21 @@ description:	DESCRIPTION adlObjectValue;
 definition:	DEFINITION complexObjectConstraint;
 
 typeConstraint
-	: orderConstraint? complexObjectConstraint
+	: orderConstraint? adlValue
+	| orderConstraint? complexObjectConstraint
 	| orderConstraint? USE_NODE typeIdentifierWithGenerics atCode? occurrences? rmPath
 	| orderConstraint? archetypeSlotConstraint
 	| orderConstraint? archetypeReferenceConstraint
-	| orderConstraint? adlValueConstraint
 	;
 
 complexObjectConstraint:
     typeIdentifierWithGenerics atCode? occurrences? attributeListMatcher?;
 
-adlValueConstraint
-	: typeIdentifier adlValue
-	| '(' typeIdentifier ')' adlValue
-	;
+//adlValueConstraint
+//	: typeIdentifier? adlValue
+//	| '(' typeIdentifier ')' adlValue
+//	;
+
 occurrences:
 	OCCURRENCES MATCHES '{' occurrenceRange '}';
 
@@ -161,7 +162,7 @@ archetypeSlotSingleConstraint:
 
 
 archetypeReferenceConstraint
-	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences? attributeListMatcher?
+	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences?
 	;
 
 
@@ -185,7 +186,7 @@ durationConstraint
 
 
 codePhraseConstraint:
-	'[' tid=codeIdentifier '::' codeIdentifierList (';' assumed=codeIdentifier)? ']' ;
+	'[' tid=codeIdentifier '::' codes=codeIdentifierList (';' assumed=codeIdentifier)? ']' ;
 
 codeIdentifierList:
 	codeIdentifier? (',' codeIdentifier)* ;
@@ -277,10 +278,10 @@ annotations:	ANNOTATIONS adlObjectValue;
 
 // Adl structure
 adlValue
-	: '<'  ( adlMapValue | adlCodePhraseValueList |  openStringList | adlObjectValue | numberIntervalConstraint ) '>' ';'?
+	: '<'  ( adlMapValue | adlCodePhraseValueList |  openStringList | numberIntervalConstraint ) '>' ';'?
+	| (('(' typeIdentifier ')') | typeIdentifier)? '<' adlObjectValue? '>' ';'?
 	| '<' number '>'
 	| '<' url '>'
-	| '<' '>'
 	;
 
 adlObjectValue:
@@ -296,7 +297,7 @@ adlCodePhraseValue
 adlMapValue:
 	( adlMapValueEntry )+ ;
 adlMapValueEntry:
-	'[' STRING ']' '=' adlValue  ;
+	'[' key=STRING ']' '=' value=adlValue  ;
 
 openStringList:
 	STRING (',' STRING)* (',' '...')? ;
@@ -421,9 +422,9 @@ ISO_DATE_TIME :     YEAR '-' MONTH '-' DAY 'T' HOUR (':' MINUTE (':' SECOND ( ',
 ISO_DATE      :     YEAR '-' MONTH ( '-' DAY )? ;
 ISO_TIME      :     HOUR ':' MINUTE ( ':' SECOND ( ',' INTEGER )?)? ( TIMEZONE )? ;
 
-fragment TIMEZONE   :     'Z' | ('+'|'-') HOUR_MIN ;   // hour offset, e.g. `+0930`, or else literal `Z` indicating +0000.
+fragment TIMEZONE   :     'Z' | ('+'|'-') DIGIT DIGIT DIGIT DIGIT ;   // hour offset, e.g. `+0930`, or else literal `Z` indicating +0000.
 fragment YEAR       :     DIGIT DIGIT DIGIT DIGIT ;
-fragment MONTH      :     ( '0' DIGIT | '1' '1'..'2' ) ;    // month in year
+fragment MONTH      :     ( '0' DIGIT | '1' '0'..'2' ) ;    // month in year
 fragment DAY        :     ( '0'..'2' DIGIT | '3' '0'..'2' ) ;  // day in month
 fragment HOUR       :     ( ('0'..'1')? DIGIT | '2' '0'..'3' ) ;  // hour in 24 hour clock
 fragment MINUTE     :     '0'..'5' DIGIT ;                 // minutes

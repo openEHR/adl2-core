@@ -85,7 +85,7 @@ public class ArchetypeValidatorTest extends ParserTestBase {
         expected.add(new AqlValidationError(AqlValidationError.Level.ERROR, "No attribute items on rm type ENTRY"));
         expected.add(new AqlValidationError(AqlValidationError.Level.ERROR, "Unknown RM type: ELEMENT_X"));
         expected.add(new AqlValidationError(AqlValidationError.Level.ERROR,
-                "Existence of attribute at /items[at10001]/value/value does not conform to RM model: [1,2] is not contained in [0,1]"));
+                "Existence of attribute at /items[at10001]/value/value does not conform to RM model: 1..2 is not contained in 0..1"));
 
 
         assertThat(validator.getErrors()).containsOnly(expected.toArray());

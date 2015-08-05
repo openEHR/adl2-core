@@ -22,22 +22,27 @@ package org.openehr.adl.parser.tree;
 
 import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.openehr.adl.antlr4.generated.adlParser;
+import org.openehr.adl.rm.RmTypes;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
+import org.openehr.jaxb.rm.Interval;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.*;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDate;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDuration;
 
 /**
  * @author markopi
  */
-public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
-    public CPrimitiveObject parsePrimitiveValue(adlParser.PrimitiveValueConstraintContext context) {
+abstract class AdlTreePrimitiveConstraintsParser  {
+    static CPrimitiveObject parsePrimitiveValue(adlParser.PrimitiveValueConstraintContext context) {
         if (context.stringConstraint() != null) {
             return parseString(context.stringConstraint(), context.STRING());
         }
@@ -59,14 +64,33 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         if (context.durationConstraint() != null) {
             return parseDuration(context.durationConstraint(), context.DURATION());
         }
+        if (context.codeIdentifierList()!=null) {
+            return parseCodeIdentifierList(context.codeIdentifierList());
+        }
         throw new AssertionError();
     }
 
-    private CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
+    static CPrimitiveObject parseCodeIdentifierList(adlParser.CodeIdentifierListContext context) {
+        CTerminologyCode result = new CTerminologyCode();
+        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
+        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifier()) {
+            result.getCodeList().add(parseCodeIdentifier(cCodeIdentifier));
+        }
+        return result;
+    }
+
+    static String parseCodeIdentifier(adlParser.CodeIdentifierContext context) {
+        return collectNonNullText(context);
+    }
+
+    static CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
         CDate result = new CDate();
+        result.setRmTypeName(RmTypes.DATE);
         result.setPattern(collectText(context.DATE_PATTERN()));
         if (context.ISO_DATE() != null) {
-            result.setPattern(collectText(context.ISO_DATE()));
+            // should go to list attribute, but there is none on CDate class
+//            String dateStr = collectText(context.ISO_DATE());
+//            result.setRange(newIntervalOfDate(dateStr, dateStr));
         }
         if (context.dateIntervalConstraint() != null) {
             result.setRange(parseDateInterval(context.dateIntervalConstraint()));
@@ -75,11 +99,13 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private CDateTime parseDateTime(adlParser.DateTimeConstraintContext context, TerminalNode assumedValue) {
+    static CDateTime parseDateTime(adlParser.DateTimeConstraintContext context, TerminalNode assumedValue) {
         CDateTime result = new CDateTime();
+        result.setRmTypeName(RmTypes.DATE_TIME);
         result.setPattern(collectText(context.DATE_TIME_PATTERN()));
         if (context.ISO_DATE_TIME() != null) {
-            result.setPattern(collectText(context.ISO_DATE_TIME()));
+            // should go to list attribute, but there is none on CDate class
+//            result.setPattern(collectText(context.ISO_DATE_TIME()));
         }
 
         if (context.dateTimeIntervalConstraint() != null) {
@@ -89,33 +115,30 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private CDuration parseDuration(adlParser.DurationConstraintContext context, TerminalNode assumedValue) {
+    static CDuration parseDuration(adlParser.DurationConstraintContext context, TerminalNode assumedValue) {
         CDuration result = new CDuration();
+        result.setRmTypeName(RmTypes.DURATION);
         if (context.pattern!=null) {
             String s = context.pattern.getText();
-            if (Pattern.compile("\\d").matcher(s).find()) {
-                result.setRange(newIntervalOfDuration(s,s));
-            } else {
-                result.setPattern(s);
-            }
+            result.setPattern(s);
         }
         if (context.singleInterval!=null) {
             String s = context.singleInterval.getText();
-            result.setRange(newIntervalOfDuration(s,s));
-        }
-
-        if (context.durationIntervalConstraint() != null) {
+            result.setRange(newIntervalOfDuration(s, s));
+        } else if (context.durationIntervalConstraint() != null) {
             result.setRange(parseDurationInterval(context.durationIntervalConstraint()));
         }
         result.setAssumedValue(collectText(assumedValue));
         return result;
     }
 
-    private CTime parseTime(adlParser.TimeConstraintContext context, TerminalNode assumedValue) {
+    static CTime parseTime(adlParser.TimeConstraintContext context, TerminalNode assumedValue) {
         CTime result = new CTime();
+        result.setRmTypeName(RmTypes.TIME);
         result.setPattern(collectText(context.TIME_PATTERN()));
         if (context.ISO_TIME() != null) {
-            result.setPattern(collectText(context.ISO_TIME()));
+            // should go to list attribute, but there is none on CTime class
+//            result.setPattern(collectText(context.ISO_TIME()));
         }
 
         if (context.timeIntervalConstraint() != null) {
@@ -125,7 +148,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private IntervalOfDate parseDateInterval(adlParser.DateIntervalConstraintContext c) {
+    static IntervalOfDate parseDateInterval(adlParser.DateIntervalConstraintContext c) {
         String lower = collectText(c.lower);
         String upper = collectText(c.upper);
         String val = collectText(c.val);
@@ -137,7 +160,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return interval;
     }
 
-    private IntervalOfTime parseTimeInterval(adlParser.TimeIntervalConstraintContext c) {
+    static IntervalOfTime parseTimeInterval(adlParser.TimeIntervalConstraintContext c) {
         String lower = collectText(c.lower);
         String upper = collectText(c.upper);
         String val = collectText(c.val);
@@ -149,7 +172,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return interval;
     }
 
-    private IntervalOfDateTime parseDateTimeInterval(adlParser.DateTimeIntervalConstraintContext c) {
+    static IntervalOfDateTime parseDateTimeInterval(adlParser.DateTimeIntervalConstraintContext c) {
         String lower = collectText(c.lower);
         String upper = collectText(c.upper);
         String val = collectText(c.val);
@@ -161,7 +184,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return interval;
     }
 
-    private IntervalOfDuration parseDurationInterval(adlParser.DurationIntervalConstraintContext c) {
+    static IntervalOfDuration parseDurationInterval(adlParser.DurationIntervalConstraintContext c) {
         String lower = collectText(c.lower);
         String upper = collectText(c.upper);
         String val = collectText(c.val);
@@ -173,7 +196,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return interval;
     }
 
-    private Number parseNumber(adlParser.NumberContext number, boolean[] isInteger) {
+    static Number parseNumber(adlParser.NumberContext number, boolean[] isInteger) {
         if (number == null) return null;
         try {
             return Integer.parseInt(number.getText());
@@ -183,7 +206,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         }
     }
 
-    private CPrimitiveObject parseNumber(adlParser.NumberConstraintContext context, adlParser.NumberContext assumedValue) {
+    static CPrimitiveObject parseNumber(adlParser.NumberConstraintContext context, adlParser.NumberContext assumedValue) {
 
         //  array is just to simulate OUT parameter
         boolean isInteger[] = {true};
@@ -202,6 +225,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
 
         if (isInteger[0]) {
             CInteger result = new CInteger();
+            result.setRmTypeName(RmTypes.INTEGER);
             if (interval != null) {
                 result.setRange((IntervalOfInteger) interval);
             }
@@ -214,6 +238,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
             return result;
         } else {
             CReal result = new CReal();
+            result.setRmTypeName(RmTypes.REAL);
             if (interval != null) {
                 result.setRange((IntervalOfReal) interval);
             }
@@ -228,7 +253,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         }
     }
 
-    private <T> TempInterval<T> parseTempInterval(T lower, T upper, T val, Token gt, Token gte, Token lt, Token lte) {
+    static <T> TempInterval<T> parseTempInterval(T lower, T upper, T val, Token gt, Token gte, Token lt, Token lte) {
         TempInterval<T> result = new TempInterval<>();
 
         // map single val interval into upper/lower
@@ -255,7 +280,12 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private Interval parseNumberInterval(adlParser.NumberIntervalConstraintContext context, boolean[] isInteger) {
+    static Interval parseNumberInterval(adlParser.NumberIntervalConstraintContext context) {
+        return parseNumberInterval(context, new boolean[]{true});
+
+    }
+
+    static Interval parseNumberInterval(adlParser.NumberIntervalConstraintContext context, boolean[] isInteger) {
         Interval result;
 
         Number lower = parseNumber(context.lower, isInteger);
@@ -280,8 +310,9 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private CBoolean parseBoolean(adlParser.BooleanListContext context, adlParser.BoolContext assumedValue) {
+    static CBoolean parseBoolean(adlParser.BooleanListContext context, adlParser.BoolContext assumedValue) {
         CBoolean result = new CBoolean();
+        result.setRmTypeName(RmTypes.BOOLEAN);
         for (adlParser.BoolContext bool : context.bool()) {
             if (bool.TRUE() != null) {
                 result.setTrueValid(true);
@@ -296,8 +327,9 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
     }
 
 
-    private CString parseString(adlParser.StringConstraintContext context, TerminalNode assumedValue) {
+    static CString parseString(adlParser.StringConstraintContext context, TerminalNode assumedValue) {
         CString result = new CString();
+        result.setRmTypeName(RmTypes.STRING);
         if (context.stringList() != null) {
             result.getList().addAll(collectStringList(context.stringList()));
         }
@@ -309,7 +341,7 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private List<String> collectStringList(adlParser.StringListContext context) {
+    static List<String> collectStringList(adlParser.StringListContext context) {
         if (context == null) return ImmutableList.of();
         List<String> result = new ArrayList<>();
         for (TerminalNode node : context.STRING()) {
@@ -318,9 +350,12 @@ public class AdlTreePrimitiveConstraintsParser extends AbstractAdlTreeParser {
         return result;
     }
 
-    private String collectRegularExpression(adlParser.RegularExpressionContext tRegularExpression) {
-        String result = collectNonNullText(tRegularExpression);
-        result = result.substring(1, result.length() - 1);
+    static String collectRegularExpression(adlParser.RegularExpressionContext tRegularExpression) {
+        int start = tRegularExpression.start.getStartIndex();
+        int stop = tRegularExpression.stop.getStopIndex();
+        String result = tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start+1, stop-1));
+//        String result = collectNonNullText(tRegularExpression);
+//        result = result.substring(1, result.length() - 1);
         return result;
     }
 

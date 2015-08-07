@@ -84,11 +84,6 @@ typeConstraint
 complexObjectConstraint:
     typeIdentifierWithGenerics atCode? occurrences? attributeListMatcher?;
 
-//adlValueConstraint
-//	: typeIdentifier? adlValue
-//	| '(' typeIdentifier ')' adlValue
-//	;
-
 occurrences:
 	OCCURRENCES MATCHES '{' occurrenceRange '}';
 
@@ -129,12 +124,6 @@ ordinalItemList:
 	ordinalItem (',' ordinalItem)*;
 ordinalItem:
 	number '|' adlCodePhraseValue ;
-
-// maybe there is a possible valueConstraint inside <>
-/*
-typeDefinitionConstraint:
-	typeIdentifier adlValue -> ^(AST_TYPE_DEFINITION_CONSTRAINT typeIdentifier adlValue) ;
-*/
 
 primitiveValueConstraint
 	:  stringConstraint (';' assumedValue=STRING)?
@@ -192,15 +181,11 @@ codeIdentifierList:
 	codeIdentifier? (',' codeIdentifier)* ;
 
 // value of regular expression must be read directly from tokenStream, since it may contain whitespaces which are on hidden channel
-// trying to rewrite AST with embedded inner part throws antlr InternalException
 regularExpression
 	: '/' regularExpressionInner1 '/'
 	| '^' regularExpressionInner2 '^' ;
 regularExpressionInner1: ( ~'/')*;
 regularExpressionInner2: ( ~'^')*;
-
-
-
 
 
 
@@ -231,8 +216,6 @@ existence:
 
 cardinality:
 	CARDINALITY MATCHES '{' occurrenceRange (';' (ord=ORDERED|ord=UNORDERED))? (';' (uq=UNIQUE))? '}';
-
-
 
 
 
@@ -355,7 +338,7 @@ number:
 
 
 
-
+// lexer
 
 RANGE:		'..';
 
@@ -379,7 +362,7 @@ AMP:		'&';
 EXCLAMATION:	'!';
 QUESTION:	'?';
 
-// all other symbols. These are defined to allow any symbol inside regular expressions
+// all other symbols.
 OTHER_SYMBOL:	'!'..'/' | ':'..'@' | '['..'`' | '{'..'~';
 
 fragment  LOWERCASE: 	'a'..'z';
@@ -431,14 +414,9 @@ fragment MINUTE     :     '0'..'5' DIGIT ;                 // minutes
 fragment SECOND     :     '0'..'5' DIGIT ;                 // seconds
 fragment HOUR_MIN   :     HOUR ':' MINUTE ;
 
-/*
-ARCHETYPEID
-	:	LETTER+ '-' LETTER+ '-' (LETTER|'_')+ '.' (IDCHAR|'-')+ '.v' DIGIT+ ('.' DIGIT+)?
-	;
-*/
 AT_CODE_VALUE: 		('at'|'ac'|'id') DIGIT+ (PERIOD DIGIT+)* ;
 
-// keywords. Some of these must also be added to keyword target. Must start with lowercase or '_'
+// keywords.
 LANGUAGE: 		'language';
 ARCHETYPE:		'archetype';
 TEMPLATE:		'template';
@@ -470,7 +448,6 @@ TERMINOLOGY:		'terminology';
 
 
 
-// types. all these must also be added to typeIdentifier target. Must start with uppercase
 TRUE:		'True';
 FALSE:		'False';
 
@@ -479,20 +456,10 @@ TYPE_IDENTIFIER:     	(UPPERCASE) (LETTER | DIGIT | UNDERSCORE)* ;
 NAME_IDENTIFIER:     	(LOWERCASE|UNDERSCORE) (LETTER | DIGIT | UNDERSCORE)* ;
 
 
-// Simple number definition messes up intervals, even though '..' should not match '.'
-/*
-NUMBER
-	: (INT '.' '.')=> INT
-	| (DOUBLE)=> DOUBLE
-	| INT;
-*/
 INTEGER:	DIGIT+;
 
 fragment POSITIVE_FLOAT:	DIGIT+ ('.' DIGIT+)? ;
 
-
-
-//NUMBER:			'-'? DIGIT+ ('.'? (DIGIT+))?;
 
 
 fragment

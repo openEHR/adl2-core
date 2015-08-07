@@ -55,7 +55,6 @@ public class AdlParserTest {
     @Test
     public void parseAdl() throws IOException {
         adlParser parser = createAdlParser(TestUtils.getResource("adl15/openEHR-EHR-EVALUATION.alert.v1.adls"));
-        parser.setTrace(true);
 
         parser.adl();
 

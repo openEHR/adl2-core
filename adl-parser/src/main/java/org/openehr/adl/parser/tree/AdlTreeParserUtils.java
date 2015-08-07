@@ -106,15 +106,8 @@ abstract class AdlTreeParserUtils {
     @Nullable
     static String collectString(@Nullable adlParser.OpenStringListContext tStringList) {
         if (tStringList == null) return null;
-        // todo
+
         return unescapeString(collectText(tStringList));
-//        if (tStringList == null) return null;
-//        if (tStringList.getType() == AdlParser.STRING) {
-//            return unescapeString(tStringList.getText());
-//        }
-//
-//        List<String> stringList = collectStringList(tStringList);
-//        return stringList.get(0);
     }
 
     static List<String> collectStringList(adlParser.OpenStringListContext tStringList) {

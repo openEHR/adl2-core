@@ -70,7 +70,6 @@ language:	LANGUAGE adlObjectValue;
 
 description:	DESCRIPTION adlObjectValue;
 
-// Constraint definition
 definition:	DEFINITION complexObjectConstraint;
 
 typeConstraint
@@ -255,7 +254,6 @@ durationIntervalConstraint
 	;
 
 
-// Ontology
 ontology:	(ONTOLOGY|TERMINOLOGY) adlObjectValue;
 annotations:	ANNOTATIONS adlObjectValue;
 
@@ -340,27 +338,27 @@ number:
 
 // lexer
 
-RANGE:		'..';
+RANGE:		    '..';
 
 EQUALS:        	'=';
 PAREN_OPEN:    	'(';
 PAREN_CLOSE:   	')';
 BRACKET_OPEN:  	'[';
 BRACKET_CLOSE: 	']';
-GT:		'>';
-LT:		'<';
+GT:		        '>';
+LT:		        '<';
 PERIOD:        	'.';
-COMMA:     	',';
-COLON:     	':';
+COMMA:     	    ',';
+COLON:     	    ':';
 SEMICOLON:     	';';
-MINUS:    	'-';
+MINUS:    	    '-';
 UNDERSCORE:    	'_';
-PIPE:		'|';
-ASTERISK:	'*';
-CARET:		'^';
-AMP:		'&';
+PIPE:		    '|';
+ASTERISK:	    '*';
+CARET:		    '^';
+AMP:		    '&';
 EXCLAMATION:	'!';
-QUESTION:	'?';
+QUESTION:	    '?';
 
 // all other symbols.
 OTHER_SYMBOL:	'!'..'/' | ':'..'@' | '['..'`' | '{'..'~';
@@ -417,39 +415,66 @@ fragment HOUR_MIN   :     HOUR ':' MINUTE ;
 AT_CODE_VALUE: 		('at'|'ac'|'id') DIGIT+ (PERIOD DIGIT+)* ;
 
 // keywords.
-LANGUAGE: 		'language';
-ARCHETYPE:		'archetype';
-TEMPLATE:		'template';
-TEMPLATE_OVERLAY:	'template_overlay';
-CONCEPT:		'concept';
-DESCRIPTION:		'description';
-ONTOLOGY:		'ontology';
-SPECIALIZE:		'specialize';
-SPECIALISE:		'specialise';
-DEFINITION:		'definition';
-MATCHES:		'matches';
-USE_NODE:		'use_node';
-OCCURRENCES:		'occurrences';
-INCLUDE:		'include';
-EXCLUDE:		'exclude';
-ALLOW_ARCHETYPE:	'allow_archetype';
-CARDINALITY:		'cardinality';
-UNORDERED:		'unordered';
-ORDERED:		'ordered';
-UNIQUE:			'unique';
-EXISTENCE:		'existence';
-BEFORE:			'before';
-AFTER:			'after';
-USE_ARCHETYPE:		'use_archetype';
-USE_TEMPLATE:		'use_template';
-CLOSED:			'closed';
-ANNOTATIONS:		'annotations';
-TERMINOLOGY:		'terminology';
+LANGUAGE: 		    L A N G U A G E;
+ARCHETYPE:		    A R C H E T Y P E;
+TEMPLATE:		    T E M P L A T E;
+TEMPLATE_OVERLAY:	T E M P L A T E '_' O V E R L A Y;
+CONCEPT:		    C O N C E P T;
+DESCRIPTION:		D E S C R I P T I O N;
+ONTOLOGY:		    O N T O L O G Y;
+SPECIALIZE:		    S P E C I A L I Z E;
+SPECIALISE:		    S P E C I A L I S E;
+DEFINITION:		    D E F I N I T I O N;
+MATCHES:		    M A T C H E S;
+USE_NODE:		    U S E '_' N O D E;
+OCCURRENCES:		O C C U R R E N C E S;
+INCLUDE:		    I N C L U D E;
+EXCLUDE:		    E X C L U D E;
+ALLOW_ARCHETYPE:	A L L O W '_' A R C H E T Y P E  ;
+CARDINALITY:		C A R D I N A L I T Y;
+UNORDERED:		    U N O R D E R E D;
+ORDERED:		    O R D E R E D;
+UNIQUE:			    U N I Q U E;
+EXISTENCE:		    E X I S T E N C E;
+BEFORE:			    B E F O R E;
+AFTER:			    A F T E R;
+USE_ARCHETYPE:		U S E '_' A R C H E T Y P E;
+USE_TEMPLATE:		U S E '_' T E M P L A T E;
+CLOSED:			    C L O S E D;
+ANNOTATIONS:		A N N O T A T I O N S;
+TERMINOLOGY:		T E R M I N O L O G Y ;
 
 
 
-TRUE:		'True';
-FALSE:		'False';
+TRUE:		T R U E;
+FALSE:		F A L S E;
+
+fragment A:('a'|'A');
+fragment B:('b'|'B');
+fragment C:('c'|'C');
+fragment D:('d'|'D');
+fragment E:('e'|'E');
+fragment F:('f'|'F');
+fragment G:('g'|'G');
+fragment H:('h'|'H');
+fragment I:('i'|'I');
+fragment J:('j'|'J');
+fragment K:('k'|'K');
+fragment L:('l'|'L');
+fragment M:('m'|'M');
+fragment N:('n'|'N');
+fragment O:('o'|'O');
+fragment P:('p'|'P');
+fragment Q:('q'|'Q');
+fragment R:('r'|'R');
+fragment S:('s'|'S');
+fragment T:('t'|'T');
+fragment U:('u'|'U');
+fragment V:('v'|'V');
+fragment W:('w'|'W');
+fragment X:('x'|'X');
+fragment Y:('y'|'Y');
+fragment Z:('z'|'Z');
 
 
 TYPE_IDENTIFIER:     	(UPPERCASE) (LETTER | DIGIT | UNDERSCORE)* ;

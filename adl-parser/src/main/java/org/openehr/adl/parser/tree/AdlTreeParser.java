@@ -60,8 +60,8 @@ public class AdlTreeParser {
             result.setDefinition(parseComplexObject(context.definition().complexObjectConstraint()));
         }
 
-        if (context.ontology() != null) {
-            result.setTerminology(parseOntology(context.ontology()));
+        if (context.terminology() != null) {
+            result.setTerminology(parseTerminology(context.terminology()));
         }
         if (context.annotations()!=null) {
             result.setAnnotations(parseAnnotations(context.annotations()));
@@ -107,7 +107,7 @@ public class AdlTreeParser {
         }
     }
 
-    private ArchetypeTerminology parseOntology(adlParser.OntologyContext context) {
+    private ArchetypeTerminology parseTerminology(adlParser.TerminologyContext context) {
         ArchetypeTerminology result = new ArchetypeTerminology();
 
         List<adlParser.OdinObjectPropertyContext> tProperties = context.odinObjectValue().odinObjectProperty();

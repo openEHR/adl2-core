@@ -21,7 +21,7 @@
 grammar adl;
 
 
-adl: header specialize? concept? language? description? definition? ontology? annotations? ;
+adl: header specialize? concept? language? description? definition? terminology? annotations? EOF;
 
 alphanumeric
 	:	(identifier|INTEGER);
@@ -60,7 +60,7 @@ atCode:
 	'[' AT_CODE_VALUE ']' ;
 
 specializeTag
-	:	SPECIALIZE | SPECIALISE;
+	:	SPECIALISE;
 
 specialize:	specializeTag archetypeId;
 
@@ -254,7 +254,7 @@ durationIntervalConstraint
 	;
 
 
-ontology:	(ONTOLOGY|TERMINOLOGY) odinObjectValue;
+terminology:	TERMINOLOGY odinObjectValue;
 annotations:	ANNOTATIONS odinObjectValue;
 
 // Adl structure
@@ -309,10 +309,10 @@ typeIdentifier:
 	TYPE_IDENTIFIER ;
 
 keyword
-	: LANGUAGE | ARCHETYPE | ONTOLOGY | DESCRIPTION | CONCEPT | SPECIALIZE
+	: LANGUAGE | ARCHETYPE | DESCRIPTION | CONCEPT | TERMINOLOGY
 	| DEFINITION | MATCHES | USE_NODE | OCCURRENCES | CARDINALITY | ORDERED
 	| UNORDERED | EXISTENCE | CLOSED | ANNOTATIONS | TEMPLATE | TEMPLATE_OVERLAY
-	| SPECIALISE | UNIQUE | TERMINOLOGY
+	| SPECIALISE | UNIQUE
 	;
 
 
@@ -421,9 +421,7 @@ TEMPLATE:		    T E M P L A T E;
 TEMPLATE_OVERLAY:	T E M P L A T E '_' O V E R L A Y;
 CONCEPT:		    C O N C E P T;
 DESCRIPTION:		D E S C R I P T I O N;
-ONTOLOGY:		    O N T O L O G Y;
-SPECIALIZE:		    S P E C I A L I Z E;
-SPECIALISE:		    S P E C I A L I S E;
+SPECIALISE:		    S P E C I A L I (S|Z) E;
 DEFINITION:		    D E F I N I T I O N;
 MATCHES:		    M A T C H E S;
 USE_NODE:		    U S E '_' N O D E;

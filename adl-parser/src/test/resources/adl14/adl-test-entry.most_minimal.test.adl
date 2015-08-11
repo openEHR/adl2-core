@@ -10,7 +10,7 @@ language
 definition
 	ENTRY[at0000] matches {*}
 
-ontology 
+terminology
 	term_definitions = <
 		["en"] = <
 			items = <

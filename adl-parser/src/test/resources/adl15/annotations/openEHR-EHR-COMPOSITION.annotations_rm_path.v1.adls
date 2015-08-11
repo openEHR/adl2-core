@@ -77,7 +77,7 @@ definition
 	}
 
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			["at0000"] = <

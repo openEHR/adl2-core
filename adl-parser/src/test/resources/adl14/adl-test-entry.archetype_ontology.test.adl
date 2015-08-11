@@ -8,7 +8,7 @@ language
 definition
 	ENTRY[at0000] matches {*}
 
-ontology 
+terminology
 	primary_language = <"en">
 	languages_available = <"en", ...>
 

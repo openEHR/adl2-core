@@ -53,7 +53,7 @@ definition
 	}
 
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			items = <

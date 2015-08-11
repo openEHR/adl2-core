@@ -40,7 +40,7 @@ definition
 	}
 
 
-ontology 
+terminology
 	primary_language = <"en">
 	
 	languages_available = <"en", ...>

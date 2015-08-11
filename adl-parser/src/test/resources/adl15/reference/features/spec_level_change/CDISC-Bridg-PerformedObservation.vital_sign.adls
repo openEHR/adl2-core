@@ -55,7 +55,7 @@ definition
 		dateRange existence matches {1}
 	}
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			["id1"] = <

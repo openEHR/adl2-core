@@ -71,7 +71,7 @@ multiple lines, just like"}
             }
         }                
     }
-ontology 
+terminology
 	primary_language = <"en">
 	languages_available = <"en", ...>
 	terminologies_available = <"adl_test", ...>

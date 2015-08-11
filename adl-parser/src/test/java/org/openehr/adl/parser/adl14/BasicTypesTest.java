@@ -159,15 +159,15 @@ public class BasicTypesTest extends ParserTestBase {
     public void testDateTimeConstraints() throws Exception {
         List list = getConstraints(6);
 
-        assertCDateTime(list.get(0), "yyyy-mm-dd hh:mm:ss", null, null, null);
+        assertCDateTime(list.get(0), "yyyy-mm-ddThh:mm:ss", null, null, null);
 
-        assertCDateTime(list.get(1), "yyyy-mm-dd hh:mm:??", null, null, null);
+        assertCDateTime(list.get(1), "yyyy-mm-ddThh:mm:??", null, null, null);
 
-        assertCDateTime(list.get(2), "yyyy-mm-dd hh:mm:XX", null, null, null);
+        assertCDateTime(list.get(2), "yyyy-mm-ddThh:mm:XX", null, null, null);
 
-        assertCDateTime(list.get(3), "yyyy-mm-dd hh:??:XX", null, null, null);
+        assertCDateTime(list.get(3), "yyyy-mm-ddThh:??:XX", null, null, null);
 
-        assertCDateTime(list.get(4), "yyyy-??-?? ??:??:??", null, null, null);
+        assertCDateTime(list.get(4), "yyyy-??-??T??:??:??", null, null, null);
 
         assertCDateTime(list.get(5), null, null,
                 new String[]{"1983-12-25T22:00:05"}, null);
@@ -225,19 +225,19 @@ public class BasicTypesTest extends ParserTestBase {
     public void testDateTimeConstraintsWithAssumedValues() throws Exception {
         List list = getConstraints(6);
 
-        assertCDateTime(list.get(20), "yyyy-mm-dd hh:mm:ss", null, null,
+        assertCDateTime(list.get(20), "yyyy-mm-ddThh:mm:ss", null, null,
                 "2006-03-31T01:12:00");
 
-        assertCDateTime(list.get(21), "yyyy-mm-dd hh:mm:??", null, null,
+        assertCDateTime(list.get(21), "yyyy-mm-ddThh:mm:??", null, null,
                 "2006-03-31T01:12:00");
 
-        assertCDateTime(list.get(22), "yyyy-mm-dd hh:mm:XX", null, null,
+        assertCDateTime(list.get(22), "yyyy-mm-ddThh:mm:XX", null, null,
                 "2006-03-31T01:12:00");
 
-        assertCDateTime(list.get(23), "yyyy-mm-dd hh:??:XX", null, null,
+        assertCDateTime(list.get(23), "yyyy-mm-ddThh:??:XX", null, null,
                 "2006-03-31T01:12:00");
 
-        assertCDateTime(list.get(24), "yyyy-??-?? ??:??:??", null, null,
+        assertCDateTime(list.get(24), "yyyy-??-??T??:??:??", null, null,
                 "2006-03-31T01:12:00");
 
         assertCDateTime(list.get(25), null, null,

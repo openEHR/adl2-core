@@ -15,7 +15,7 @@ description
 		["en"] = <
 			language = <[ISO_639-1::en]>
 			purpose = <"Test sum statement in rules section">
-			copyright = <"© 2011 openEHR Foundation">
+			copyright = <"ï¿½ 2011 openEHR Foundation">
 		>
 	>
 	other_details = <
@@ -173,7 +173,7 @@ invariant
 		/data[id3]/events[id4]/data[id2]/items[id22]/value[id43]/value
 
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			["id1"] = <

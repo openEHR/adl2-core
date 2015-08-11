@@ -66,7 +66,7 @@ definition
 		}
 	}
 
-ontology
+terminology
 	term_definitions = <
 		["nb"] = <
 			items = <

@@ -34,7 +34,7 @@ definition
 		/approachAnatomicSiteCode matches {[ac3.1]}
 	}
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			["id1.1"] = <

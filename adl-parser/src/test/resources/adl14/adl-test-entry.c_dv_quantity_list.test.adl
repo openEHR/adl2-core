@@ -35,7 +35,7 @@ definition
         }
 	}
 
-ontology
+terminology
 	primary_language = <"en">
 	languages_available = <"en", ...>
 	term_definitions = < 

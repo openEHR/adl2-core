@@ -9,7 +9,7 @@ language
 definition
 	ENTRY[at0000] matches {*}
 
-ontology 
+terminology
 	terminologies_available = <"SNOMED-CT", ...>
 	term_definitions = <
 		["en"] = <

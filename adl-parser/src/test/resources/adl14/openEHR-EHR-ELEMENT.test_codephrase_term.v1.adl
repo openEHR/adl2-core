@@ -36,7 +36,7 @@ definition
 		}
 	}
 
-ontology
+terminology
 	terminologies_available = <"ICD10_1998", ...>
 	term_definitions = <
 		["nb"] = <

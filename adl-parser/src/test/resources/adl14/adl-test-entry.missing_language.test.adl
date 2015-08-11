@@ -7,7 +7,7 @@ concept
 definition
 	ENTRY[at0000] matches {*}
 
-ontology 
+terminology
 	primary_language = <"zh">
 	languages_available = <"zh", ...>
 

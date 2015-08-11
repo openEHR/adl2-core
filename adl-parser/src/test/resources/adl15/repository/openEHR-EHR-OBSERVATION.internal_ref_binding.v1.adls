@@ -54,7 +54,7 @@ definition
 		}
 	}
 
-ontology
+terminology
 	terminologies_available = <"DDB00", ...>
 	term_definitions = <
 		["en"] = <

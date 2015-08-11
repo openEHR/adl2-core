@@ -112,11 +112,8 @@ valueConstraint
 	| primitiveValueConstraint
 	| codePhraseConstraint
 	| ordinalConstraint
-	| constraintRef
 	;
 
-constraintRef:
-	'[' AT_CODE_VALUE ']';
 ordinalConstraint:
 	ordinalItemList (';' number)? ;
 ordinalItemList:

@@ -220,35 +220,35 @@ cardinality:
 
 numberIntervalConstraint
 	// range
-    : '|'  (gt='>' (gte='=')?)? (lower=number|'*') '..' (lt='<' (lte='=')?)? (upper=number|'*') '|'
+    : '|'  (gt='>')? (lower=number) '..' (lt='<')? (upper=number) '|'
 	// relative to single value
 	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=number '|'
 	;
 
 dateIntervalConstraint
 	// range
-    : '|'  (gt='>' (gte='=')?)? (lower=ISO_DATE|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_DATE|'*') '|'
+    : '|'  (gt='>')? (lower=ISO_DATE) '..' (lt='<')? (upper=ISO_DATE) '|'
 	// relative to single value
 	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_DATE '|'
 	;
 
 timeIntervalConstraint
 	// range
-    : '|'  (gt='>' (gte='=')?)? (lower=ISO_TIME|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_TIME|'*') '|'
+    : '|'  (gt='>')? (lower=ISO_TIME) '..' (lt='<')? (upper=ISO_TIME) '|'
 	// relative to single value
 	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_TIME '|'
 	;
 
 dateTimeIntervalConstraint
 	// range
-    : '|'  (gt='>' (gte='=')?)? (lower=ISO_DATE_TIME|'*') '..' (lt='<' (lte='=')?)? (upper=ISO_DATE_TIME|'*') '|'
+    : '|'  (gt='>')? (lower=ISO_DATE_TIME) '..' (lt='<')? (upper=ISO_DATE_TIME) '|'
 	// relative to single value
 	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=ISO_DATE_TIME '|'
 	;
 
 durationIntervalConstraint
 	// range
-    : '|'  (gt='>' (gte='=')?)? (lower=DURATION|'*') '..' (lt='<' (lte='=')?)? (upper=DURATION|'*') '|'
+    : '|'  (gt='>')? (lower=DURATION|'*') '..' (lt='<')? (upper=DURATION|'*') '|'
 	// relative to single value
 	| '|' ( (gt='>' (gte='=')?)? | (lt='<' (lte='=')?)? ) val=DURATION '|'
 	;

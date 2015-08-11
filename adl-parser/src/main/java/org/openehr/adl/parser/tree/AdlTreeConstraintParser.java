@@ -53,8 +53,8 @@ abstract class AdlTreeConstraintParser {
             result = parseArchetypeInternalRef(context);
         } else if (context.archetypeSlotConstraint() != null) {
             result = parseArchetypeSlot(context.archetypeSlotConstraint());
-        } else if (context.adlValue() != null) {
-            result = parseAdlValueConstraint(context.adlValue());
+        } else if (context.odinValue() != null) {
+            result = parseAdlValueConstraint(context.odinValue());
         } else if (context.archetypeReferenceConstraint() != null) {
             result = parseArchetypeReference(context.archetypeReferenceConstraint());
         } else {
@@ -76,7 +76,7 @@ abstract class AdlTreeConstraintParser {
         return result;
     }
 
-    private static CObject parseAdlValueConstraint(adlParser.AdlValueContext context) {
+    private static CObject parseAdlValueConstraint(adlParser.OdinValueContext context) {
         String amType = collectText(context.typeIdentifier());
         if ("C_DV_QUANTITY".equals(amType) || amType==null) {
             return parseCDvQuantityConstraint(context);
@@ -87,40 +87,40 @@ abstract class AdlTreeConstraintParser {
         }
     }
 
-    private static CObject parseCDvOrdinalConstraint(adlParser.AdlValueContext adlValueContext) {
+    private static CObject parseCDvOrdinalConstraint(adlParser.OdinValueContext adlValueContext) {
         CDvOrdinal result = new CDvOrdinal();
         result.setRmTypeName("DV_ORDINAL");
         return result;
     }
 
-    private static CDvQuantity parseCDvQuantityConstraint(adlParser.AdlValueContext context) {
+    private static CDvQuantity parseCDvQuantityConstraint(adlParser.OdinValueContext context) {
         CDvQuantity result = new CDvQuantity();
         result.setRmTypeName("DV_QUANTITY");
         if (context == null) return result;
 
-        DAdlObject dQuantity = DAdlObject.parse(context.adlObjectValue());
-        adlParser.AdlValueContext dProperty = dQuantity.tryGet("property");
+        OdinObject dQuantity = OdinObject.parse(context.odinObjectValue());
+        adlParser.OdinValueContext dProperty = dQuantity.tryGet("property");
         if (dProperty != null) {
-            result.setProperty(parseCodePhraseListSingleItem(dProperty.adlCodePhraseValueList()));
+            result.setProperty(parseCodePhraseListSingleItem(dProperty.odinCodePhraseValueList()));
         }
-        adlParser.AdlValueContext dItem = dQuantity.tryGet("list");
-        if (dItem != null && dItem.adlMapValue() != null) {
-            for (adlParser.AdlMapValueEntryContext entryContext : dItem.adlMapValue().adlMapValueEntry()) {
-                result.getList().add(parseCQuantityItem(entryContext.adlValue().adlObjectValue()));
+        adlParser.OdinValueContext dItem = dQuantity.tryGet("list");
+        if (dItem != null && dItem.odinMapValue() != null) {
+            for (adlParser.OdinMapValueEntryContext entryContext : dItem.odinMapValue().odinMapValueEntry()) {
+                result.getList().add(parseCQuantityItem(entryContext.odinValue().odinObjectValue()));
             }
         }
-        adlParser.AdlValueContext dAssumedValue = dQuantity.tryGet("assumed_value");
+        adlParser.OdinValueContext dAssumedValue = dQuantity.tryGet("assumed_value");
         if (dAssumedValue != null) {
-            result.setAssumedValue(parseDvQuantity(dAssumedValue.adlObjectValue()));
+            result.setAssumedValue(parseDvQuantity(dAssumedValue.odinObjectValue()));
         }
 
         return result;
     }
 
-    private static DvQuantity parseDvQuantity(adlParser.AdlObjectValueContext context) {
+    private static DvQuantity parseDvQuantity(adlParser.OdinObjectValueContext context) {
         DvQuantity result = new DvQuantity();
 
-        DAdlObject dContext = DAdlObject.parse(context);
+        OdinObject dContext = OdinObject.parse(context);
         result.setUnits(dContext.tryGetString("units"));
         Double tMagnitude = dContext.tryGetDouble("magnitude");
         if (tMagnitude != null) result.setMagnitude(tMagnitude);
@@ -128,16 +128,16 @@ abstract class AdlTreeConstraintParser {
         return result;
     }
 
-    private static CQuantityItem parseCQuantityItem(adlParser.AdlObjectValueContext context) {
+    private static CQuantityItem parseCQuantityItem(adlParser.OdinObjectValueContext context) {
         CQuantityItem result = new CQuantityItem();
 
-        DAdlObject dContext = DAdlObject.parse(context);
+        OdinObject dContext = OdinObject.parse(context);
         result.setUnits(collectString(dContext.get("units").openStringList()));
-        adlParser.AdlValueContext pMagnitude = dContext.tryGet("magnitude");
+        adlParser.OdinValueContext pMagnitude = dContext.tryGet("magnitude");
         if (pMagnitude != null) {
             result.setMagnitude((IntervalOfReal) parseNumberInterval(pMagnitude.numberIntervalConstraint()));
         }
-        adlParser.AdlValueContext pPrecision = dContext.tryGet("precision");
+        adlParser.OdinValueContext pPrecision = dContext.tryGet("precision");
         if (pPrecision != null) {
             result.setPrecision((IntervalOfInteger) parseNumberInterval(pPrecision.numberIntervalConstraint()));
         }
@@ -301,12 +301,12 @@ abstract class AdlTreeConstraintParser {
     private static DvOrdinal parseOrdinalItem(adlParser.OrdinalItemContext context) {
         DvOrdinal result = new DvOrdinal();
         result.setValue(parseInteger(context.number()));
-        CodePhrase code = parseCodePhrase(context.adlCodePhraseValue());
+        CodePhrase code = parseCodePhrase(context.odinCodePhraseValue());
         result.setSymbol(newDvCodedText(code.getCodeString(), code));
         return result;
     }
 
-    private static CodePhrase parseCodePhrase(adlParser.AdlCodePhraseValueContext context) {
+    private static CodePhrase parseCodePhrase(adlParser.OdinCodePhraseValueContext context) {
         return newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.code));
     }
 

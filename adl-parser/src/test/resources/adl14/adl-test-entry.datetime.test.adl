@@ -103,11 +103,11 @@ definition
         }
         date_time_attributes matches {
             LIST matches {
-                date_time_attr1 matches {yyyy-mm-dd hh:mm:ss}
-                date_time_attr2 matches {yyyy-mm-dd hh:mm:??}
-                date_time_attr3 matches {yyyy-mm-dd hh:mm:XX}
-                date_time_attr4 matches {yyyy-mm-dd hh:??:XX}
-                date_time_attr5 matches {yyyy-??-?? ??:??:??}
+                date_time_attr1 matches {yyyy-mm-ddThh:mm:ss}
+                date_time_attr2 matches {yyyy-mm-ddThh:mm:??}
+                date_time_attr3 matches {yyyy-mm-ddThh:mm:XX}
+                date_time_attr4 matches {yyyy-mm-ddThh:??:XX}
+                date_time_attr5 matches {yyyy-??-??T??:??:??}
                 date_time_attr6 matches {1983-12-25T22:00:05}
                 date_time_attr7 matches {2000-01-01T00:00:59}
 
@@ -129,11 +129,11 @@ definition
                 -- date_time_attr8 matches {2000-12-25T00:00:59, ...} -- Not currently in ADL syntax
                 
                 -- with assumed values
-                date_time_attr1 matches {yyyy-mm-dd hh:mm:ss; 2006-03-31T01:12:00}
-                date_time_attr2 matches {yyyy-mm-dd hh:mm:??; 2006-03-31T01:12:00}
-                date_time_attr3 matches {yyyy-mm-dd hh:mm:XX; 2006-03-31T01:12:00}
-                date_time_attr4 matches {yyyy-mm-dd hh:??:XX; 2006-03-31T01:12:00}
-                date_time_attr5 matches {yyyy-??-?? ??:??:??; 2006-03-31T01:12:00}
+                date_time_attr1 matches {yyyy-mm-ddThh:mm:ss; 2006-03-31T01:12:00}
+                date_time_attr2 matches {yyyy-mm-ddThh:mm:??; 2006-03-31T01:12:00}
+                date_time_attr3 matches {yyyy-mm-ddThh:mm:XX; 2006-03-31T01:12:00}
+                date_time_attr4 matches {yyyy-mm-ddThh:??:XX; 2006-03-31T01:12:00}
+                date_time_attr5 matches {yyyy-??-??T??:??:??; 2006-03-31T01:12:00}
                 date_time_attr6 matches {1983-12-25T22:00:05; 2006-03-31T01:12:00}
                 date_time_attr7 matches {2000-01-01T00:00:59; 2006-03-31T01:12:00}
 

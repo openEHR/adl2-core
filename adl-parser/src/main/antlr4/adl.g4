@@ -66,14 +66,14 @@ specialize:	specializeTag archetypeId;
 
 concept: 	CONCEPT atCode;
 
-language:	LANGUAGE adlObjectValue;
+language:	LANGUAGE odinObjectValue;
 
-description:	DESCRIPTION adlObjectValue;
+description:	DESCRIPTION odinObjectValue;
 
 definition:	DEFINITION complexObjectConstraint;
 
 typeConstraint
-	: orderConstraint? adlValue
+	: orderConstraint? odinValue
 	| orderConstraint? complexObjectConstraint
 	| orderConstraint? USE_NODE typeIdentifierWithGenerics atCode? occurrences? rmPath
 	| orderConstraint? archetypeSlotConstraint
@@ -122,7 +122,7 @@ ordinalConstraint:
 ordinalItemList:
 	ordinalItem (',' ordinalItem)*;
 ordinalItem:
-	number '|' adlCodePhraseValue ;
+	number '|' odinCodePhraseValue ;
 
 primitiveValueConstraint
 	:  stringConstraint (';' assumedValue=STRING)?
@@ -254,31 +254,31 @@ durationIntervalConstraint
 	;
 
 
-ontology:	(ONTOLOGY|TERMINOLOGY) adlObjectValue;
-annotations:	ANNOTATIONS adlObjectValue;
+ontology:	(ONTOLOGY|TERMINOLOGY) odinObjectValue;
+annotations:	ANNOTATIONS odinObjectValue;
 
 // Adl structure
-adlValue
-	: '<'  ( adlMapValue | adlCodePhraseValueList |  openStringList | numberIntervalConstraint ) '>' ';'?
-	| (('(' typeIdentifier ')') | typeIdentifier)? '<' adlObjectValue? '>' ';'?
+odinValue
+	: '<'  ( odinMapValue | odinCodePhraseValueList |  openStringList | numberIntervalConstraint ) '>' ';'?
+	| (('(' typeIdentifier ')') | typeIdentifier)? '<' odinObjectValue? '>' ';'?
 	| '<' number '>'
 	| '<' url '>'
 	;
 
-adlObjectValue:
-	( adlObjectProperty ) + ;
-adlObjectProperty:
-	identifier '=' adlValue ;
+odinObjectValue:
+	( odinObjectProperty ) + ;
+odinObjectProperty:
+	identifier '=' odinValue ;
 
-adlCodePhraseValueList:
-	adlCodePhraseValue (',' adlCodePhraseValue)* ;
-adlCodePhraseValue
+odinCodePhraseValueList:
+	odinCodePhraseValue (',' odinCodePhraseValue)* ;
+odinCodePhraseValue
 	: '[' tid=codeIdentifier '::' code=codeIdentifier ']'
 	;
-adlMapValue:
-	( adlMapValueEntry )+ ;
-adlMapValueEntry:
-	'[' key=STRING ']' '=' value=adlValue  ;
+odinMapValue:
+	( odinMapValueEntry )+ ;
+odinMapValueEntry:
+	'[' key=STRING ']' '=' value=odinValue  ;
 
 openStringList:
 	STRING (',' STRING)* (',' '...')? ;

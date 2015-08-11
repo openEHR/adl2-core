@@ -122,15 +122,15 @@ abstract class AdlTreeParserUtils {
     }
 
 
-    static CodePhrase parseCodePhraseListSingleItem(adlParser.AdlCodePhraseValueListContext context) {
-        List<adlParser.AdlCodePhraseValueContext> phrases = context.adlCodePhraseValue();
+    static CodePhrase parseCodePhraseListSingleItem(adlParser.OdinCodePhraseValueListContext context) {
+        List<adlParser.OdinCodePhraseValueContext> phrases = context.odinCodePhraseValue();
         if (phrases.size() != 1)
             throw new AdlTreeParserException(tokenOf(context), "Expected exactly one code phrase in list");
         return parseCodePhrase(phrases.get(0));
     }
 
 
-    static CodePhrase parseCodePhrase(adlParser.AdlCodePhraseValueContext context) {
+    static CodePhrase parseCodePhrase(adlParser.OdinCodePhraseValueContext context) {
         return newCodePhrase(
                 newTerminologyId(collectNonNullText(context.tid)),
                 collectNonNullText(context.code));
@@ -161,7 +161,7 @@ abstract class AdlTreeParserUtils {
 
     }
 
-    static String collectText(adlParser.AdlValueContext context) {
+    static String collectText(adlParser.OdinValueContext context) {
         if (context==null) return null;
         if (context.url()!=null) {
             return collectText(context.url());
@@ -184,15 +184,15 @@ abstract class AdlTreeParserUtils {
         return context.getText();
     }
 
-    static adlParser.AdlValueContext getAdlProperty(adlParser.AdlObjectValueContext adlContext, String name) {
-        adlParser.AdlValueContext value = getAdlPropertyOrNull(adlContext, name);
+    static adlParser.OdinValueContext getAdlProperty(adlParser.OdinObjectValueContext adlContext, String name) {
+        adlParser.OdinValueContext value = getAdlPropertyOrNull(adlContext, name);
         if (value == null) {
             throw new AdlTreeParserException(tokenOf(adlContext), "Missing required property: %s", name);
         }
         return value;
     }
 
-    static String collectString( adlParser.AdlValueContext adlValue) {
+    static String collectString( adlParser.OdinValueContext adlValue) {
         if (adlValue==null) {
             return null;
         }
@@ -205,20 +205,20 @@ abstract class AdlTreeParserUtils {
     }
 
 
-    static adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlObjectValueContext adlContext, String name) {
-        List<adlParser.AdlObjectPropertyContext> properties = adlContext.adlObjectProperty();
-        for (adlParser.AdlObjectPropertyContext propertyContext : properties) {
+    static adlParser.OdinValueContext getAdlPropertyOrNull(adlParser.OdinObjectValueContext adlContext, String name) {
+        List<adlParser.OdinObjectPropertyContext> properties = adlContext.odinObjectProperty();
+        for (adlParser.OdinObjectPropertyContext propertyContext : properties) {
             String identifier = collectNonNullText(propertyContext.identifier());
-            if (identifier.equals(name)) return propertyContext.adlValue();
+            if (identifier.equals(name)) return propertyContext.odinValue();
         }
         return null;
     }
 
-    static adlParser.AdlValueContext getAdlPropertyOrNull(adlParser.AdlMapValueContext adlContext, String name) {
-        List<adlParser.AdlMapValueEntryContext> properties = adlContext.adlMapValueEntry();
-        for (adlParser.AdlMapValueEntryContext propertyContext : properties) {
+    static adlParser.OdinValueContext getAdlPropertyOrNull(adlParser.OdinMapValueContext adlContext, String name) {
+        List<adlParser.OdinMapValueEntryContext> properties = adlContext.odinMapValueEntry();
+        for (adlParser.OdinMapValueEntryContext propertyContext : properties) {
             String identifier = collectNonNullText(propertyContext.STRING());
-            if (identifier.equals(name)) return propertyContext.adlValue();
+            if (identifier.equals(name)) return propertyContext.odinValue();
         }
         return null;
     }

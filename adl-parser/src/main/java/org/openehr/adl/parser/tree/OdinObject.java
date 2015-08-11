@@ -35,30 +35,30 @@ import static org.openehr.adl.parser.tree.AdlTreeParserUtils.collectText;
 /**
  * @author markopi
  */
-class DAdlObject {
+class OdinObject {
     private final Token startToken;
-    private final Map<String, adlParser.AdlValueContext> properties;
+    private final Map<String, adlParser.OdinValueContext> properties;
 
-    DAdlObject(Token startToken, Map<String, adlParser.AdlValueContext> properties) {
+    OdinObject(Token startToken, Map<String, adlParser.OdinValueContext> properties) {
         this.startToken = startToken;
         this.properties = properties;
     }
 
-    static DAdlObject parse(adlParser.AdlObjectValueContext context) {
-        if (context == null) return new DAdlObject(null, ImmutableMap.<String, adlParser.AdlValueContext>of());
+    static OdinObject parse(adlParser.OdinObjectValueContext context) {
+        if (context == null) return new OdinObject(null, ImmutableMap.<String, adlParser.OdinValueContext>of());
 
-        Map<String, adlParser.AdlValueContext> properties = Maps.newLinkedHashMap();
-        List<adlParser.AdlObjectPropertyContext> adlObjectProperties = context.adlObjectProperty();
-        for (adlParser.AdlObjectPropertyContext adlObjectProperty : adlObjectProperties) {
+        Map<String, adlParser.OdinValueContext> properties = Maps.newLinkedHashMap();
+        List<adlParser.OdinObjectPropertyContext> adlObjectProperties = context.odinObjectProperty();
+        for (adlParser.OdinObjectPropertyContext adlObjectProperty : adlObjectProperties) {
             String name = adlObjectProperty.identifier().getText();
-            properties.put(name, adlObjectProperty.adlValue());
+            properties.put(name, adlObjectProperty.odinValue());
 
         }
-        return new DAdlObject(context.start, properties);
+        return new OdinObject(context.start, properties);
     }
 
-    adlParser.AdlValueContext get(String property) {
-        adlParser.AdlValueContext result = properties.get(property);
+    adlParser.OdinValueContext get(String property) {
+        adlParser.OdinValueContext result = properties.get(property);
         if (result == null) {
             throw new AdlTreeParserException(startToken, "Adl object does not contain required property: " + property);
         }
@@ -66,20 +66,20 @@ class DAdlObject {
     }
 
     @Nullable
-    adlParser.AdlValueContext tryGet(String property) {
+    adlParser.OdinValueContext tryGet(String property) {
         return properties.get(property);
     }
 
     @Nullable
     String tryGetString(String property) {
-        adlParser.AdlValueContext prop = tryGet(property);
+        adlParser.OdinValueContext prop = tryGet(property);
         if (prop == null) return null;
         return AdlTreeParserUtils.collectString(prop.openStringList());
     }
 
     @Nullable
     Double tryGetDouble(String property) {
-        adlParser.AdlValueContext prop = tryGet(property);
+        adlParser.OdinValueContext prop = tryGet(property);
         if (prop == null) return null;
         String str = collectText(prop.number());
         if (str==null) return null;
@@ -87,7 +87,7 @@ class DAdlObject {
     }
     @Nullable
     Integer tryGetInteger(String property) {
-        adlParser.AdlValueContext prop = tryGet(property);
+        adlParser.OdinValueContext prop = tryGet(property);
         if (prop == null) return null;
         String str = collectText(prop.number());
         if (str==null) return null;
@@ -98,7 +98,7 @@ class DAdlObject {
         return properties.containsKey(property);
     }
 
-    Map<String, adlParser.AdlValueContext> getProperties() {
+    Map<String, adlParser.OdinValueContext> getProperties() {
         return properties;
     }
 

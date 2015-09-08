@@ -47,7 +47,7 @@ public class MultiplicityIntervalMixin extends IntervalOfIntegerMixin<Multiplici
     }
 
     /**
-     * @return true if upper >= 2 or unbounded
+     * @return true if upper &gt;= 2 or unbounded
      */
     public boolean isMultiple() {
         return self.getUpper() == null || self.getUpper() >= 2;

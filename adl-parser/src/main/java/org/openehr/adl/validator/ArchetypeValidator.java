@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * Validator for archetype parsed from ADL files
- * <p/>
+ * <p>
  * It checks
  * .Existence of class and atribute
  * .Use node by object path in cADL
@@ -56,6 +56,7 @@ public class ArchetypeValidator {
     /**
      * Constructs an ArchetypeValidator
      *
+     * @param rmModel Reference model to validate against
      * @param archetype The Archetype to be validated
      */
     public ArchetypeValidator(RmModel rmModel, FlatArchetype archetype) {
@@ -66,8 +67,6 @@ public class ArchetypeValidator {
     /**
      * Check if information model entity referenced by archetype
      * has right name or type
-     *
-     * @return true if valid
      */
     void checkRmModelConformance() {
         final AmVisitor<AmObject, AmConstraintContext> visitor = AmVisitors.preorder(new ConformanceVisitor());

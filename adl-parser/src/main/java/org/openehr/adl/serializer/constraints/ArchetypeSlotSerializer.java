@@ -27,7 +27,7 @@ import org.openehr.jaxb.am.Assertion;
 
 /**
  * Created by bna on 27.01.2015.
- * <p/>
+ * <p>
  * allow_archetype CLUSTER[at1030] occurrences matches {0..1} matches {	-- Exertion
  * include
  * archetype_id/value matches {/openEHR-EHR-CLUSTER\.level_of_exertion(-[a-zA-Z0-9_]+)*\.v1/}

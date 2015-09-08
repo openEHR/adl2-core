@@ -27,27 +27,27 @@ public enum OperatorKind {
     OP_EQ(2001, "="),
 
     /**
-     * Not equals operator ("!=" or "/=" or "<>")
+     * Not equals operator ("!=" or "/=" or "&lt;&gt;")
      */
     OP_NE(2002, "!="),
 
     /**
-     * Less-than or equals operator ("<=")
+     * Less-than or equals operator ("&lt;=")
      */
     OP_LE(2003, "<="),
 
     /**
-     * Less-than operator ("<")
+     * Less-than operator ("&lt;")
      */
     OP_LT(2004, "<"),
 
     /**
-     * Grater-than or equals operator (">=")
+     * Grater-than or equals operator ("&gt;=")
      */
     OP_GE(2005, ">="),
 
     /**
-     * Grater-than operator (">")
+     * Grater-than operator ("&gt;")
      */
     OP_GT(2006, ">"),
 

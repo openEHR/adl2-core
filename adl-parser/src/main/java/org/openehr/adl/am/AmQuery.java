@@ -36,12 +36,13 @@ import java.util.List;
 public class AmQuery {
 
     /**
-     * Gets the object on a path <code>path</code> relative to <code>obj</code>
+     * Gets the object on a path {@code path} relative to {@code obj}
      * If not found throws {@link IllegalStateException}.
      * The method returns first object found, and does not check if there are more than one matches.
      *
      * @param obj  Root object from which to search, Must be either an Archetype or CComplexObject
      * @param path path identifying the object to return.
+     * @param <T> type to remove required casting
      * @return The object matching the path relative to obj
      * @throws IllegalStateException if no object is found
      */
@@ -54,12 +55,13 @@ public class AmQuery {
     }
 
     /**
-     * Gets the object on a path <code>path</code> relative to <code>obj</code>
+     * Gets the object on a path {@code path} relative to {@code obj}
      * If not found returns null.
      * The method returns first object found, and does not check if there are more than one matches.
      *
      * @param obj  Root object from which to search, Must be either an Archetype or CComplexObject
      * @param path path identifying the object to return.
+     * @param <T> type to remove required casting
      * @return The object matching the path relative to obj, or null if not found
      */
     @Nullable

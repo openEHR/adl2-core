@@ -254,7 +254,7 @@ durationIntervalConstraint
 terminology:	TERMINOLOGY odinObjectValue;
 annotations:	ANNOTATIONS odinObjectValue;
 
-// Adl structure
+// Odin dadl structure
 odinValue
 	: '<'  ( odinMapValue | odinCodePhraseValueList |  openStringList | numberIntervalConstraint ) '>' ';'?
 	| (('(' typeIdentifier ')') | typeIdentifier)? '<' odinObjectValue? '>' ';'?

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+
 <!--
   ~ ADL2-core
   ~ Copyright (c) 2013-2014 Marand d.o.o. (www.marand.com)
@@ -27,7 +28,7 @@
     </parent>
     <artifactId>model-rm</artifactId>
     <packaging>jar</packaging>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>${project.artifactId}</name>
     <licenses>
         <license>
             <name>GNU AFFERO GENERAL PUBLIC LICENSE</name>

@@ -33,9 +33,9 @@
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <guava.version>18.0</guava.version>
-        <testng.version>6.8.8</testng.version>
-        <jackson.version>2.4.3</jackson.version>
-        <antlr.version>4.5.1</antlr.version>
+        <testng.version>6.9.6</testng.version>
+        <jackson.version>2.6.2</jackson.version>
+        <antlr.version>4.5.1-1</antlr.version>
     </properties>
     <licenses>
         <license>
@@ -87,7 +87,7 @@
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
-                <version>2.0.1</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>

@@ -26,7 +26,6 @@ import com.google.common.cache.LoadingCache;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
-import org.apache.commons.io.FilenameUtils;
 import org.openehr.jaxb.am.DifferentialArchetype;
 import org.openehr.jaxb.am.FlatArchetype;
 
@@ -68,9 +67,9 @@ public class TestingArchetypeProvider implements FlatArchetypeProvider {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 String filename = file.getFileName().toString();
-                String ext = FilenameUtils.getExtension(filename);
+                String ext = getExtension(filename);
                 if (ext.equalsIgnoreCase("adls") || ext.equalsIgnoreCase("adl")) {
-                    String archetypeId = FilenameUtils.getBaseName(filename);
+                    String archetypeId = getBaseName(filename);
                     String relativePath = basePath.relativize(file).toString();
                     result.put(archetypeId, Paths.get(classpath).resolve(relativePath).toString());
                 }
@@ -79,6 +78,26 @@ public class TestingArchetypeProvider implements FlatArchetypeProvider {
         });
 
         return result;
+    }
+
+    private String getBaseName(String filename) {
+        String onlyFilename = Paths.get(filename).getFileName().toString();
+        int lastPeriod = onlyFilename.lastIndexOf('.');
+        if (lastPeriod > 0) { // not a bug
+            return onlyFilename.substring(0, lastPeriod);
+        } else {
+            return onlyFilename;
+        }
+    }
+
+    private String getExtension(String filename) {
+        String onlyFilename = Paths.get(filename).getFileName().toString();
+        int lastPeriod = onlyFilename.lastIndexOf(".");
+        if (lastPeriod > 0) { // not a bug
+            return onlyFilename.substring(lastPeriod + 1);
+        } else {
+            return "";
+        }
     }
 
 

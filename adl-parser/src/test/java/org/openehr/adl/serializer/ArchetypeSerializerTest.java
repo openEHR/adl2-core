@@ -21,7 +21,6 @@
 package org.openehr.adl.serializer;
 
 
-import org.apache.commons.io.FileUtils;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
@@ -29,6 +28,8 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.testng.Assert.assertNotNull;
@@ -106,7 +107,7 @@ public class ArchetypeSerializerTest {
      */
     public static void write(String adl, String file) {
         try {
-            FileUtils.forceMkdir(new File("target"));
+            Files.createDirectories(Paths.get("target"));
             FileWriter writer = new FileWriter(new File("target/" + file));
             writer.write(adl);
             writer.flush();

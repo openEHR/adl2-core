@@ -21,10 +21,9 @@
 package org.openehr.adl.util;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import org.openehr.adl.parser.AdlDeserializer;
 import org.openehr.adl.parser.BomSupportingReader;
-import org.openehr.adl.rm.OpenEhrRmModel;
-import org.apache.commons.io.IOUtils;
 import org.openehr.jaxb.am.DifferentialArchetype;
 
 import java.io.IOException;
@@ -40,13 +39,14 @@ public class TestAdlParser {
         try {
             InputStream in = TestAdlParser.class.getClassLoader().getResourceAsStream(classpathResource);
             try (Reader reader = new BomSupportingReader(in, Charsets.UTF_8)) {
-                return IOUtils.toString(reader);
+                return CharStreams.toString(reader);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public static DifferentialArchetype parseAdlFromString(String adl){
+
+    public static DifferentialArchetype parseAdlFromString(String adl) {
         return new AdlDeserializer().parse(adl);
     }
 

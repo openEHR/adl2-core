@@ -27,7 +27,7 @@ Parse source archetype:
 
 Flatten differential archetype:
 ```java
-    ArchetypeFlattener flattener = new ArchetypeFlattener(new OpenEhrRmModel());
+    ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
     DifferentialArchetype specializedArchetype = ...; // parse source archetype
     FlatArchetype flatParent = ...; // get flattened parent archetype, or null if no parent

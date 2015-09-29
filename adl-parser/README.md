@@ -19,7 +19,8 @@ related Information Models from revision 1.5.4 (July 2014)
 Parse source archetype:
 ```java
     String adl = ...; // read a .adls file into a string
-    DifferentialArchetype archetype = AdlDeserializer.parse(adl);
+    AdlDeserializer adlDeserializer = new AdlDeserializer();
+    DifferentialArchetype archetype = adlDeserializer.parse(adl);
 ```
 
 

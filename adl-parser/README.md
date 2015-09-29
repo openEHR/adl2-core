@@ -24,7 +24,6 @@ Parse source archetype:
 ```
 
 
-
 Flatten differential archetype:
 ```java
     ArchetypeFlattener flattener = new ArchetypeFlattener(new OpenEhrRmModel());
@@ -45,5 +44,10 @@ Validate flat archetype:
     List<AqlValidationError> errors = validator.getErrors();
 ```
 
+Serialize an archetype:
+```java
+    Archetype archetype = ...;
+    String adl = ArchetypeSerializer.serialize(archetype);
+```
 
 

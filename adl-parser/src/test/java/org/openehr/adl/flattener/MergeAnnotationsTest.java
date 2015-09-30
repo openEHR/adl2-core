@@ -20,7 +20,7 @@
 
 package org.openehr.adl.flattener;
 
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
 import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.testng.annotations.Test;
@@ -36,7 +36,7 @@ import static org.fest.assertions.MapAssert.entry;
 public class MergeAnnotationsTest extends FlattenerTestBase {
     @Test
     public void testMergeAnnotations() {
-        FlatArchetype archetype = parseAndFlattenArchetype("adl15/annotations/openEHR-EHR-EVALUATION.annotations_1st_child.v1.adls");
+        Archetype archetype = parseAndFlattenArchetype("adl15/annotations/openEHR-EHR-EVALUATION.annotations_1st_child.v1.adls");
 
         assertThat(archetype.getAnnotations().getItems()).hasSize(1);
 

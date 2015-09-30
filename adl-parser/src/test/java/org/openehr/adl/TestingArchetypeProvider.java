@@ -26,8 +26,7 @@ import com.google.common.cache.LoadingCache;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -42,10 +41,10 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class TestingArchetypeProvider implements FlatArchetypeProvider {
     private final Map<String, String> archetypeIdToClasspathMap;
-    private final LoadingCache<String, FlatArchetype> archetypeIdToArchetypeMap = CacheBuilder.newBuilder()
-            .build(new CacheLoader<String, FlatArchetype>() {
+    private final LoadingCache<String, Archetype> archetypeIdToArchetypeMap = CacheBuilder.newBuilder()
+            .build(new CacheLoader<String, Archetype>() {
                 @Override
-                public FlatArchetype load(String archetypeId) throws Exception {
+                public Archetype load(String archetypeId) throws Exception {
                     return parseAndFlattenArchetype(archetypeId);
                 }
             });
@@ -101,9 +100,9 @@ public class TestingArchetypeProvider implements FlatArchetypeProvider {
     }
 
 
-    private FlatArchetype parseAndFlattenArchetype(String archetypeId) {
-        DifferentialArchetype differential = getDifferentialArchetype(archetypeId);
-        FlatArchetype parent;
+    private Archetype parseAndFlattenArchetype(String archetypeId) {
+        Archetype differential = getDifferentialArchetype(archetypeId);
+        Archetype parent;
         if (differential.getParentArchetypeId() != null) {
             parent = getFlatArchetype(differential.getParentArchetypeId().getValue());
         } else {
@@ -115,14 +114,14 @@ public class TestingArchetypeProvider implements FlatArchetypeProvider {
 
 
     @Override
-    public DifferentialArchetype getDifferentialArchetype(String archetypeId) {
+    public Archetype getDifferentialArchetype(String archetypeId) {
         String classpath = archetypeIdToClasspathMap.get(archetypeId);
         checkState(classpath != null, "No archetype with archetypeId=%s", archetypeId);
         return TestAdlParser.parseAdl(classpath);
     }
 
     @Override
-    public FlatArchetype getFlatArchetype(String archetypeId) {
+    public Archetype getFlatArchetype(String archetypeId) {
         return archetypeIdToArchetypeMap.getUnchecked(archetypeId);
     }
 }

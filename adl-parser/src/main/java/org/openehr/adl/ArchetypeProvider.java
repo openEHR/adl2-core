@@ -20,12 +20,11 @@
 
 package org.openehr.adl;
 
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 /**
  * @author markopi
  */
 public interface ArchetypeProvider {
-    DifferentialArchetype getDifferentialArchetype(String archetypeId);
+    Archetype getDifferentialArchetype(String archetypeId);
 }

@@ -23,8 +23,7 @@ package org.openehr.adl.validator;
 import org.openehr.adl.ParserTestBase;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -54,8 +53,8 @@ public class ArchetypeValidatorTest extends ParserTestBase {
      */
     @Test
     public void testCheckInternalReferences() throws Exception {
-        DifferentialArchetype sourceArchetype = parseArchetype("adl15/validation/adl-test-car.use_node.test.adls");
-        FlatArchetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype sourceArchetype = parseArchetype("adl15/validation/adl-test-car.use_node.test.adls");
+        Archetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, useNodeArchetype);
 
@@ -75,8 +74,8 @@ public class ArchetypeValidatorTest extends ParserTestBase {
 
     @Test
     public void testCheckRmModelConformance() throws Exception {
-        DifferentialArchetype sourceArchetype = parseArchetype("adl15/validation/adl-test-ENTRY.bad_rm_model.v1.adls");
-        FlatArchetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype sourceArchetype = parseArchetype("adl15/validation/adl-test-ENTRY.bad_rm_model.v1.adls");
+        Archetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, useNodeArchetype);
         validator.validate();

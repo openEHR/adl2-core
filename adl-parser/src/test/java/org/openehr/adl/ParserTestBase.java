@@ -43,7 +43,7 @@ public class ParserTestBase {
     public static final MultiplicityInterval MANDATORY_UNBOUNDED = newMultiplicityInterval(1, null);
 
 
-    protected DifferentialArchetype parseArchetype(String classpathResource) {
+    protected Archetype parseArchetype(String classpathResource) {
         return TestAdlParser.parseAdl(classpathResource);
     }
 
@@ -116,7 +116,7 @@ public class ParserTestBase {
 
     // assert CObject has expected values
     protected void assertCObject(CObject obj, String rmTypeName, @Nullable String nodeID,
-            @Nullable IntervalOfInteger occurrences, @Nullable SiblingOrder siblingOrder) {
+                                 @Nullable IntervalOfInteger occurrences, @Nullable SiblingOrder siblingOrder) {
         assertEquals("rmTypeName", rmTypeName, obj.getRmTypeName());
         assertEquals("nodeID", nodeID, obj.getNodeId());
         assertEquals("occurrences", json(occurrences), json(obj.getOccurrences()));
@@ -124,22 +124,22 @@ public class ParserTestBase {
     }
 
     protected void assertCObject(CObject obj, String rmTypeName, @Nullable String nodeID,
-            @Nullable IntervalOfInteger occurrences) {
+                                 @Nullable IntervalOfInteger occurrences) {
         assertCObject(obj, rmTypeName, nodeID, occurrences, null);
     }
 
     // assert CComplexObject object has expected values
     protected void assertCComplexObject(CComplexObject obj, String rmTypeName,
-            @Nullable String nodeID, IntervalOfInteger occurrences,
-            int attributes) {
+                                        @Nullable String nodeID, IntervalOfInteger occurrences,
+                                        int attributes) {
         assertCObject(obj, rmTypeName, nodeID, occurrences);
         assertEquals("attributes.size", attributes, obj.getAttributes().size());
     }
 
     // assert CAttribute has expected values
     protected void assertCAttribute(CAttribute attr, String rmAttributeName,
-            IntervalOfInteger existence,
-            @Nullable Cardinality cardinality, int children) {
+                                    IntervalOfInteger existence,
+                                    @Nullable Cardinality cardinality, int children) {
         assertEquals("rmAttributeName", rmAttributeName,
                 attr.getRmAttributeName());
         assertEquals("existence", json(existence), json(attr.getExistence()));
@@ -149,14 +149,14 @@ public class ParserTestBase {
 
     // assert CAttribute has expected values
     protected void assertCAttribute(CAttribute attr, String rmAttributeName,
-            int children) {
+                                    int children) {
         assertCAttribute(attr, rmAttributeName, null,
                 null, children);
     }
 
     // assertion on primitive types
     protected void assertCBoolean(Object obj, boolean trueValid, boolean falseValid,
-            boolean assumed, boolean hasAssumed) {
+                                  boolean assumed, boolean hasAssumed) {
         CBoolean b = (CBoolean) fetchFirst(obj);
         assertEquals("trueValid", trueValid, b.isTrueValid());
         assertEquals("falseValid", falseValid, b.isFalseValid());
@@ -164,7 +164,7 @@ public class ParserTestBase {
     }
 
     protected void assertCInteger(Object obj, @Nullable IntervalOfInteger interval, @Nullable int[] values,
-            @Nullable Integer assumed) {
+                                  @Nullable Integer assumed) {
         CInteger c = (CInteger) fetchFirst(obj);
         assertEquals("interval", json(interval), json(c.getRange()));
         assertEquals("list", intSet(values), c.getList());
@@ -172,7 +172,7 @@ public class ParserTestBase {
     }
 
     protected void assertCReal(Object obj, @Nullable IntervalOfReal interval, @Nullable double[] values,
-            @Nullable Double assumed) {
+                               @Nullable Double assumed) {
         CReal c;
         if (obj instanceof CAttribute) {
             c = (CReal) fetchFirst(obj);
@@ -185,7 +185,7 @@ public class ParserTestBase {
     }
 
     protected void assertCDate(Object obj, @Nullable String pattern, @Nullable IntervalOfDate interval,
-            @Nullable String[] values, @Nullable String assumed) {
+                               @Nullable String[] values, @Nullable String assumed) {
         CDate c = (CDate) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
         assertEquals("interval", json(interval), json(c.getRange()));
@@ -194,7 +194,7 @@ public class ParserTestBase {
     }
 
     protected void assertCDateTime(Object obj, @Nullable String pattern, @Nullable IntervalOfDateTime interval,
-            @Nullable String[] values, @Nullable String assumed) {
+                                   @Nullable String[] values, @Nullable String assumed) {
 
         CDateTime c = (CDateTime) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
@@ -205,13 +205,13 @@ public class ParserTestBase {
 
     // without assumed value
     protected void assertCDateTime(Object obj, String pattern, IntervalOfDateTime interval,
-            String[] values) {
+                                   String[] values) {
         assertCDateTime(obj, pattern, interval, values, null);
     }
 
 
     protected void assertCTime(Object obj, @Nullable String pattern, @Nullable IntervalOfTime interval,
-            @Nullable String[] values, @Nullable String assumed) {
+                               @Nullable String[] values, @Nullable String assumed) {
 
         CTime c = (CTime) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
@@ -221,7 +221,7 @@ public class ParserTestBase {
     }
 
     protected void assertCCodePhrase(ArchetypeConstraint actual,
-            String terminologyId, @Nullable String[] codes, @Nullable String assumedValue) {
+                                     String terminologyId, @Nullable String[] codes, @Nullable String assumedValue) {
 
         // check type
         assertTrue("CCodePhrase expected, got " + actual.getClass(),
@@ -250,7 +250,7 @@ public class ParserTestBase {
     }
 
     protected void assertCTerminologyCode(ArchetypeConstraint actual,
-            String terminologyId, @Nullable String[] codes, @Nullable String assumedValue) {
+                                          String terminologyId, @Nullable String[] codes, @Nullable String assumedValue) {
 
         // check type
         assertTrue("CTerminologyCode expected, got " + actual.getClass(),
@@ -281,13 +281,13 @@ public class ParserTestBase {
 
     // without assumed value
     protected void assertCTime(Object obj, String pattern, IntervalOfTime interval,
-            String[] values) {
+                               String[] values) {
         assertCTime(obj, pattern, interval, values, null);
     }
 
     // full assertion with CDuration
     protected void assertCDuration(Object obj, @Nullable String pattern, @Nullable IntervalOfDuration interval,
-            @Nullable String assumed) {
+                                   @Nullable String assumed) {
 
         CDuration c = (CDuration) obj;
 //        assertEquals("list", value == null ? null : DvDuration.getInstance(value),
@@ -313,7 +313,7 @@ public class ParserTestBase {
     }
 
     protected void assertCString(Object obj, @Nullable String pattern, @Nullable String[] values,
-            @Nullable String assumedValue) {
+                                 @Nullable String assumedValue) {
         CString c;
         if (obj instanceof CAttribute) {
             c = (CString) fetchFirst(obj);

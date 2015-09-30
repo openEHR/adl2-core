@@ -24,8 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
 import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 import org.openehr.jaxb.rm.StringDictionaryItem;
@@ -50,12 +49,12 @@ public class FlatteningAnnotationsTest {
 
     @Test
     public void testOnlyChild() {
-        DifferentialArchetype parent = TestAdlParser.parseAdl(
+        Archetype parent = TestAdlParser.parseAdl(
                 "adl15/reference/features/annotations/openEHR-EHR-EVALUATION.annotations_parent.v1.adls");
-        DifferentialArchetype specialized = TestAdlParser.parseAdl(
+        Archetype specialized = TestAdlParser.parseAdl(
                 "adl15/reference/features/annotations/openEHR-EHR-EVALUATION.annotations_only_child.v1.adls");
 
-        FlatArchetype flattened = flatten(parent, specialized);
+        Archetype flattened = flatten(parent, specialized);
 
         assertThat(flattened.getAnnotations().getItems()).hasSize(1);
         ResourceAnnotationNodes annotations = flattened.getAnnotations().getItems().get(0);
@@ -73,12 +72,12 @@ public class FlatteningAnnotationsTest {
 
     @Test
     public void testFirstChild() {
-        DifferentialArchetype parent = TestAdlParser.parseAdl(
+        Archetype parent = TestAdlParser.parseAdl(
                 "adl15/reference/features/annotations/openEHR-EHR-EVALUATION.annotations_parent.v1.adls");
-        DifferentialArchetype specialized = TestAdlParser.parseAdl(
+        Archetype specialized = TestAdlParser.parseAdl(
                 "adl15/reference/features/annotations/openEHR-EHR-EVALUATION.annotations_1st_child.v1.adls");
 
-        FlatArchetype flattened = flatten(parent, specialized);
+        Archetype flattened = flatten(parent, specialized);
 
         assertThat(flattened.getAnnotations().getItems()).hasSize(1);
         ResourceAnnotationNodes annotations = flattened.getAnnotations().getItems().get(0);
@@ -115,8 +114,8 @@ public class FlatteningAnnotationsTest {
         throw new IllegalArgumentException("No annotation with path: " + path);
     }
 
-    private FlatArchetype flatten(DifferentialArchetype parent, DifferentialArchetype specialized) {
-        FlatArchetype flatParent = flattener.flatten(null, parent);
+    private Archetype flatten(Archetype parent, Archetype specialized) {
+        Archetype flatParent = flattener.flatten(null, parent);
         return flattener.flatten(flatParent, specialized);
     }
 }

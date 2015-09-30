@@ -28,7 +28,7 @@
 
     <xs:complexType name="OPERATIONAL_TEMPLATE">
         <xs:complexContent>
-            <xs:extension base="FLAT_ARCHETYPE">
+            <xs:extension base="ARCHETYPE">
                 <xs:sequence>
                     <xs:annotation id="annotations_added_20100503">
                         <xs:documentation>Element 'annotations' added 3 May 2010 to provide a location for

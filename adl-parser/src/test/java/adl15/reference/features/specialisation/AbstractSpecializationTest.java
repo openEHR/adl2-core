@@ -23,8 +23,7 @@ package adl15.reference.features.specialisation;
 import org.openehr.adl.flattener.ArchetypeFlattener;
 import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 /**
  * @author Marko Pipan
@@ -34,14 +33,14 @@ abstract public class AbstractSpecializationTest {
 
     protected ArchetypeFlattener FLATTENER = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
-    private DifferentialArchetype parse(String archetypeId) {
+    private Archetype parse(String archetypeId) {
         String classpathResource = RESOURCE_PATTERN.replaceAll("\\$", archetypeId);
         return TestAdlParser.parseAdl(classpathResource);
     }
 
-    protected FlatArchetype getArchetype(String archetypeId) {
-        DifferentialArchetype source = parse(archetypeId);
-        FlatArchetype parent = null;
+    protected Archetype getArchetype(String archetypeId) {
+        Archetype source = parse(archetypeId);
+        Archetype parent = null;
         if (source.getParentArchetypeId() != null) {
             parent = getArchetype(source.getParentArchetypeId().getValue());
         }

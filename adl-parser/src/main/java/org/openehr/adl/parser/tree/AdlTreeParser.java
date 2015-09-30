@@ -41,9 +41,10 @@ import static org.openehr.adl.rm.RmObjectFactory.*;
  */
 public class AdlTreeParser {
 
-    public DifferentialArchetype parseAdl(adlParser.AdlContext context) {
-        DifferentialArchetype result = new DifferentialArchetype();
+    public Archetype parseAdl(adlParser.AdlContext context) {
+        Archetype result = new Archetype();
         parseArchetypeHeader(result, context.header());
+        result.setIsDifferential(true);
         if (context.concept() != null) {
             result.setConcept(collectNonNullText(context.concept().atCode().AT_CODE_VALUE()));
         }
@@ -67,16 +68,6 @@ public class AdlTreeParser {
             result.setAnnotations(parseAnnotations(context.annotations()));
         }
 
-//        for (Tree child : children(adlTree)) {
-//            switch (child.getType()) {
-//                case org.openehr.adl.antlr.AdlParser.ANNOTATIONS:
-//                    result.setAnnotations(new ResourceAnnotations());
-//                    parseAnnotations(result.getAnnotations().getItems(), child.getChild(0));
-//                    break;
-//                default:
-//                    throw new RuntimeRecognitionException(child);
-//            }
-//        }
         return result;
     }
 
@@ -343,7 +334,7 @@ public class AdlTreeParser {
     }
 
 
-    private void parseLanguage(DifferentialArchetype target, adlParser.LanguageContext context) {
+    private void parseLanguage(Archetype target, adlParser.LanguageContext context) {
         OdinObject cLanguage = OdinObject.parse(context.odinObjectValue());
 
         target.setOriginalLanguage(parseCodePhraseListSingleItem(cLanguage.get("original_language").odinCodePhraseValueList()));

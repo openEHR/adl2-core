@@ -56,8 +56,9 @@ public class OperationalTemplateBuilder {
      * @param source flattened archetype representing a template
      * @return operational template
      */
-    public Template build(FlatArchetype source) {
-        checkArgument(source != null && source.isIsTemplate(), "Archetype must be a template");
+    public Template build(Archetype source) {
+        checkArgument(!source.isIsDifferential(), "Archetype must be flattened");
+        checkArgument(source.isIsTemplate(), "Archetype must be a template");
         Template result = createTemplateClone(source);
 
         State state = new State();
@@ -69,14 +70,14 @@ public class OperationalTemplateBuilder {
         return result;
     }
 
-    private void addArchetypeAnnotations(Template result, FlatArchetype source, State state) {
+    private void addArchetypeAnnotations(Template result, Archetype source, State state) {
         ArchetypeWalker.walkConstraints(new AnnotationAddingVisitor(result), source, new AmConstraintContext());
     }
 
     private void buildOntology(Template target, State state) {
-        for (Map.Entry<String, FlatArchetype> entry : state.containedArchetypes.entrySet()) {
+        for (Map.Entry<String, Archetype> entry : state.containedArchetypes.entrySet()) {
             String archetypeId = entry.getKey();
-            FlatArchetype archetype = entry.getValue();
+            Archetype archetype = entry.getValue();
             ArchetypeTerminology source = archetype.getTerminology();
 
             FlatArchetypeOntology dest = new FlatArchetypeOntology();
@@ -105,7 +106,7 @@ public class OperationalTemplateBuilder {
 
     }
 
-    private void resolveReferences(Template target, FlatArchetype source, State state) {
+    private void resolveReferences(Template target, Archetype source, State state) {
         state.archetypeRoots.push(source);
         target.setDefinition(createArchetypeRoot(source, state));
 
@@ -122,7 +123,7 @@ public class OperationalTemplateBuilder {
         } else if (source instanceof CArchetypeRoot) {
             CArchetypeRoot t = (CArchetypeRoot) source;
             final String archetypeId = t.getArchetypeRef();
-            FlatArchetype targetArchetype = archetypeProvider.getFlatArchetype(archetypeId);
+            Archetype targetArchetype = archetypeProvider.getFlatArchetype(archetypeId);
             CObject result = createArchetypeRoot(targetArchetype, state);
             result.setNodeId(source.getNodeId());
             result.setSiblingOrder(source.getSiblingOrder());
@@ -174,7 +175,7 @@ public class OperationalTemplateBuilder {
         }
     }
 
-    private CArchetypeRoot createArchetypeRoot(FlatArchetype source, State state) {
+    private CArchetypeRoot createArchetypeRoot(Archetype source, State state) {
 
         CArchetypeRoot result = new CArchetypeRoot();
         result.setArchetypeRef(source.getArchetypeId().getValue());
@@ -199,16 +200,16 @@ public class OperationalTemplateBuilder {
 
     private class State {
         // current archetype roots, including top-level archetype.
-        private final Deque<FlatArchetype> archetypeRoots = new ArrayDeque<>();
+        private final Deque<Archetype> archetypeRoots = new ArrayDeque<>();
         // all archetypes contained in the template
-        private final Map<String, FlatArchetype> containedArchetypes = new LinkedHashMap<>();
+        private final Map<String, Archetype> containedArchetypes = new LinkedHashMap<>();
 
-        public void pushArchetypeRoot(String archetypeId, FlatArchetype archetype) {
+        public void pushArchetypeRoot(String archetypeId, Archetype archetype) {
             containedArchetypes.put(archetypeId, archetype);
             archetypeRoots.push(archetype);
         }
 
-        public FlatArchetype popArchetypeRoot() {
+        public Archetype popArchetypeRoot() {
             return archetypeRoots.pop();
         }
     }
@@ -267,7 +268,7 @@ public class OperationalTemplateBuilder {
         }
 
         private ResourceAnnotationNodes getOrCreateLanguageAnnotations(Template template, String language) {
-            if (template.getAnnotations()==null) {
+            if (template.getAnnotations() == null) {
                 template.setAnnotations(new ResourceAnnotations());
             }
             for (ResourceAnnotationNodes item : template.getAnnotations().getItems()) {

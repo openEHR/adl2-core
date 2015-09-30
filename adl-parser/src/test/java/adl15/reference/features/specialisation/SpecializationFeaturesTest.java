@@ -29,8 +29,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 
 /**
  * @author Marko Pipan
@@ -38,7 +38,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public class SpecializationFeaturesTest extends AbstractSpecializationTest {
     @Test
     public void testListConstrained() {
-        FlatArchetype archetype = getArchetype("openEHR-EHR-EVALUATION.code_list_constrained.v1");
+        Archetype archetype = getArchetype("openEHR-EHR-EVALUATION.code_list_constrained.v1");
         CTerminologyCode cr = AmQuery.get(archetype, "/data[id2]/items[id3]/value/defining_code");
         assertThat(cr.getCodeList().get(0)).isEqualTo("ac1.1");
     }
@@ -46,7 +46,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
     // should be updated one openEHR-EHR-OBSERVATION.spec_test_parent.v1 is fixed
     @Test
     public void testNodeOrder() {
-        FlatArchetype archetype = getArchetype("openEHR-EHR-OBSERVATION.ordering_parent-merge_children.v1");
+        Archetype archetype = getArchetype("openEHR-EHR-OBSERVATION.ordering_parent-merge_children.v1");
         CComplexObject cobj = AmQuery.get(archetype, "/data[id2]/events[id3]/data[id4]");
         CAttribute citems = cobj.getAttributes().get(0);
 
@@ -77,7 +77,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
 
     @Test
     public void testNarrowDvQuantity() {
-        FlatArchetype archetype = getArchetype("openEHR-EHR-OBSERVATION.narrow_dv_quantity.v1");
+        Archetype archetype = getArchetype("openEHR-EHR-OBSERVATION.narrow_dv_quantity.v1");
 
         CComplexObject cq = AmQuery.get(archetype, "/data[id3]/events[id4]/data[id2]/items[id5]/value");
         assertThat(cq.getAttributes()).hasSize(1);
@@ -98,17 +98,17 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
 
     @Test
     public void testTupleRedefineToSingle() {
-        FlatArchetype archetype = getArchetype("openEHR-EHR-OBSERVATION.tuple_redefine_to_single.v1");
+        Archetype archetype = getArchetype("openEHR-EHR-OBSERVATION.tuple_redefine_to_single.v1");
         CComplexObject cobj = AmQuery.get(archetype, "/data[id2]/events[id3]/data[id4]/items[id6]/value");
         assertThat(cobj.getAttributeTuples()).hasSize(1);
         final CAttributeTuple tuple = cobj.getAttributeTuples().get(0);
         assertThat(tuple.getMembers()).hasSize(3);
         assertThat(tuple.getChildren()).hasSize(1);
-        CReal cr = (CReal)(tuple.getChildren().get(0).getMembers().get(0));
+        CReal cr = (CReal) (tuple.getChildren().get(0).getMembers().get(0));
         assertThat(AmMixins.of(cr.getRange()).isEqualTo(newIntervalOfReal(0.0, null))).isTrue();
-        CString cs = (CString)(tuple.getChildren().get(0).getMembers().get(1));
+        CString cs = (CString) (tuple.getChildren().get(0).getMembers().get(1));
         assertThat(cs.getList()).containsExactly("cm[H20]");
-        CInteger ci = (CInteger)(tuple.getChildren().get(0).getMembers().get(2));
+        CInteger ci = (CInteger) (tuple.getChildren().get(0).getMembers().get(2));
         assertThat(ci.getList()).containsExactly(2);
     }
 
@@ -116,12 +116,11 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
     // need to implement this particular rm model (WHOLE)
     @Test(enabled = false)
     public void testDateTimeSpecializations() {
-        DifferentialArchetype source = TestAdlParser.parseAdl("adl15/reference/features/specialisation/openEHR-TEST_PKG-WHOLE.date_time_specialisations.v1.adls");
-        DifferentialArchetype parent = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-WHOLE.basic_types.v1.adls");
-        FlatArchetype flatParent = FLATTENER.flatten(null, parent);
-        FlatArchetype archetype = FLATTENER.flatten(flatParent, source);
+        Archetype source = TestAdlParser.parseAdl("adl15/reference/features/specialisation/openEHR-TEST_PKG-WHOLE.date_time_specialisations.v1.adls");
+        Archetype parent = TestAdlParser.parseAdl("adl15/reference/features/basic/openEHR-TEST_PKG-WHOLE.basic_types.v1.adls");
+        Archetype flatParent = FLATTENER.flatten(null, parent);
+        Archetype archetype = FLATTENER.flatten(flatParent, source);
     }
-
 
 
 }

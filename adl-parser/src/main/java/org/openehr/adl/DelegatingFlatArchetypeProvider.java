@@ -25,8 +25,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.openehr.adl.flattener.ArchetypeFlattener;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 /**
  * @author Marko Pipan
@@ -34,13 +33,13 @@ import org.openehr.jaxb.am.FlatArchetype;
 public class DelegatingFlatArchetypeProvider implements FlatArchetypeProvider {
     private final ArchetypeProvider archetypeProvider;
     private final ArchetypeFlattener flattener;
-    private final LoadingCache<String, FlatArchetype> flatArchetypeCache = CacheBuilder.newBuilder()
+    private final LoadingCache<String, Archetype> flatArchetypeCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
-            .build(new CacheLoader<String, FlatArchetype>() {
+            .build(new CacheLoader<String, Archetype>() {
                 @Override
-                public FlatArchetype load(String archetypeId) throws Exception {
-                    DifferentialArchetype differentialArchetype = getDifferentialArchetype(archetypeId);
-                    FlatArchetype flatParent = null;
+                public Archetype load(String archetypeId) throws Exception {
+                    Archetype differentialArchetype = getDifferentialArchetype(archetypeId);
+                    Archetype flatParent = null;
                     if (differentialArchetype.getParentArchetypeId() != null) {
                         flatParent = getFlatArchetype(differentialArchetype.getParentArchetypeId().getValue());
                     }
@@ -54,12 +53,12 @@ public class DelegatingFlatArchetypeProvider implements FlatArchetypeProvider {
     }
 
     @Override
-    public DifferentialArchetype getDifferentialArchetype(String archetypeId) {
+    public Archetype getDifferentialArchetype(String archetypeId) {
         return archetypeProvider.getDifferentialArchetype(archetypeId);
     }
 
     @Override
-    public FlatArchetype getFlatArchetype(String archetypeId) {
+    public Archetype getFlatArchetype(String archetypeId) {
         try {
             return flatArchetypeCache.getUnchecked(archetypeId);
         } catch (UncheckedExecutionException e) {

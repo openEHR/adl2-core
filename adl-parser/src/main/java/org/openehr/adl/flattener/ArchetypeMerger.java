@@ -57,7 +57,7 @@ class ArchetypeMerger {
      * @param flatParent  Flat parent archetype
      * @param specialized Specialized archetype
      */
-    void merge(FlatArchetype flatParent, FlatArchetype specialized) {
+    void merge(Archetype flatParent, Archetype specialized) {
         expandAttributeNodes(specialized.getDefinition());
 //        AdlParserPostprocessor.fillRmTypes(rmModel, specialized);
 

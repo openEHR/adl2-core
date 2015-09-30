@@ -249,12 +249,6 @@
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE']">
             <jxb:class name="Archetype" implClass="Archetype"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='FLAT_ARCHETYPE']">
-            <jxb:class name="FlatArchetype" implClass="FlatArchetype"/>
-        </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='DIFFERENTIAL_ARCHETYPE']">
-            <jxb:class name="DifferentialArchetype" implClass="DifferentialArchetype"/>
-        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_CONSTRAINT']" abstract="true">
             <jxb:class name="ArchetypeConstraint" implClass="ArchetypeConstraint"/>
         </jxb:bindings>

@@ -21,8 +21,7 @@
 package org.openehr.adl.util;
 
 import org.openehr.adl.ParserTestBase;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 import org.testng.annotations.Test;
 
 /**
@@ -31,9 +30,9 @@ import org.testng.annotations.Test;
 public class AdlUtilsTest extends ParserTestBase {
     @Test
     public void testTargetCloneEquals() {
-        DifferentialArchetype differential = parseArchetype("adl15/openEHR-EHR-EVALUATION.alert.v1.adls");
+        Archetype differential = parseArchetype("adl15/openEHR-EHR-EVALUATION.alert.v1.adls");
 
-        FlatArchetype targetClone = AdlUtils.createFlatArchetypeClone(differential);
+        Archetype targetClone = AdlUtils.makeClone(differential);
         assertEquals(json(differential), json(targetClone));
     }
 

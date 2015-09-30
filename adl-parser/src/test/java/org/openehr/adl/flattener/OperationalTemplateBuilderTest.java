@@ -50,7 +50,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     @Test
     public void testUseArchetype() throws Exception {
-        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
+        Archetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
 
         Template template = operationalTemplateBuilder.build(archetype);
 
@@ -67,7 +67,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     @Test
     public void testUseNode() throws Exception {
-        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-OBSERVATION.internal_ref_binding.v1");
+        Archetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-OBSERVATION.internal_ref_binding.v1");
 
         Template template = operationalTemplateBuilder.build(archetype);
 
@@ -92,7 +92,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     @Test
     public void testOntologyMerge() throws Exception {
-        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
+        Archetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
 
         Template template = operationalTemplateBuilder.build(archetype);
 
@@ -109,7 +109,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     @Test
     public void testAnnotations() throws Exception {
-        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
+        Archetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.root_use_archetype.v1");
 
         Template template = operationalTemplateBuilder.build(archetype);
         assertThat(template.getAnnotations().getItems()).hasSize(1);
@@ -123,7 +123,7 @@ public class OperationalTemplateBuilderTest extends ParserTestBase {
 
     @Test
     public void testOverrideEmpty() throws Exception {
-        FlatArchetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.override_empty.v1");
+        Archetype archetype = archetypeProvider.getFlatArchetype("openEHR-EHR-COMPOSITION.override_empty.v1");
         CArchetypeRoot cArchetypeRoot = AmQuery.get(archetype, "content");
         assertThat(cArchetypeRoot.getArchetypeRef()).isEqualTo("openEHR-EHR-OBSERVATION.body_weight.v1");
     }

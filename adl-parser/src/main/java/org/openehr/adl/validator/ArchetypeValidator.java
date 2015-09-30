@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Validator for archetype parsed from ADL files
  * <p>
@@ -50,7 +52,7 @@ import java.util.List;
  */
 public class ArchetypeValidator {
     private final RmModel rmModel;
-    private final FlatArchetype archetype;
+    private final Archetype archetype;
     private final List<AqlValidationError> errors = new ArrayList<>();
 
     /**
@@ -59,7 +61,8 @@ public class ArchetypeValidator {
      * @param rmModel Reference model to validate against
      * @param archetype The Archetype to be validated
      */
-    public ArchetypeValidator(RmModel rmModel, FlatArchetype archetype) {
+    public ArchetypeValidator(RmModel rmModel, Archetype archetype) {
+        checkArgument(!archetype.isIsDifferential(), "Validated archetype must be a flat archetype");
         this.rmModel = rmModel;
         this.archetype = archetype;
     }

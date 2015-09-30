@@ -21,14 +21,11 @@
 package org.openehr.adl.flattener;
 
 import org.openehr.adl.rm.RmModel;
-import org.openehr.adl.rm.RmModelException;
-import org.openehr.adl.rm.RmTypeAttribute;
-import org.openehr.adl.util.AdlUtils;
-import org.openehr.jaxb.am.*;
+import org.openehr.jaxb.am.Archetype;
 
 import javax.annotation.Nullable;
 
-import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.openehr.adl.util.AdlUtils.createFlatArchetypeClone;
 
 /**
@@ -52,8 +49,11 @@ public class ArchetypeFlattener {
      * @param differential Differential (source) archetype
      * @return Specialized archetype in flattened form
      */
-    public FlatArchetype flatten(@Nullable FlatArchetype flatParent, DifferentialArchetype differential) {
-        FlatArchetype result = createFlatArchetypeClone(differential);
+    public Archetype flatten(@Nullable Archetype flatParent, Archetype differential) {
+        checkArgument(flatParent == null || !flatParent.isIsDifferential(), "flatParent: Flat parent must be a flat archetype or null");
+        checkArgument(differential.isIsDifferential(), "differential: Can only flatten a differential archetype");
+
+        Archetype result = createFlatArchetypeClone(differential);
 
         if (differential.getParentArchetypeId() != null) {
             if (flatParent == null || !flatParent.getArchetypeId().getValue().startsWith(differential.getParentArchetypeId().getValue())) {

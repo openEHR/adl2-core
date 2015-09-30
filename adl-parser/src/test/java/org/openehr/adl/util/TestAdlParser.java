@@ -24,7 +24,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import org.openehr.adl.parser.AdlDeserializer;
 import org.openehr.adl.parser.BomSupportingReader;
-import org.openehr.jaxb.am.DifferentialArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,12 +46,12 @@ public class TestAdlParser {
         }
     }
 
-    public static DifferentialArchetype parseAdlFromString(String adl) {
+    public static Archetype parseAdlFromString(String adl) {
         return new AdlDeserializer().parse(adl);
     }
 
 
-    public static DifferentialArchetype parseAdl(String classpathResource) {
+    public static Archetype parseAdl(String classpathResource) {
         String adl = readClasspathResource(classpathResource);
         return new AdlDeserializer().parse(adl);
     }

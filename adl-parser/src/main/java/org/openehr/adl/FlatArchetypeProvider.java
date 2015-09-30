@@ -20,11 +20,11 @@
 
 package org.openehr.adl;
 
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 /**
  * @author Marko Pipan
  */
 public interface FlatArchetypeProvider extends ArchetypeProvider {
-    public FlatArchetype getFlatArchetype(String archetypeId);
+    public Archetype getFlatArchetype(String archetypeId);
 }

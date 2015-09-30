@@ -24,8 +24,8 @@
            id="Archetype.xsd">
     <xs:include schemaLocation="../rm/Resource.xsd"/>
 
-    <xs:element name="archetype" type="FLAT_ARCHETYPE"/>
-    <xs:complexType name="ARCHETYPE" abstract="true">
+    <xs:element name="archetype" type="ARCHETYPE"/>
+    <xs:complexType name="ARCHETYPE">
         <xs:complexContent>
             <xs:extension base="AUTHORED_RESOURCE">
                 <xs:sequence>
@@ -34,6 +34,7 @@
                     <xs:element name="adl_version" type="xs:string" minOccurs="0"/>
                     <xs:element name="rm_release" type="xs:string" minOccurs="1"/>
                     <xs:element name="is_generated" type="xs:boolean" minOccurs="1"/>
+                    <xs:element name="is_differential" type="xs:boolean" minOccurs="1"/>
                     <xs:element name="concept" type="xs:string"/>
                     <xs:element name="parent_archetype_id" type="ARCHETYPE_ID" minOccurs="0"/>
                     <xs:element name="definition" type="C_COMPLEX_OBJECT"/>
@@ -43,20 +44,6 @@
                     <xs:element name="is_overlay" type="xs:boolean"/>
 
                 </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="FLAT_ARCHETYPE">
-        <xs:complexContent>
-            <xs:extension base="ARCHETYPE">
-                <xs:sequence/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DIFFERENTIAL_ARCHETYPE">
-        <xs:complexContent>
-            <xs:extension base="ARCHETYPE">
-                <xs:sequence/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

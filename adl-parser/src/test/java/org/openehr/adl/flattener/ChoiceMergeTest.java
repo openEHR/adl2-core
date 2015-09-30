@@ -21,9 +21,9 @@
 package org.openehr.adl.flattener;
 
 import org.openehr.adl.am.AmQuery;
+import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.am.CComplexObject;
-import org.openehr.jaxb.am.FlatArchetype;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -37,7 +37,7 @@ public class ChoiceMergeTest extends FlattenerTestBase {
 
     @Test
     public void testChoiceOverride() {
-        FlatArchetype archetype = parseAndFlattenArchetype("adl14/openEHR-EHR-CLUSTER.amount-range.v1.adl");
+        Archetype archetype = parseAndFlattenArchetype("adl14/openEHR-EHR-CLUSTER.amount-range.v1.adl");
         CAttribute choiceAttribute = ((CComplexObject) AmQuery.get(archetype, "items[at0001.1]")).getAttributes().get(0);
         assertThat(choiceAttribute.getRmAttributeName()).isEqualTo("value");
         assertThat(choiceAttribute.isIsMultiple()).isFalse();

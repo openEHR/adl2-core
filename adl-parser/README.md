@@ -20,7 +20,7 @@ Parse source archetype:
 ```java
     String adl = ...; // read a .adls file into a string
     AdlDeserializer adlDeserializer = new AdlDeserializer();
-    DifferentialArchetype archetype = adlDeserializer.parse(adl);
+    Archetype archetype = adlDeserializer.parse(adl);
 ```
 
 
@@ -29,17 +29,17 @@ Flatten differential archetype:
 ```java
     ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
-    DifferentialArchetype specializedArchetype = ...; // parse source archetype
-    FlatArchetype flatParent = ...; // get flattened parent archetype, or null if no parent
+    Archetype specializedArchetype = ...; // parse source archetype
+    Archetype flatParent = ...; // get flattened parent archetype, or null if no parent
 
-    FlatArchetype flatArchetype = flattener.flatten(flatParent, specializedArchetype);
+    Archetype flatArchetype = flattener.flatten(flatParent, specializedArchetype);
 ```
 
 
 
 Validate flat archetype:
 ```java
-    FlatArchetype flatArchetype = ...; // parse and flatten archetype
+    Archetype flatArchetype = ...; // parse and flatten archetype
     ArchetypeValidator validator = new ArchetypeValidator(new OpenEhrRmModel(), flatArchetype);
     validator.validate();
     List<AqlValidationError> errors = validator.getErrors();

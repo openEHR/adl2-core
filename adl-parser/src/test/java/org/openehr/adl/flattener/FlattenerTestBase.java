@@ -23,8 +23,7 @@ package org.openehr.adl.flattener;
 import org.openehr.adl.ParserTestBase;
 import org.openehr.adl.rm.OpenEhrRmModel;
 import org.openehr.adl.util.TestAdlParser;
-import org.openehr.jaxb.am.DifferentialArchetype;
-import org.openehr.jaxb.am.FlatArchetype;
+import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.rm.ResourceAnnotationNodeItems;
 import org.openehr.jaxb.rm.ResourceAnnotationNodes;
 
@@ -41,9 +40,9 @@ abstract public class FlattenerTestBase extends ParserTestBase {
     private static final Pattern CLASSPATH_PATTERN = Pattern.compile("(.*/)[^/]+(\\.adls?)");
     private final ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
 
-    protected FlatArchetype parseAndFlattenArchetype(String classpathResource) {
-        DifferentialArchetype differential = TestAdlParser.parseAdl(classpathResource);
-        FlatArchetype parent;
+    protected Archetype parseAndFlattenArchetype(String classpathResource) {
+        Archetype differential = TestAdlParser.parseAdl(classpathResource);
+        Archetype parent;
         if (differential.getParentArchetypeId() != null) {
             Matcher m = CLASSPATH_PATTERN.matcher(classpathResource);
             m.find();

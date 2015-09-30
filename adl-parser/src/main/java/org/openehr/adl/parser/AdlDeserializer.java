@@ -22,11 +22,14 @@ package org.openehr.adl.parser;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Lexer;
 import org.openehr.adl.antlr4.generated.adlLexer;
 import org.openehr.adl.antlr4.generated.adlParser;
 import org.openehr.adl.parser.tree.AdlTreeParser;
-import org.openehr.jaxb.am.DifferentialArchetype;
+import org.openehr.jaxb.am.Archetype;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +49,7 @@ public class AdlDeserializer {
      * @return parsed archetype
      * @throws org.openehr.adl.parser.AdlParserException if an error occurred while parsing
      */
-    public DifferentialArchetype parse(String adl) {
+    public Archetype parse(String adl) {
         try {
             return parse(new StringReader(adl));
         } catch (IOException e) {
@@ -55,7 +58,7 @@ public class AdlDeserializer {
         }
     }
 
-    public DifferentialArchetype parse(Reader reader) throws IOException {
+    public Archetype parse(Reader reader) throws IOException {
         try {
             CharStream charStream = new ANTLRInputStream(reader);
             Lexer lexer = new adlLexer(charStream);
@@ -75,7 +78,7 @@ public class AdlDeserializer {
         }
     }
 
-    public DifferentialArchetype parse(InputStream inputStream) throws IOException {
+    public Archetype parse(InputStream inputStream) throws IOException {
         try (BomSupportingReader reader = new BomSupportingReader(inputStream, Charsets.UTF_8)) {
             return parse(reader);
         }

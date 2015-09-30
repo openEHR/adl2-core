@@ -22,7 +22,9 @@ package org.openehr.adl.util;
 
 import com.google.common.base.CaseFormat;
 import org.apache.commons.lang.SerializationUtils;
-import org.openehr.jaxb.am.*;
+import org.openehr.jaxb.am.Archetype;
+import org.openehr.jaxb.am.CObject;
+import org.openehr.jaxb.am.Template;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,6 +32,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author markopi
@@ -87,19 +91,22 @@ public class AdlUtils {
     }
 
 
-    public static FlatArchetype createFlatArchetypeClone(DifferentialArchetype source) {
-        FlatArchetype result = new FlatArchetype();
-        fillArchetypeFields(result, source);
-        return makeClone(result);
+    public static Archetype createFlatArchetypeClone(Archetype source) {
+        checkArgument(source.isIsDifferential(), "source archetype must be a differential archetype");
+        Archetype result = makeClone(source);
+        result.setIsDifferential(false);
+        return result;
     }
 
-    public static DifferentialArchetype createDifferentialArchetypeClone(FlatArchetype source) {
-        DifferentialArchetype result = new DifferentialArchetype();
-        fillArchetypeFields(result, source);
-        return makeClone(result);
+    public static Archetype createDifferentialArchetypeClone(Archetype source) {
+        checkArgument(!source.isIsDifferential(), "source archetype must be a flat archetype");
+        Archetype result = makeClone(source);
+        result.setIsDifferential(true);
+        return result;
     }
 
-    public static Template createTemplateClone(FlatArchetype source) {
+    public static Template createTemplateClone(Archetype source) {
+        checkArgument(!source.isIsDifferential(), "source archetype must be a flat archetype");
         Template result = new Template();
         fillArchetypeFields(result, source);
 
@@ -112,6 +119,7 @@ public class AdlUtils {
         target.setIsControlled(source.isIsControlled());
         target.setArchetypeId(source.getArchetypeId());
         target.setUid(source.getUid());
+        target.setIsDifferential(source.isIsDifferential());
         target.setAdlVersion(source.getAdlVersion());
         target.setConcept(source.getConcept());
         target.setDescription(source.getDescription());

@@ -39,7 +39,7 @@ public class OpenEhrRmModel implements RmModel {
      * Use OpenEhrRmModel.getInstance() instead
      */
     private OpenEhrRmModel() {
-        rmTypeGraph = new RmTypeGraphBuilder().build();
+        rmTypeGraph = new RmTypeGraphBuilder(org.openehr.jaxb.rm.ObjectFactory.class).build();
     }
 
     public static OpenEhrRmModel getInstance() {

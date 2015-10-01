@@ -37,18 +37,23 @@ import static com.google.common.base.Preconditions.checkState;
  * @author markopi
  * @since 3.6.2013
  */
-class RmTypeGraphBuilder {
+public class RmTypeGraphBuilder {
 
     private final Map<String, RmType> rmTypeMappings = new HashMap<>();
     private final Map<Class<?>, RmType> rmClassMappings = new HashMap<>();
     private final Set<Class> nonRmClasses = new HashSet<>();
 
     private final Multimap<String, Class> rmTypeNameClasses = ArrayListMultimap.create();
+    private final Class objectFactoryClass;
+
+    public RmTypeGraphBuilder(Class objectFactoryClass) {
+        this.objectFactoryClass=objectFactoryClass;
+    }
 
     public RmTypeGraph build() {
 
         Map<String, RmType> objectFactoryMappings = new HashMap<>();
-        addObjectFactoryClasses(objectFactoryMappings, org.openehr.jaxb.rm.ObjectFactory.class);
+        addObjectFactoryClasses(objectFactoryMappings, objectFactoryClass);
 
 
         for (RmType rmType : objectFactoryMappings.values()) {

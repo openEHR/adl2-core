@@ -30,41 +30,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 20.6.2013
  */
 public class RmTypeAttribute {
-    private final RmType owner;
-    private final RmType targetType;
+    private final String targetType;
     private final String attributeName;
-    private final String propertyName;
     private final MultiplicityInterval existence;
     private final Cardinality cardinality;
 
-    public RmTypeAttribute(String attributeName, String propertyName, RmType owner, RmType targetType,
-            MultiplicityInterval existence, Cardinality cardinality) {
+    public RmTypeAttribute(String attributeName, String targetType,
+                           MultiplicityInterval existence, Cardinality cardinality) {
         this.attributeName = attributeName;
-        this.propertyName = propertyName;
         this.existence = existence;
-        this.owner = checkNotNull(owner);
         this.targetType = targetType;
-        this.cardinality=cardinality;
+        this.cardinality = cardinality;
     }
 
     public String getAttributeName() {
         return attributeName;
     }
 
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    public RmType getOwner() {
-        return owner;
-    }
-
-    public RmType getTargetType() {
+    public String getType() {
         return targetType;
-    }
-
-    public Class<?> getType() {
-        return targetType.getMainRmClass();
     }
 
     public MultiplicityInterval getExistence() {

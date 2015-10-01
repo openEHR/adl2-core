@@ -304,20 +304,22 @@ class ArchetypeMerger {
         }
 
         // todo what to do on bad rm type?
-        if (!rmModel.rmTypeExists(parent.getRmTypeName())) {
-            return;
-        }
+        if (specialized instanceof CComplexObject) {
+            if (!rmModel.rmTypeExists(parent.getRmTypeName())) {
+                return;
+            }
 
-        RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
-        RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
-
-
-        require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
-                specialized.getRmTypeName(), parent.getRmTypeName());
+            RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
+            RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
 
 
-        if (specialized instanceof CComplexObject && parent instanceof CComplexObject) {
-            flattenCComplexObject(path, (CComplexObject) parent, (CComplexObject) specialized);
+            require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
+                    specialized.getRmTypeName(), parent.getRmTypeName());
+
+
+            if (parent instanceof CComplexObject) {
+                flattenCComplexObject(path, (CComplexObject) parent, (CComplexObject) specialized);
+            }
         }
 
         if (container != null && container.isMatchNegated()) {
@@ -376,7 +378,7 @@ class ArchetypeMerger {
             // rm type on the specialized constraint can only be null on intermediate nodes on differential path.
             // Just accept the parent constraint, since differential paths are only allowed on aom 1.5, where node_id
             // (already checked above) is always required.
-            if (candidate.getRmTypeName() != null) {
+            if (candidate.getRmTypeName() != null && candidate instanceof CComplexObject) {
                 RmType specializedRmType = rmModel.getRmType(candidate.getRmTypeName());
                 if (!specializedRmType.isSubclassOf(parentConstraint.getRmTypeName())) continue;
             }

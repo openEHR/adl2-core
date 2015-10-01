@@ -45,29 +45,12 @@ public class OpenEhrRmModel implements RmModel {
     public static OpenEhrRmModel getInstance() {
         OpenEhrRmModel result = instance;
         if (result == null) {
-            //noinspection deprecation
             result = new OpenEhrRmModel();
             instance = result;
         }
         return result;
     }
 
-    public Class<?> getRmClass(String rmType) {
-        return getRmType(rmType).getMainRmClass();
-    }
-
-    @Override
-    public String getRmTypeName(Class<?> rmClass) {
-        return getRmType(rmClass).getRmType();
-    }
-
-    public RmType getRmType(Class<?> rmClass) {
-        RmType result = rmTypeGraph.tryGetNodeFromRmClass(rmClass);
-        if (result == null) {
-            throw new RmModelException("Unknown RM class: " + rmClass.getName());
-        }
-        return result;
-    }
 
     @Override
     public boolean rmTypeExists(String rmType) {

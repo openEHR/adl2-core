@@ -20,7 +20,9 @@
 
 package org.openehr.adl.rm;
 
-import org.openehr.jaxb.am.CTerminologyCode;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Multimap;
 import org.openehr.jaxb.am.Cardinality;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.openehr.rm.RmObject;
@@ -28,7 +30,6 @@ import org.openehr.rm.RmObject;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlType;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -44,6 +45,7 @@ class RmTypeGraphBuilder {
     private final Map<Class<?>, RmType> rmClassMappings = new HashMap<>();
     private final Set<Class> nonRmClasses = new HashSet<>();
 
+    private final Multimap<String, Class> rmTypeNameClasses = ArrayListMultimap.create();
 
     public RmTypeGraph build() {
 
@@ -54,26 +56,11 @@ class RmTypeGraphBuilder {
         for (RmType rmType : objectFactoryMappings.values()) {
             checkState(!rmTypeMappings.containsKey(rmType.getRmType()));
             rmTypeMappings.put(rmType.getRmType(), rmType);
-            for (Class<?> cls : rmType.getRmClasses()) {
+            for (Class<?> cls : rmTypeNameClasses.get(rmType.getRmType())) {
                 checkState(!rmClassMappings.containsKey(cls));
                 rmClassMappings.put(cls, rmType);
             }
         }
-
-
-        // Add primitives
-        addRmType(RmTypes.BOOLEAN, Boolean.class, Boolean.TYPE);
-        addRmType(RmTypes.DURATION, String.class);
-        addRmType(RmTypes.DATE_TIME, String.class);
-        addRmType(RmTypes.STRING, String.class);
-        addRmType(RmTypes.INTEGER, Long.class, Long.TYPE, Integer.class, Integer.TYPE,
-                Short.class, Short.TYPE, Byte.class, Byte.TYPE, BigInteger.class);
-        addRmType(RmTypes.REAL, Double.class, Double.TYPE, Float.class, Float.TYPE);
-        addRmType(RmTypes.TERMINOLOGY_CODE, CTerminologyCode.class);
-        // Add other
-        addRmType(RmTypes.LIST, List.class);
-        addRmType(RmTypes.DATE, Date.class);
-        addRmType(RmTypes.OBJECT, Object.class);
 
 
         buildAttributes();
@@ -84,14 +71,17 @@ class RmTypeGraphBuilder {
         final Set<RmType> processed = new HashSet<>();
 
         for (RmType rmType : rmTypeMappings.values()) {
-            if (processed.contains(rmType) || nonRmClasses.contains(rmType.getMainRmClass())) continue;
+            Class mainRmClass = Iterables.getFirst(rmTypeNameClasses.get(rmType.getRmType()), null);
+            if (processed.contains(rmType) || nonRmClasses.contains(mainRmClass)) continue;
 
-            Iterable<RmBeanReflector.RmAttribute> attributes = RmBeanReflector.listProperties(rmType.getMainRmClass());
+            Iterable<RmBeanReflector.RmAttribute> attributes = RmBeanReflector.listProperties(mainRmClass);
             List<RmTypeAttribute> resultAttributes = new ArrayList<>();
             for (RmBeanReflector.RmAttribute attribute : attributes) {
                 RmType type = rmClassMappings.get(attribute.getTargetType());
 
-                resultAttributes.add(new RmTypeAttribute(attribute.getAttribute(), attribute.getProperty().getName(), rmType, type,
+                String targetType = type != null ? type.getRmType() : null;
+                resultAttributes.add(new RmTypeAttribute(
+                        attribute.getAttribute(), targetType,
                         buildExistence(attribute.getOccurrences()), buildCardinality(attribute)));
             }
             rmType.setAttributes(resultAttributes);
@@ -121,10 +111,12 @@ class RmTypeGraphBuilder {
         // check removed because VERSION is both in rm and thinkehr model
         // checkState(!rmTypeMappings.containsKey(rmType), "RmType already exists: %s", rmType);
 
-        RmType rmTypeNode = new RmType(rmType, rmMainClass, otherRmClasses);
+        RmType rmTypeNode = new RmType(rmType);
+        rmTypeNameClasses.put(rmTypeNode.getRmType(), rmMainClass);
+        rmTypeNameClasses.putAll(rmTypeNode.getRmType(), Arrays.asList(otherRmClasses));
 
         rmTypeMappings.put(rmType, rmTypeNode);
-        for (Class<?> rmClass : rmTypeNode.getRmClasses()) {
+        for (Class<?> rmClass : rmTypeNameClasses.get(rmTypeNode.getRmType())) {
             rmClassMappings.put(rmClass, rmTypeNode);
             nonRmClasses.add(rmClass);
         }
@@ -146,7 +138,8 @@ class RmTypeGraphBuilder {
             String rmType = xmlType != null ? xmlType.name() : RmTypes.RM_OBJECT;
             RmType node = target.get(rmType);
             if (node == null) {
-                node = new RmType(rmType, rmClass);
+                node = new RmType(rmType);
+                rmTypeNameClasses.put(rmType, rmClass);
 
                 target.put(rmType, node);
             }

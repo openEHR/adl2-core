@@ -36,20 +36,10 @@ public final class RmType {
     private RmType parent;
     private ImmutableList<RmType> children;
     private String rmType;
-    private Class mainRmClass;
-    private List<Class> rmClasses;
     private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
-    private String dataAttribute;
 
-    public RmType(String rmType, Class rmClass, Class... otherRmClasses) {
+    public RmType(String rmType) {
         this.rmType = rmType;
-
-        this.mainRmClass = rmClass;
-        this.rmClasses = new ImmutableList.Builder<Class>()
-                .add(rmClass)
-                .addAll(Arrays.asList(otherRmClasses))
-                .build();
-
         children = ImmutableList.of();
     }
 
@@ -80,17 +70,11 @@ public final class RmType {
         return result.build();
     }
 
-    public Class getMainRmClass() {
-        return mainRmClass;
-    }
 
     public RmType getParent() {
         return parent;
     }
 
-    public List<Class> getRmClasses() {
-        return rmClasses;
-    }
 
     public String getRmType() {
         return rmType;
@@ -116,14 +100,6 @@ public final class RmType {
         return result;
     }
 
-
-    public String getDataAttribute() {
-        return dataAttribute;
-    }
-
-    public void setDataAttribute(String dataAttribute) {
-        this.dataAttribute = dataAttribute;
-    }
 
 
     public boolean isSubclassOf(String rmType) {

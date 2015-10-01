@@ -28,25 +28,9 @@ import java.util.List;
  * @author markopi
  */
 public interface RmModel {
-    /**
-     * Maps a type name to a java class with that name.
-     *
-     * @param rmType type name
-     * @return java class
-     * @throws org.openehr.adl.rm.RmModelException if no such rm type exists
-     */
-    Class<?> getRmClass(String rmType);
 
     RmType getRmType(String rmType);
 
-    /**
-     * Gets the type name of a particular java class
-     *
-     * @param rmClass java class
-     * @return type name
-     * @throws org.openehr.adl.rm.RmModelException if java class does not represent a rm type
-     */
-    String getRmTypeName(Class<?> rmClass);
 
     /**
      * checks if a given rm type exists

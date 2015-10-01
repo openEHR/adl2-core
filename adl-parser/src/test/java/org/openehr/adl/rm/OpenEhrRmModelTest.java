@@ -40,12 +40,11 @@ public class OpenEhrRmModelTest {
 
     @Test
     public void testGetExisting() throws Exception {
-        assertThat(rmModel.getRmClass("DV_AMOUNT")).isEqualTo(DvAmount.class);
-        assertThat(rmModel.getRmTypeName(DvText.class)).isEqualTo("DV_TEXT");
+        assertThat(rmModel.getRmType("DV_AMOUNT")).isNotNull();
     }
 
     @Test(expectedExceptions = RmModelException.class, expectedExceptionsMessageRegExp = "Unknown.*DV_NONE")
     public void testGetAbsent() throws Exception {
-        rmModel.getRmClass("DV_NONE");
+        rmModel.getRmType("DV_NONE");
     }
 }

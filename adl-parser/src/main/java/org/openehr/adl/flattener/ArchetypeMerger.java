@@ -59,7 +59,6 @@ class ArchetypeMerger {
      */
     void merge(Archetype flatParent, Archetype specialized) {
         expandAttributeNodes(specialized.getDefinition());
-//        AdlParserPostprocessor.fillRmTypes(rmModel, specialized);
 
         flattenCObject(RmPath.ROOT, null, flatParent.getDefinition(), specialized.getDefinition());
 
@@ -229,11 +228,7 @@ class ArchetypeMerger {
                 if (pair.parent != null) {
                     flattenCObject(childPath, specialized, pair.parent, pair.specialized);
                 }
-                // node removal on occurrences=0 should be done only for operational template (maybe)
-//                if (pair.specialized.getOccurrences() == null || !isEmptyInterval(pair.specialized.getOccurrences())) {
-//                    result.add(pair.specialized);
-//                }
-                    result.add(pair.specialized);
+                result.add(pair.specialized);
             } else {
                 result.add(makeClone(checkNotNull(pair.parent)));
             }
@@ -299,7 +294,7 @@ class ArchetypeMerger {
     private void flattenCObject(RmPath path, @Nullable CAttribute container, CObject parent, CObject specialized) {
         specialized.setNodeId(first(specialized.getNodeId(), parent.getNodeId()));
         specialized.setRmTypeName(first(specialized.getRmTypeName(), parent.getRmTypeName()));
-        if (specialized.getNodeId()!=null && specialized.getNodeId().equals(parent.getNodeId())) {
+        if (specialized.getNodeId() != null && specialized.getNodeId().equals(parent.getNodeId())) {
             specialized.setOccurrences(first(specialized.getOccurrences(), parent.getOccurrences()));
         }
 

@@ -115,7 +115,6 @@ public class AmQuery {
             return findChildInAttributes(((CComplexObject) obj).getAttributes(), attribute, atCode);
         } else {
             throw new AssertionError(obj);
-//            return findWithReflection(obj, attribute);
         }
     }
 

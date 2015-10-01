@@ -353,10 +353,7 @@ abstract class AdlTreePrimitiveConstraintsParser  {
     static String collectRegularExpression(adlParser.RegularExpressionContext tRegularExpression) {
         int start = tRegularExpression.start.getStartIndex();
         int stop = tRegularExpression.stop.getStopIndex();
-        String result = tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start+1, stop-1));
-//        String result = collectNonNullText(tRegularExpression);
-//        result = result.substring(1, result.length() - 1);
-        return result;
+        return tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start+1, stop-1));
     }
 
     private static class TempInterval<T> extends Interval {

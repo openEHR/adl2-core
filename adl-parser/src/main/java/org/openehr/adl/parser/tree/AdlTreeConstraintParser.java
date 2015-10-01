@@ -324,18 +324,6 @@ abstract class AdlTreeConstraintParser {
 
         return result;
     }
-//    private static CCodePhrase parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
-//        CCodePhrase result = new CCodePhrase();
-//        result.setTerminologyId(newTerminologyId(collectText(context.tid)));
-//        if (context.assumed!=null) {
-//            result.setAssumedValue(newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.assumed)));
-//        }
-//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
-//            result.getCodeList().add(collectText(cCodeIdentifier));
-//        }
-//
-//        return result;
-//    }
 
     private static Cardinality parseCardinality(adlParser.CardinalityContext context) {
         if (context == null) return null;

@@ -26,8 +26,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import static org.openehr.adl.util.AdlUtils.doubleToFloat;
-import static org.openehr.adl.util.AdlUtils.emptyIfNull;
 
 /**
  * @author markopi
@@ -60,7 +58,7 @@ public class RmObjectFactory {
     }
 
     public static TranslationDetails newTranslationDetails(CodePhrase language, Map<String, String> author, String accrediation,
-            Map<String, String> otherDetails) {
+                                                           Map<String, String> otherDetails) {
         TranslationDetails result = new TranslationDetails();
         result.setLanguage(language);
         addStringDictionaryItems(result.getAuthor(), author);
@@ -85,7 +83,7 @@ public class RmObjectFactory {
 
 
     public static IntervalOfInteger newIntervalOfInteger(@Nullable Integer lower, @Nullable Integer upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                         boolean upperIncluded) {
         IntervalOfInteger result = new IntervalOfInteger();
         result.setLower(lower);
         result.setUpper(upper);
@@ -95,12 +93,13 @@ public class RmObjectFactory {
         result.setUpperIncluded(upperIncluded);
         return result;
     }
+
     public static IntervalOfInteger newIntervalOfInteger(@Nullable Integer lower, @Nullable Integer upper) {
         return newIntervalOfInteger(lower, upper, lower != null, upper != null);
     }
 
     public static MultiplicityInterval newMultiplicityInterval(@Nullable Integer lower, @Nullable Integer upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                               boolean upperIncluded) {
         MultiplicityInterval result = new MultiplicityInterval();
         result.setLower(lower);
         result.setUpper(upper);
@@ -116,19 +115,18 @@ public class RmObjectFactory {
     }
 
 
-
     public static IntervalOfReal newIntervalOfReal(@Nullable Double lower, @Nullable Double upper) {
         return newIntervalOfReal(lower, upper, lower != null, upper != null);
     }
 
     public static IntervalOfReal newIntervalOfReal(@Nullable Double lower, @Nullable Double upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         return newIntervalOfReal(doubleToFloat(lower), doubleToFloat(upper), lowerIncluded, upperIncluded);
     }
 
 
     public static IntervalOfReal newIntervalOfReal(@Nullable Float lower, @Nullable Float upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         IntervalOfReal result = new IntervalOfReal();
         result.setLower(lower);
         result.setUpper(upper);
@@ -150,7 +148,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDate newIntervalOfDate(@Nullable String lower, @Nullable String upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         IntervalOfDate result = new IntervalOfDate();
         result.setLower(lower);
         result.setUpper(upper);
@@ -162,7 +160,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDate newIntervalOfDate(@Nullable DvDate lower, @Nullable DvDate upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         return newIntervalOfDate(lower != null ? lower.getValue() : null, upper != null ? upper.getValue() : null, lowerIncluded,
                 upperIncluded);
     }
@@ -178,7 +176,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfTime newIntervalOfTime(@Nullable String lower, @Nullable String upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         IntervalOfTime result = new IntervalOfTime();
         result.setLower(lower);
         result.setUpper(upper);
@@ -190,7 +188,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfTime newIntervalOfTime(@Nullable DvTime lower, @Nullable DvTime upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                   boolean upperIncluded) {
         return newIntervalOfTime(lower != null ? lower.getValue() : null, upper != null ? upper.getValue() : null, lowerIncluded,
                 upperIncluded);
     }
@@ -206,7 +204,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDateTime newIntervalOfDateTime(@Nullable String lower, @Nullable String upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                           boolean upperIncluded) {
         IntervalOfDateTime result = new IntervalOfDateTime();
         result.setLower(lower);
         result.setUpper(upper);
@@ -218,7 +216,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDateTime newIntervalOfDateTime(@Nullable DvDateTime lower, @Nullable DvDateTime upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                           boolean upperIncluded) {
         return newIntervalOfDateTime(lower != null ? lower.getValue() : null, upper != null ? upper.getValue() : null, lowerIncluded,
                 upperIncluded);
     }
@@ -234,7 +232,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDuration newIntervalOfDuration(@Nullable String lower, @Nullable String upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                           boolean upperIncluded) {
         IntervalOfDuration result = new IntervalOfDuration();
         result.setLower(lower);
         result.setUpper(upper);
@@ -246,7 +244,7 @@ public class RmObjectFactory {
     }
 
     public static IntervalOfDuration newIntervalOfDuration(@Nullable DvDuration lower, @Nullable DvDuration upper, boolean lowerIncluded,
-            boolean upperIncluded) {
+                                                           boolean upperIncluded) {
         return newIntervalOfDuration(lower != null ? lower.getValue() : null, upper != null ? upper.getValue() : null, lowerIncluded,
                 upperIncluded);
     }
@@ -271,6 +269,11 @@ public class RmObjectFactory {
         result.setMagnitude(magnitude);
         result.setPrecision(precision);
         return result;
+    }
+
+    @Nullable
+    private static Float doubleToFloat(@Nullable Double d) {
+        return d != null ? d.floatValue() : null;
     }
 
 

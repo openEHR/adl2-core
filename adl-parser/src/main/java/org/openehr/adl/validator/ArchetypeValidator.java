@@ -31,12 +31,14 @@ import org.openehr.adl.am.AmQuery;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.adl.util.walker.*;
 import org.openehr.jaxb.am.*;
+import org.openehr.jaxb.rm.MultiplicityInterval;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 
 /**
  * Validator for archetype parsed from ADL files
@@ -145,11 +147,14 @@ public class ArchetypeValidator {
                     RmTypeAttribute rmAttribute = rmModel.getRmAttribute(
                             container.getRmTypeName(), attr.getRmAttributeName());
                     if (attr.getExistence()!=null) {
-                        if (!AmMixins.of(rmAttribute.getExistence()).contains(attr.getExistence())) {
+                        MultiplicityInterval interval = newMultiplicityInterval(
+                                rmAttribute.getExistence().getLower(),
+                                rmAttribute.getExistence().getUpper());
+                        if (!AmMixins.of(interval).contains(attr.getExistence())) {
                             error(AqlValidationError.Level.ERROR,
                                     "Existence of attribute at %s/%s does not conform to RM model: %s is not contained in %s",
                                     context.getRmPath(), attr.getRmAttributeName(),
-                                    AmMixins.of(attr.getExistence()), AmMixins.of(rmAttribute.getExistence())
+                                    AmMixins.of(attr.getExistence()), AmMixins.of(interval)
                             );
                         }
                     }

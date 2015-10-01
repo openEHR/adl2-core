@@ -20,12 +20,11 @@
 
 package org.openehr.adl.rm;
 
-import org.openehr.adl.AdlException;
 
 /**
  * @author markopi
  */
-public class RmModelException extends AdlException {
+public class RmModelException extends RuntimeException {
 
     private static final long serialVersionUID = -5462726199786846680L;
 

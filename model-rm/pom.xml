@@ -17,7 +17,7 @@
   ~ GNU Affero General Public License for more details.
   ~
   ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses />.
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -36,61 +36,10 @@
             <url>http://www.gnu.org/licenses/agpl-3.0.html</url>
         </license>
     </licenses>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>rm</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <extension>true</extension>
-                            <args>
-                                <arg>-Xinheritance</arg>
-                            </args>
-                            <bindingDirectory>src/main/resources/org/openehr/xjb/rm</bindingDirectory>
-                            <bindingIncludes>
-                                <bindingInclude>openehr-rm-bindings.xjb</bindingInclude>
-                            </bindingIncludes>
-                            <schemaIncludes>
-                                <schemaInclude>*.xsd</schemaInclude>
-                            </schemaIncludes>
-                            <schemaDirectory>src/main/resources/org/openehr/xsd/rm</schemaDirectory>
-                            <generatePackage>org.openehr.jaxb.rm</generatePackage>
-                            <forceRegenerate>true</forceRegenerate>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jvnet.jaxb2_commons</groupId>
-                        <artifactId>jaxb2-basics</artifactId>
-                        <version>0.5.3</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <excludePackageNames>org.openehr.jaxb</excludePackageNames>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

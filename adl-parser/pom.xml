@@ -40,6 +40,14 @@
             <groupId>org.openehr.adl2-core</groupId>
             <artifactId>model-am</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openehr.adl2-core</groupId>
+            <artifactId>model-rm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehr.adl2-core</groupId>
+            <artifactId>model-rm-openehr</artifactId>
+        </dependency>
         <!-- google -->
         <dependency>
             <groupId>com.google.guava</groupId>

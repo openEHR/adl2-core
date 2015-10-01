@@ -23,7 +23,6 @@ package org.openehr.adl.rm;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
-import org.openehr.jaxb.am.Cardinality;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.openehr.rm.RmObject;
 
@@ -33,7 +32,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkState;
-import static org.openehr.adl.rm.RmObjectFactory.newMultiplicityInterval;
 
 /**
  * @author markopi
@@ -89,18 +87,17 @@ class RmTypeGraphBuilder {
         }
     }
 
-    private MultiplicityInterval buildExistence(MultiplicityInterval occurrences) {
-        MultiplicityInterval result = newMultiplicityInterval(occurrences.getLower(), occurrences.getUpper());
-        return result;
+    private RmMultiplicity buildExistence(MultiplicityInterval occurrences) {
+        return new RmMultiplicity(occurrences.getLower(), occurrences.getUpper());
     }
 
     @Nullable
-    private Cardinality buildCardinality(RmBeanReflector.RmAttribute attribute) {
+    private RmCardinality buildCardinality(RmBeanReflector.RmAttribute attribute) {
         if (attribute.getOccurrences().getUpper() != null && attribute.getOccurrences().getUpper() == 1) {
             return null;
         }
-        Cardinality result = new Cardinality();
-        result.setInterval(newMultiplicityInterval(null, null));
+        RmCardinality result = new RmCardinality();
+        result.setInterval(new RmMultiplicity());
         result.setIsOrdered(true);
         result.setIsUnique(false);
         return result;

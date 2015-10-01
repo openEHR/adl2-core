@@ -20,11 +20,6 @@
 
 package org.openehr.adl.rm;
 
-import org.openehr.jaxb.am.Cardinality;
-import org.openehr.jaxb.rm.MultiplicityInterval;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * @author markopi
  * @since 20.6.2013
@@ -32,11 +27,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RmTypeAttribute {
     private final String targetType;
     private final String attributeName;
-    private final MultiplicityInterval existence;
-    private final Cardinality cardinality;
+    private final RmMultiplicity existence;
+    private final RmCardinality cardinality;
 
     public RmTypeAttribute(String attributeName, String targetType,
-                           MultiplicityInterval existence, Cardinality cardinality) {
+                           RmMultiplicity existence, RmCardinality cardinality) {
         this.attributeName = attributeName;
         this.existence = existence;
         this.targetType = targetType;
@@ -51,11 +46,11 @@ public class RmTypeAttribute {
         return targetType;
     }
 
-    public MultiplicityInterval getExistence() {
+    public RmMultiplicity getExistence() {
         return existence;
     }
 
-    public Cardinality getCardinality() {
+    public RmCardinality getCardinality() {
         return cardinality;
     }
 }

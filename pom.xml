@@ -53,6 +53,7 @@
         <module>adl-parser</module>
         <module>model-am</module>
         <module>model-rm</module>
+        <module>model-rm-openehr</module>
     </modules>
     <developers>
         <developer>
@@ -77,6 +78,11 @@
             <dependency>
                 <groupId>org.openehr.adl2-core</groupId>
                 <artifactId>model-rm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehr.adl2-core</groupId>
+                <artifactId>model-rm-openehr</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

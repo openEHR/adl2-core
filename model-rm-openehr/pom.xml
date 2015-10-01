@@ -27,7 +27,7 @@
         <artifactId>adl2-core</artifactId>
         <version>1.2.2-SNAPSHOT</version>
     </parent>
-    <artifactId>model-am</artifactId>
+    <artifactId>model-rm-openehr</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <licenses>
@@ -36,12 +36,6 @@
             <url>http://www.gnu.org/licenses/agpl-3.0.html</url>
         </license>
     </licenses>
-    <dependencies>
-        <dependency>
-            <groupId>org.openehr.adl2-core</groupId>
-            <artifactId>model-rm-openehr</artifactId>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -49,7 +43,7 @@
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>am</id>
+                        <id>rm</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
@@ -58,15 +52,15 @@
                             <args>
                                 <arg>-Xinheritance</arg>
                             </args>
-                            <bindingDirectory>src/main/resources/org/openehr/xjb/am</bindingDirectory>
+                            <bindingDirectory>src/main/resources/org/openehr/xjb/rm</bindingDirectory>
                             <bindingIncludes>
-                                <bindingInclude>openehr-am-bindings.xjb</bindingInclude>
+                                <bindingInclude>openehr-rm-bindings.xjb</bindingInclude>
                             </bindingIncludes>
                             <schemaIncludes>
                                 <schemaInclude>*.xsd</schemaInclude>
                             </schemaIncludes>
-                            <schemaDirectory>src/main/resources/org/openehr/xsd/am</schemaDirectory>
-                            <generatePackage>org.openehr.jaxb.am</generatePackage>
+                            <schemaDirectory>src/main/resources/org/openehr/xsd/rm</schemaDirectory>
+                            <generatePackage>org.openehr.jaxb.rm</generatePackage>
                             <forceRegenerate>true</forceRegenerate>
                         </configuration>
                     </execution>
@@ -81,6 +75,23 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.openehr.adl2-core</groupId>
+            <artifactId>model-rm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <!-- Apache commons -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+
+    </dependencies>
     <profiles>
         <profile>
             <id>release</id>

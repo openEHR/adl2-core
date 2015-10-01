@@ -1,8 +1,0 @@
-REQUIREMENTS:
-
-    - Java 1.7 or higher
-    - Maven 3.0.4 or higher
-
-INSTALLATION:
-
-mvn clean install

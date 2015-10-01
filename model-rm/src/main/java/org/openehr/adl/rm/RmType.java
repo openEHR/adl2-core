@@ -23,7 +23,7 @@ package org.openehr.adl.rm;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public final class RmType {
     private RmType parent;
-    private ImmutableList<RmType> children;
+    private List<RmType> children;
     private String rmType;
     private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
 
@@ -55,7 +55,7 @@ public final class RmType {
         return children;
     }
 
-    private void buildDescendants(ImmutableList.Builder<RmType> result, boolean includeSelf) {
+    private void buildDescendants(List<RmType> result, boolean includeSelf) {
         if (includeSelf) {
             result.add(this);
         }
@@ -65,9 +65,9 @@ public final class RmType {
     }
 
     public List<RmType> getDescendants(boolean includeSelf) {
-        ImmutableList.Builder<RmType> result = new ImmutableList.Builder<>();
+        List<RmType> result = new ArrayList<>();
         buildDescendants(result, includeSelf);
-        return result.build();
+        return result;
     }
 
 
@@ -101,7 +101,6 @@ public final class RmType {
     }
 
 
-
     public boolean isSubclassOf(String rmType) {
         RmType type = this;
         while (type != null) {
@@ -122,7 +121,6 @@ public final class RmType {
         }
         this.attributesMap = ImmutableMap.copyOf(attributesMap);
     }
-
 
 
 }

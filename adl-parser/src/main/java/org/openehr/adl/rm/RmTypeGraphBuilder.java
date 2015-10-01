@@ -106,22 +106,6 @@ class RmTypeGraphBuilder {
         return result;
     }
 
-    // Adds a RmType to builder, checks for duplicates
-    private void addRmType(String rmType, Class<?> rmMainClass, Class<?>... otherRmClasses) {
-        // check removed because VERSION is both in rm and thinkehr model
-        // checkState(!rmTypeMappings.containsKey(rmType), "RmType already exists: %s", rmType);
-
-        RmType rmTypeNode = new RmType(rmType);
-        rmTypeNameClasses.put(rmTypeNode.getRmType(), rmMainClass);
-        rmTypeNameClasses.putAll(rmTypeNode.getRmType(), Arrays.asList(otherRmClasses));
-
-        rmTypeMappings.put(rmType, rmTypeNode);
-        for (Class<?> rmClass : rmTypeNameClasses.get(rmTypeNode.getRmType())) {
-            rmClassMappings.put(rmClass, rmTypeNode);
-            nonRmClasses.add(rmClass);
-        }
-    }
-
     private void addObjectFactoryClasses(Map<String, RmType> target, Class objectFactoryClass) {
         Method[] methods = objectFactoryClass.getDeclaredMethods();
         for (Method m : methods) {

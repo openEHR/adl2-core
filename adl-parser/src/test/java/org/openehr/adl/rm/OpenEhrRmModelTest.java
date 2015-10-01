@@ -20,8 +20,6 @@
 
 package org.openehr.adl.rm;
 
-import org.openehr.jaxb.rm.DvAmount;
-import org.openehr.jaxb.rm.DvText;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -40,7 +38,24 @@ public class OpenEhrRmModelTest {
 
     @Test
     public void testGetExisting() throws Exception {
-        assertThat(rmModel.getRmType("DV_AMOUNT")).isNotNull();
+        assertThat(rmModel.getRmType("DV_TEXT")).isNotNull();
+    }
+
+    @Test
+    public void testGetHierarchy() throws Exception {
+        assertThat(rmModel.getRmType("DV_AMOUNT").getChildren()).containsOnly(
+                rmModel.getRmType("DV_COUNT"),
+                rmModel.getRmType("DV_DURATION"),
+                rmModel.getRmType("DV_QUANTITY"),
+                rmModel.getRmType("DV_PROPORTION")
+        );
+        assertThat(rmModel.getRmType("DV_AMOUNT").getParent()).isEqualTo(rmModel.getRmType("DV_QUANTIFIED"));
+    }
+
+    @Test
+    public void testGetAttributes() throws Exception {
+        assertThat(rmModel.getRmType("DV_CODED_TEXT").getAttributes().keySet()).containsOnly(
+                "defining_code", "encoding", "formatting", "hyperlink", "language", "mappings", "value");
     }
 
     @Test(expectedExceptions = RmModelException.class, expectedExceptionsMessageRegExp = "Unknown.*DV_NONE")

@@ -30,6 +30,8 @@ import javax.annotation.Nonnull;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -222,9 +224,22 @@ public class DAdlSerializer {
         } else if (item instanceof TermBindingItem) {
             TermBindingItem t = (TermBindingItem) item;
             serializeKey(t.getCode());
-            builder.append("<").append(t.getValue()).append(">");
+            if (isUrl(t.getValue())) {
+                builder.append("<").append(t.getValue()).append(">");
+            } else {
+                serialize(t.getValue());
+            }
         } else {
             throw new IllegalArgumentException(item.getClass().getName());
+        }
+    }
+
+    private boolean isUrl(String value) {
+        try {
+            new URL(value);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
         }
     }
 

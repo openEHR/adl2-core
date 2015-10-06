@@ -21,6 +21,8 @@
 package adl15.reference.features.rm_enum_types;
 
 import org.openehr.adl.am.AmQuery;
+import org.openehr.adl.am.mixin.AmMixin;
+import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CComplexObject;
@@ -29,6 +31,7 @@ import org.openehr.jaxb.am.CObject;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Marko Pipan
@@ -43,8 +46,12 @@ public class RmEnumTypesFeaturesTest {
         CObject c1 = AmQuery.find(c, "items[id5]/value");
         CObject c2 = AmQuery.find(c, "items[id7]/value");
 
-        assertThat(((CInteger) AmQuery.find(c1, "type")).getList()).containsExactly(1);
-        assertThat(((CInteger) AmQuery.find(c2, "type")).getList()).containsExactly(2, 3);
+        CInteger ci1 = AmQuery.find(c1, "type");
+        assertTrue(AmMixins.of(ci1.getConstraint().get(0)).isSingleValued(1));
+
+        CInteger ci2 = AmQuery.find(c2, "type");
+        assertTrue(AmMixins.of(ci2.getConstraint().get(0)).isSingleValued(2));
+        assertTrue(AmMixins.of(ci2.getConstraint().get(1)).isSingleValued(3));
     }
 
 }

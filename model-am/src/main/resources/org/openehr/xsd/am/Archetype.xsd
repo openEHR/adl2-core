@@ -309,8 +309,7 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="list" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="range" type="IntervalOfInteger" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfInteger" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="xs:int" minOccurs="0"/>
                     <xs:element name="default_value" type="xs:int" minOccurs="0"/>
                 </xs:sequence>
@@ -321,8 +320,7 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="list" type="xs:float" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="range" type="IntervalOfReal" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfReal" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="xs:float" minOccurs="0"/>
                     <xs:element name="default_value" type="xs:float" minOccurs="0"/>
                 </xs:sequence>

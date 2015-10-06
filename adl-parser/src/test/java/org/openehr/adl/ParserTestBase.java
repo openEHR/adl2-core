@@ -22,6 +22,7 @@ package org.openehr.adl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
@@ -30,6 +31,7 @@ import org.testng.Assert;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.openehr.adl.rm.RmObjectFactory.*;
 
 /**
@@ -177,8 +179,11 @@ public class ParserTestBase {
     protected void assertCInteger(Object obj, @Nullable IntervalOfInteger interval, @Nullable int[] values,
                                   @Nullable Integer assumed) {
         CInteger c = (CInteger) fetchFirst(obj);
-        assertEquals("interval", json(interval), json(c.getRange()));
-        assertEquals("list", intSet(values), c.getList());
+        if (interval==null) {
+            // assertThat(c.getConstraint()).isEmpty();
+        } else {
+            assertTrue("interval", AmMixins.of(interval).isEqualTo(c.getConstraint().get(0)));
+        }
         assertEquals("unexpected assumed value", assumed, c.getAssumedValue());
     }
 
@@ -190,8 +195,11 @@ public class ParserTestBase {
         } else {
             c = (CReal) obj;
         }
-        assertEquals("interval", json(interval), json(c.getRange()));
-        assertEquals("list", floatSet(values), c.getList());
+        if (interval==null) {
+            // assertThat(c.getConstraint()).isEmpty();
+        } else {
+            assertTrue("interval", AmMixins.of(interval).isEqualTo(c.getConstraint().get(0)));
+        }
         assertEquals("unexpected assumed value", assumed != null ? assumed.floatValue() : null, c.getAssumedValue());
     }
 

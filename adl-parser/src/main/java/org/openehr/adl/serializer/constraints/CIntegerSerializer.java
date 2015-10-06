@@ -24,6 +24,7 @@ import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CInteger;
 import org.openehr.jaxb.rm.IntervalOfInteger;
+import org.openehr.jaxb.rm.IntervalOfReal;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -40,20 +41,16 @@ public class CIntegerSerializer extends ConstraintSerializer<CInteger> {
     public void serialize(CInteger cobj) {
         boolean constrained=false;
 
-        if (cobj.getRange() != null) {
-            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
-            constrained=true;
-        }
-        if (!cobj.getList().isEmpty()) {
-            for (int i = 0; i < cobj.getList().size(); i++) {
-                Integer item = cobj.getList().get(i);
-                builder.append(item);
-                if (i < cobj.getList().size() - 1) {
+        if (!cobj.getConstraint().isEmpty()) {
+            boolean first=true;
+            for (IntervalOfInteger intervalOfInteger : cobj.getConstraint()) {
+                if (!first) {
                     builder.append(", ");
                 }
+                builder.append("|").append(AmMixins.of(intervalOfInteger).toString()).append("|");
+                first=false;
             }
             constrained=true;
-
         }
         if (cobj.getAssumedValue() != null) {
             builder.append(";").append(cobj.getAssumedValue());

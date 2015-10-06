@@ -155,9 +155,9 @@ stringConstraint
 	: stringList
 	| regularExpression;
 numberConstraint:
-	numberList|numberIntervalConstraint;
+	numberList | numberIntervalConstraint (',' numberIntervalConstraint)*;
 dateTimeConstraint:
-	DATE_TIME_PATTERN|ISO_DATE_TIME|dateTimeIntervalConstraint;
+	DATE_TIME_PATTERN|ISO_DATE_TIME | dateTimeIntervalConstraint;
 dateConstraint:
 	DATE_PATTERN|ISO_DATE|dateIntervalConstraint;
 timeConstraint:

@@ -202,30 +202,22 @@ public class AmObjectFactory {
         return result;
     }
 
-    public static CInteger newCInteger(IntervalOfInteger interval, @Nullable Collection<Integer> list, @Nullable Integer assumedValue) {
+    public static CInteger newCInteger(IntervalOfInteger interval, @Nullable Integer assumedValue) {
         CInteger result = new CInteger();
         result.setAssumedValue(assumedValue);
-        result.setRange(interval);
-        result.getList().addAll(emptyIfNull(list));
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         return result;
     }
 
-    public static CReal newCReal(IntervalOfReal interval, Collection<Double> list, Double assumedValue) {
-        List<Float> floatList = null;
-        if (list != null) {
-            floatList = new ArrayList<>(list.size());
-            for (Double d : list) {
-                floatList.add(doubleToFloat(d));
-            }
-        }
-        return newCReal(interval, floatList, doubleToFloat(assumedValue));
-    }
 
-    public static CReal newCReal(IntervalOfReal interval, @Nullable Collection<Float> list, @Nullable Float assumedValue) {
+    public static CReal newCReal(IntervalOfReal interval, @Nullable Float assumedValue) {
         CReal result = new CReal();
         result.setAssumedValue(assumedValue);
-        result.setRange(interval);
-        result.getList().addAll(emptyIfNull(list));
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         return result;
 
     }

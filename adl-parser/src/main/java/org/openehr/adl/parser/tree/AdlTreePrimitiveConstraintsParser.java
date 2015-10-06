@@ -22,26 +22,22 @@ package org.openehr.adl.parser.tree;
 
 import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.openehr.adl.antlr4.generated.adlParser;
 import org.openehr.adl.rm.RmTypes;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
-import org.openehr.jaxb.rm.Interval;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.openehr.adl.parser.tree.AdlTreeParserUtils.*;
-import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDate;
-import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfDuration;
+import static org.openehr.adl.rm.RmObjectFactory.*;
 
 /**
  * @author markopi
  */
-abstract class AdlTreePrimitiveConstraintsParser  {
+abstract class AdlTreePrimitiveConstraintsParser {
     static CPrimitiveObject parsePrimitiveValue(adlParser.PrimitiveValueConstraintContext context) {
         if (context.stringConstraint() != null) {
             return parseString(context.stringConstraint(), context.STRING());
@@ -64,7 +60,7 @@ abstract class AdlTreePrimitiveConstraintsParser  {
         if (context.durationConstraint() != null) {
             return parseDuration(context.durationConstraint(), context.DURATION());
         }
-        if (context.codeIdentifierList()!=null) {
+        if (context.codeIdentifierList() != null) {
             return parseCodeIdentifierList(context.codeIdentifierList());
         }
         throw new AssertionError();
@@ -118,11 +114,11 @@ abstract class AdlTreePrimitiveConstraintsParser  {
     static CDuration parseDuration(adlParser.DurationConstraintContext context, TerminalNode assumedValue) {
         CDuration result = new CDuration();
         result.setRmTypeName(RmTypes.DURATION);
-        if (context.pattern!=null) {
+        if (context.pattern != null) {
             String s = context.pattern.getText();
             result.setPattern(s);
         }
-        if (context.singleInterval!=null) {
+        if (context.singleInterval != null) {
             String s = context.singleInterval.getText();
             result.setRange(newIntervalOfDuration(s, s));
         } else if (context.durationIntervalConstraint() != null) {
@@ -212,25 +208,29 @@ abstract class AdlTreePrimitiveConstraintsParser  {
         boolean isInteger[] = {true};
 
         List<Number> numbers = new ArrayList<>();
-        Interval interval = null;
+        List<Interval> intervals = new ArrayList<>();
 
         if (context.numberList() != null) {
             for (adlParser.NumberContext number : context.numberList().number()) {
                 numbers.add(parseNumber(number, isInteger));
             }
-        } else if (context.numberIntervalConstraint() != null) {
-            interval = parseNumberInterval(context.numberIntervalConstraint(), isInteger);
+        }
+
+        for (adlParser.NumberIntervalConstraintContext ctx : context.numberIntervalConstraint()) {
+            intervals.add(parseNumberInterval(ctx, isInteger));
+
         }
 
 
         if (isInteger[0]) {
             CInteger result = new CInteger();
             result.setRmTypeName(RmTypes.INTEGER);
-            if (interval != null) {
-                result.setRange((IntervalOfInteger) interval);
+            for (Interval interval : intervals) {
+                result.getConstraint().add((IntervalOfInteger) interval);
             }
+
             for (Number number : numbers) {
-                result.getList().add(number.intValue());
+                result.getConstraint().add(newIntervalOfInteger(number.intValue(), number.intValue()));
             }
             if (assumedValue != null) {
                 result.setAssumedValue(parseNumber(assumedValue, isInteger).intValue());
@@ -239,11 +239,12 @@ abstract class AdlTreePrimitiveConstraintsParser  {
         } else {
             CReal result = new CReal();
             result.setRmTypeName(RmTypes.REAL);
-            if (interval != null) {
-                result.setRange((IntervalOfReal) interval);
+            for (Interval interval : intervals) {
+                result.getConstraint().add((IntervalOfReal) interval);
+
             }
             for (Number number : numbers) {
-                result.getList().add(number.floatValue());
+                result.getConstraint().add(newIntervalOfReal(number.doubleValue(), number.doubleValue()));
             }
             if (assumedValue != null) {
                 result.setAssumedValue(parseNumber(assumedValue, isInteger).floatValue());
@@ -353,7 +354,7 @@ abstract class AdlTreePrimitiveConstraintsParser  {
     static String collectRegularExpression(adlParser.RegularExpressionContext tRegularExpression) {
         int start = tRegularExpression.start.getStartIndex();
         int stop = tRegularExpression.stop.getStopIndex();
-        return tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start+1, stop-1));
+        return tRegularExpression.start.getInputStream().getText(new org.antlr.v4.runtime.misc.Interval(start + 1, stop - 1));
     }
 
     private static class TempInterval<T> extends Interval {

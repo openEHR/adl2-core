@@ -24,13 +24,16 @@ import org.openehr.adl.am.AmQuery;
 import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
+import org.openehr.jaxb.rm.IntervalOfInteger;
 import org.openehr.jaxb.rm.IntervalOfReal;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * @author Marko Pipan
@@ -125,21 +128,27 @@ public class TuplesFeaturesTest {
 
 
     private void assertOrdinalTuple(CObjectTuple cot, int value, String... symbols) {
-        assertThat(((CInteger) (cot.getMembers().get(0))).getList()).containsExactly(value);
+        List<IntervalOfInteger> intervals = ((CInteger) (cot.getMembers().get(0))).getConstraint();
+        assertThat(intervals).isNotEmpty();
+        assertTrue("interval", AmMixins.of(intervals.get(0)).isSingleValued(value));
+
+        assertTrue("value", AmMixins.of(intervals.get(0)).isSingleValued(value));
         assertThat(((CTerminologyCode) (cot.getMembers().get(1))).getCodeList()).containsExactly(symbols);
     }
 
     private void assertQuantityTuple(CObjectTuple cot, String units, IntervalOfReal expectedRange) {
         assertThat(((CString) (cot.getMembers().get(0))).getConstraint()).containsExactly(units);
 
-        IntervalOfReal actualRange = ((CReal) (cot.getMembers().get(1))).getRange();
+        IntervalOfReal actualRange = ((CReal) (cot.getMembers().get(1))).getConstraint().get(0);
         assertThat(AmMixins.of(actualRange).isEqualTo(expectedRange));
 
     }
 
     private void assertStandardOrdinalAttr(CComplexObject cord, String nodeId, int value, String... symbol) {
         assertThat(cord.getNodeId()).isEqualTo(nodeId);
-        assertThat(((CInteger) AmQuery.get(cord, "value")).getList()).containsExactly(value);
+        CInteger c = AmQuery.get(cord, "value");
+
+        assertTrue("value", AmMixins.of(c.getConstraint().get(0)).isSingleValued(value));
         assertThat(((CTerminologyCode) AmQuery.get(cord, "symbol/defining_code")).getCodeList()).containsExactly(symbol);
     }
 }

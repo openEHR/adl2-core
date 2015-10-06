@@ -31,6 +31,7 @@ import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Marko Pipan
@@ -92,7 +93,8 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
         final CObjectTuple cObjectTuple = ctuple.getChildren().get(0);
         assertThat(cObjectTuple.getMembers()).hasSize(2);
         assertThat(((CString) cObjectTuple.getMembers().get(0)).getConstraint()).containsExactly("°C");
-        assertThat(((CInteger) cObjectTuple.getMembers().get(1)).getList()).containsExactly(1);
+        CInteger ci = (CInteger) cObjectTuple.getMembers().get(1);
+        assertTrue(AmMixins.of(ci.getConstraint().get(0)).isSingleValued(1));
     }
 
 
@@ -105,11 +107,11 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
         assertThat(tuple.getMembers()).hasSize(3);
         assertThat(tuple.getChildren()).hasSize(1);
         CReal cr = (CReal) (tuple.getChildren().get(0).getMembers().get(0));
-        assertThat(AmMixins.of(cr.getRange()).isEqualTo(newIntervalOfReal(0.0, null))).isTrue();
+        assertThat(AmMixins.of(cr.getConstraint().get(0)).isEqualTo(newIntervalOfReal(0.0, null))).isTrue();
         CString cs = (CString) (tuple.getChildren().get(0).getMembers().get(1));
         assertThat(cs.getConstraint()).containsExactly("cm[H20]");
         CInteger ci = (CInteger) (tuple.getChildren().get(0).getMembers().get(2));
-        assertThat(ci.getList()).containsExactly(2);
+        assertTrue(AmMixins.of(ci.getConstraint().get(0)).isSingleValued(2));
     }
 
 

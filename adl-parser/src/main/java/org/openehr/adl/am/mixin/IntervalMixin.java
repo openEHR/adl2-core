@@ -115,4 +115,15 @@ abstract public class IntervalMixin<T extends Interval, V extends Comparable> ex
     }
 
 
+    public boolean isSingleValued(V value) {
+        if (!self.isLowerIncluded() || !self.isUpperIncluded()) return false;
+        if (self.isLowerUnbounded() || self.isUpperUnbounded()) return false;
+        V lower = getLower(self);
+        V upper = getUpper(self);
+        if (lower==null || upper==null) return false;
+
+        if (lower.compareTo(value) != 0) return false;
+        if (upper.compareTo(value) != 0) return false;
+        return true;
+    }
 }

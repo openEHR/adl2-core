@@ -49,19 +49,19 @@ public abstract class CSerializer {
      * @param filename the filename
      */
     protected void write(String adl, String filename) {
-        if (debug) {
-            try {
+        try {
+            if (debug) {
                 System.out.println("adlResult");
                 System.out.println(adl);
-                createTargetIfNotExist();
-                FileWriter writer = new FileWriter(new File("target/" + filename));
-
-                writer.write(adl);
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            createTargetIfNotExist();
+            FileWriter writer = new FileWriter(new File("target/" + filename));
+
+            writer.write(adl);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

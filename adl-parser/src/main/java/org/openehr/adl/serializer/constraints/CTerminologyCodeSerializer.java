@@ -21,7 +21,6 @@
 package org.openehr.adl.serializer.constraints;
 
 import org.openehr.adl.serializer.ArchetypeSerializer;
-import org.openehr.jaxb.am.CObject;
 import org.openehr.jaxb.am.CTerminologyCode;
 
 /**
@@ -47,9 +46,12 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
     private void serializeSingleLine(CTerminologyCode cobj) {
         builder.append("[");
         if (cobj.getTerminologyId() != null) {
-            builder.append(cobj.getTerminologyId()).append("::");
+            builder.append(cobj.getTerminologyId());
         }
         if (!cobj.getCodeList().isEmpty()) {
+            if (cobj.getTerminologyId() != null) {
+                builder.append("::");
+            }
             builder.append(cobj.getCodeList().get(0));
         }
         if (cobj.getAssumedValue() != null) {
@@ -84,7 +86,7 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
 
     @Override
     public boolean isEmpty(CTerminologyCode cobj) {
-        return cobj.getCodeList().isEmpty() && cobj.getAssumedValue()==null && cobj.getTerminologyId()==null;
+        return cobj.getCodeList().isEmpty() && cobj.getAssumedValue() == null && cobj.getTerminologyId() == null;
     }
 
     @Override

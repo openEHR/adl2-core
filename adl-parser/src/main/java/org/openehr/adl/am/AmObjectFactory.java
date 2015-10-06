@@ -272,8 +272,12 @@ public class AmObjectFactory {
 
     public static CBoolean newCBoolean(boolean trueValid, boolean falseValid, Boolean assumedValue) {
         CBoolean result = new CBoolean();
-        result.setTrueValid(trueValid);
-        result.setFalseValid(falseValid);
+        if (trueValid) {
+            result.getConstraint().add(true);
+        }
+        if (falseValid) {
+            result.getConstraint().add(false);
+        }
         result.setAssumedValue(assumedValue);
         return result;
     }

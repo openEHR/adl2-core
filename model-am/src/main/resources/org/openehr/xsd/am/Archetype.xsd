@@ -285,8 +285,7 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="true_valid" type="xs:boolean"/>
-                    <xs:element name="false_valid" type="xs:boolean"/>
+                    <xs:element name="constraint" type="xs:boolean" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="xs:boolean" minOccurs="0"/>
                     <xs:element name="default_value" type="xs:boolean" minOccurs="0"/>
                 </xs:sequence>

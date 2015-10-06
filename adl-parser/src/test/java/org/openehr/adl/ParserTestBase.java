@@ -158,8 +158,19 @@ public class ParserTestBase {
     protected void assertCBoolean(Object obj, boolean trueValid, boolean falseValid,
                                   boolean assumed, boolean hasAssumed) {
         CBoolean b = (CBoolean) fetchFirst(obj);
-        assertEquals("trueValid", trueValid, b.isTrueValid());
-        assertEquals("falseValid", falseValid, b.isFalseValid());
+        if (!b.getConstraint().isEmpty()) {
+            boolean actualTrueValid = false;
+            boolean actualFalseValid = false;
+            for (Boolean aBoolean : b.getConstraint()) {
+                if (aBoolean) {
+                    actualTrueValid = true;
+                } else {
+                    actualFalseValid = true;
+                }
+            }
+            assertEquals("trueValid", trueValid, actualTrueValid);
+            assertEquals("falseValid", falseValid, actualFalseValid);
+        }
         assertEquals("assumed value", hasAssumed ? assumed : null, b.isAssumedValue());
     }
 

@@ -21,10 +21,9 @@
 package org.openehr.adl.serializer.constraints;
 
 import com.google.common.base.Joiner;
-import org.openehr.adl.am.mixin.AmMixins;
+import org.apache.commons.lang.StringUtils;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CBoolean;
-import org.openehr.jaxb.am.CDuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,20 +38,19 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
 
     @Override
     public void serialize(CBoolean cobj) {
-        boolean constrained=false;
+        boolean constrained = false;
 
         List<String> valids = new ArrayList<>();
-        if (cobj.isTrueValid()) {
-            valids.add("True");
-        }
-        if (cobj.isFalseValid()) {
-            valids.add("False");
+        if (!cobj.getConstraint().isEmpty()) {
+            for (Boolean aBoolean : cobj.getConstraint()) {
+                valids.add(StringUtils.capitalize(aBoolean.toString().toLowerCase()));
+            }
         }
 
 
         if (!valids.isEmpty()) {
             builder.append(Joiner.on(", ").join(valids));
-            constrained=true;
+            constrained = true;
         }
 
         if (cobj.isAssumedValue() != null) {

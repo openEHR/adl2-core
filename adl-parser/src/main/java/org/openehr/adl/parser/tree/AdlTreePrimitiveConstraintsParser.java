@@ -315,9 +315,9 @@ abstract class AdlTreePrimitiveConstraintsParser  {
         result.setRmTypeName(RmTypes.BOOLEAN);
         for (adlParser.BoolContext bool : context.bool()) {
             if (bool.TRUE() != null) {
-                result.setTrueValid(true);
+                result.getConstraint().add(true);
             } else {
-                result.setFalseValid(true);
+                result.getConstraint().add(false);
             }
         }
         if (assumedValue != null) {

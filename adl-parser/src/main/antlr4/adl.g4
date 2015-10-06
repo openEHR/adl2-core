@@ -157,11 +157,11 @@ stringConstraint
 numberConstraint:
 	numberList | numberIntervalConstraint (',' numberIntervalConstraint)*;
 dateTimeConstraint:
-	DATE_TIME_PATTERN|ISO_DATE_TIME | dateTimeIntervalConstraint;
+	DATE_TIME_PATTERN|ISO_DATE_TIME | dateTimeIntervalConstraint (',' dateTimeIntervalConstraint)*;
 dateConstraint:
-	DATE_PATTERN|ISO_DATE|dateIntervalConstraint;
+	DATE_PATTERN|ISO_DATE|	dateIntervalConstraint (',' dateIntervalConstraint)*;
 timeConstraint:
-	TIME_PATTERN|ISO_TIME|timeIntervalConstraint;
+	TIME_PATTERN|ISO_TIME| timeIntervalConstraint (',' timeIntervalConstraint)*;
 
 
 durationConstraint

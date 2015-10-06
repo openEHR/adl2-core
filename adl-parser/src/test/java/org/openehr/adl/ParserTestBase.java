@@ -206,8 +206,10 @@ public class ParserTestBase {
     protected void assertCDate(Object obj, @Nullable String pattern, @Nullable IntervalOfDate interval,
                                @Nullable String[] values, @Nullable String assumed) {
         CDate c = (CDate) fetchFirst(obj);
-        assertEquals("pattern", pattern, c.getPattern());
-        assertEquals("interval", json(interval), json(c.getRange()));
+        assertEquals("pattern", pattern, c.getPatternConstraint());
+        if (interval!=null) {
+            assertTrue("interval", AmMixins.of(interval).isEqualTo(c.getConstraint().get(0)));
+        }
         //assertEquals("list", dateSet(values), c.getList());
         assertEquals("assumed value", assumed, c.getAssumedValue());
     }
@@ -216,8 +218,10 @@ public class ParserTestBase {
                                    @Nullable String[] values, @Nullable String assumed) {
 
         CDateTime c = (CDateTime) fetchFirst(obj);
-        assertEquals("pattern", pattern, c.getPattern());
-        assertEquals("interval", json(interval), json(c.getRange()));
+        assertEquals("pattern", pattern, c.getPatternConstraint());
+        if (interval!=null) {
+            assertTrue("interval", AmMixins.of(interval).isEqualTo(c.getConstraint().get(0)));
+        }
         //assertEquals("list", dateTimeSet(values), c.getList());
         assertEquals("assumed value", assumed, c.getAssumedValue());
     }
@@ -233,8 +237,10 @@ public class ParserTestBase {
                                @Nullable String[] values, @Nullable String assumed) {
 
         CTime c = (CTime) fetchFirst(obj);
-        assertEquals("pattern", pattern, c.getPattern());
-        assertEquals("interval", json(interval), json(c.getRange()));
+        assertEquals("pattern", pattern, c.getPatternConstraint());
+        if (interval!=null) {
+            assertTrue("interval", AmMixins.of(interval).isEqualTo(c.getConstraint().get(0)));
+        }
         //assertEquals("list", timeSet(values), c.getList());
         assertEquals("assumed value", assumed, c.getAssumedValue());
     }

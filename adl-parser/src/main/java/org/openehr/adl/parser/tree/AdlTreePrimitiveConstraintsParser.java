@@ -82,14 +82,14 @@ abstract class AdlTreePrimitiveConstraintsParser {
     static CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
         CDate result = new CDate();
         result.setRmTypeName(RmTypes.DATE);
-        result.setPattern(collectText(context.DATE_PATTERN()));
+        result.setPatternConstraint(collectText(context.DATE_PATTERN()));
         if (context.ISO_DATE() != null) {
             // should go to list attribute, but there is none on CDate class
 //            String dateStr = collectText(context.ISO_DATE());
 //            result.setRange(newIntervalOfDate(dateStr, dateStr));
         }
-        if (context.dateIntervalConstraint() != null) {
-            result.setRange(parseDateInterval(context.dateIntervalConstraint()));
+        for (adlParser.DateIntervalConstraintContext ctx : context.dateIntervalConstraint()) {
+            result.getConstraint().add(parseDateInterval(ctx));
         }
         result.setAssumedValue(collectText(assumedValue));
         return result;
@@ -98,14 +98,15 @@ abstract class AdlTreePrimitiveConstraintsParser {
     static CDateTime parseDateTime(adlParser.DateTimeConstraintContext context, TerminalNode assumedValue) {
         CDateTime result = new CDateTime();
         result.setRmTypeName(RmTypes.DATE_TIME);
-        result.setPattern(collectText(context.DATE_TIME_PATTERN()));
+        result.setPatternConstraint(collectText(context.DATE_TIME_PATTERN()));
         if (context.ISO_DATE_TIME() != null) {
             // should go to list attribute, but there is none on CDate class
 //            result.setPattern(collectText(context.ISO_DATE_TIME()));
         }
 
-        if (context.dateTimeIntervalConstraint() != null) {
-            result.setRange(parseDateTimeInterval(context.dateTimeIntervalConstraint()));
+        for (adlParser.DateTimeIntervalConstraintContext ctx : context.dateTimeIntervalConstraint()) {
+            result.getConstraint().add(parseDateTimeInterval(ctx));
+
         }
         result.setAssumedValue(collectText(assumedValue));
         return result;
@@ -131,14 +132,15 @@ abstract class AdlTreePrimitiveConstraintsParser {
     static CTime parseTime(adlParser.TimeConstraintContext context, TerminalNode assumedValue) {
         CTime result = new CTime();
         result.setRmTypeName(RmTypes.TIME);
-        result.setPattern(collectText(context.TIME_PATTERN()));
+        result.setPatternConstraint(collectText(context.TIME_PATTERN()));
         if (context.ISO_TIME() != null) {
             // should go to list attribute, but there is none on CTime class
 //            result.setPattern(collectText(context.ISO_TIME()));
         }
 
-        if (context.timeIntervalConstraint() != null) {
-            result.setRange(parseTimeInterval(context.timeIntervalConstraint()));
+        for (adlParser.TimeIntervalConstraintContext ctx : context.timeIntervalConstraint()) {
+            result.getConstraint().add(parseTimeInterval(ctx));
+
         }
         result.setAssumedValue(collectText(assumedValue));
         return result;

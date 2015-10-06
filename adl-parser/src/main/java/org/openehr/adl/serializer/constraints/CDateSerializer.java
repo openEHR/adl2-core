@@ -23,7 +23,7 @@ package org.openehr.adl.serializer.constraints;
 import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CDate;
-import org.openehr.jaxb.am.CDateTime;
+import org.openehr.jaxb.rm.IntervalOfDate;
 
 /**
  * @author Marko Pipan
@@ -35,19 +35,26 @@ public class CDateSerializer extends ConstraintSerializer<CDate> {
 
     @Override
     public void serialize(CDate cobj) {
-        boolean constrained=false;
+        boolean constrained = false;
 
-        if (cobj.getPattern() != null) {
-            builder.append(cobj.getPattern());
-            constrained=true;
+        if (cobj.getPatternConstraint() != null) {
+            builder.append(cobj.getPatternConstraint());
+            constrained = true;
         }
-        if (cobj.getRange() != null) {
-            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
-            constrained=true;
+        if (!cobj.getConstraint().isEmpty()) {
+            boolean first = true;
+            for (IntervalOfDate interval : cobj.getConstraint()) {
+                if (!first) {
+                    builder.append(", ");
+                }
+                builder.append("|").append(AmMixins.of(interval).toString()).append("|");
+                first = false;
+            }
+            constrained = true;
         }
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());
-            constrained=true;
+            constrained = true;
         }
 
         if (!constrained) {

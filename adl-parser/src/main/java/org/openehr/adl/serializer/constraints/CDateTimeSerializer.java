@@ -23,6 +23,7 @@ package org.openehr.adl.serializer.constraints;
 import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.serializer.ArchetypeSerializer;
 import org.openehr.jaxb.am.CDateTime;
+import org.openehr.jaxb.rm.IntervalOfDateTime;
 
 /**
  * @author Marko Pipan
@@ -36,12 +37,19 @@ public class CDateTimeSerializer extends ConstraintSerializer<CDateTime> {
     public void serialize(CDateTime cobj) {
         boolean constrained = false;
 
-        if (cobj.getPattern() != null) {
-            builder.append(cobj.getPattern());
+        if (cobj.getPatternConstraint() != null) {
+            builder.append(cobj.getPatternConstraint());
             constrained = true;
         }
-        if (cobj.getRange() != null) {
-            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
+        if (!cobj.getConstraint().isEmpty()) {
+            boolean first = true;
+            for (IntervalOfDateTime interval : cobj.getConstraint()) {
+                if (!first) {
+                    builder.append(", ");
+                }
+                builder.append("|").append(AmMixins.of(interval).toString()).append("|");
+                first = false;
+            }
             constrained = true;
         }
         if (cobj.getAssumedValue() != null) {

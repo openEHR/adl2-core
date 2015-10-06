@@ -331,9 +331,9 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="pattern" type="DateConstraintPattern" minOccurs="0"/>
+                    <xs:element name="pattern_constraint" type="DateConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
-                    <xs:element name="range" type="IntervalOfDate" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfDate" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="Iso8601Date" minOccurs="0"/>
                     <xs:element name="default_value" type="Iso8601Date" minOccurs="0"/>
                 </xs:sequence>
@@ -363,9 +363,9 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="pattern" type="DateTimeConstraintPattern" minOccurs="0"/>
+                    <xs:element name="pattern_constraint" type="DateTimeConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
-                    <xs:element name="range" type="IntervalOfDateTime" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfDateTime" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="Iso8601DateTime" minOccurs="0"/>
                     <xs:element name="default_value" type="Iso8601DateTime" minOccurs="0"/>
                 </xs:sequence>
@@ -382,9 +382,9 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="pattern" type="TimeConstraintPattern" minOccurs="0"/>
+                    <xs:element name="pattern_constraint" type="TimeConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
-                    <xs:element name="range" type="IntervalOfTime" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfTime" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="Iso8601Time" minOccurs="0"/>
                     <xs:element name="default_value" type="Iso8601Time" minOccurs="0"/>
                 </xs:sequence>

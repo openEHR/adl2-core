@@ -224,24 +224,30 @@ public class AmObjectFactory {
 
     public static CDate newCDate(String pattern, IntervalOfDate interval, List<DvDate> list, String assumed) {
         CDate result = new CDate();
-        result.setPattern(pattern);
-        result.setRange(interval);
+        result.setPatternConstraint(pattern);
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         result.setAssumedValue(assumed);
         return result;
     }
 
     public static CTime newCTime(String pattern, IntervalOfTime interval, List<DvTime> list, String assumed) {
         CTime result = new CTime();
-        result.setPattern(pattern);
-        result.setRange(interval);
+        result.setPatternConstraint(pattern);
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         result.setAssumedValue(assumed);
         return result;
     }
 
     public static CDateTime newCDateTime(String pattern, IntervalOfDateTime interval, List<DvDateTime> list, String assumed) {
         CDateTime result = new CDateTime();
-        result.setPattern(pattern);
-        result.setRange(interval);
+        result.setPatternConstraint(pattern);
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         result.setAssumedValue(assumed);
         return result;
     }

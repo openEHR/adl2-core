@@ -41,15 +41,17 @@ public class CDurationSerializer extends ConstraintSerializer<CDuration> {
     public void serialize(CDuration cobj) {
         boolean constrained=false;
 
-        if (cobj.getPattern() != null) {
-            builder.append(cobj.getPattern());
+        if (cobj.getPatternConstraint() != null) {
+            builder.append(cobj.getPatternConstraint());
             constrained=true;
         }
-        if (cobj.getRange() != null) {
+        if (!cobj.getConstraint().isEmpty()) {
             if (constrained) {
                 builder.append("/");
             }
-            builder.append("|").append(AmMixins.of(cobj.getRange()).toString()).append("|");
+            for (IntervalOfDuration interval : cobj.getConstraint()) {
+                builder.append("|").append(AmMixins.of(interval).toString()).append("|");
+            }
             constrained=true;
         }
         if (cobj.getAssumedValue() != null) {

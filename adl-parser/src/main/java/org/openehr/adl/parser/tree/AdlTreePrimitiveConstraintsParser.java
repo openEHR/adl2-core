@@ -117,13 +117,13 @@ abstract class AdlTreePrimitiveConstraintsParser {
         result.setRmTypeName(RmTypes.DURATION);
         if (context.pattern != null) {
             String s = context.pattern.getText();
-            result.setPattern(s);
+            result.setPatternConstraint(s);
         }
         if (context.singleInterval != null) {
             String s = context.singleInterval.getText();
-            result.setRange(newIntervalOfDuration(s, s));
+            result.getConstraint().add(newIntervalOfDuration(s, s));
         } else if (context.durationIntervalConstraint() != null) {
-            result.setRange(parseDurationInterval(context.durationIntervalConstraint()));
+            result.getConstraint().add(parseDurationInterval(context.durationIntervalConstraint()));
         }
         result.setAssumedValue(collectText(assumedValue));
         return result;

@@ -254,8 +254,10 @@ public class AmObjectFactory {
 
     public static CDuration newCDuration(String pattern, DvDuration value, IntervalOfDuration interval, String assumed) {
         CDuration result = new CDuration();
-        result.setPattern(pattern);
-        result.setRange(interval);
+        result.setPatternConstraint(pattern);
+        if (interval!=null) {
+            result.getConstraint().add(interval);
+        }
         result.setAssumedValue(assumed);
         return result;
     }

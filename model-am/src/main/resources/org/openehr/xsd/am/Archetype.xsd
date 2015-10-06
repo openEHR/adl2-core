@@ -400,8 +400,8 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="pattern" type="DurationConstraintPattern" minOccurs="0"/>
-                    <xs:element name="range" type="IntervalOfDuration" minOccurs="0"/>
+                    <xs:element name="pattern_constraint" type="DurationConstraintPattern" minOccurs="0"/>
+                    <xs:element name="constraint" type="IntervalOfDuration" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="assumed_value" type="Iso8601Duration" minOccurs="0"/>
                     <xs:element name="default_value" type="Iso8601Duration" minOccurs="0"/>
                 </xs:sequence>

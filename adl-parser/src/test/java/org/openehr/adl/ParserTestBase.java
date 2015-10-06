@@ -22,6 +22,7 @@ package org.openehr.adl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.openehr.adl.am.mixin.AmMixin;
 import org.openehr.adl.am.mixin.AmMixins;
 import org.openehr.adl.util.TestAdlParser;
 import org.openehr.jaxb.am.*;
@@ -317,9 +318,11 @@ public class ParserTestBase {
         CDuration c = (CDuration) obj;
 //        assertEquals("list", value == null ? null : DvDuration.getInstance(value),
 //                c.getValue());
-        assertEquals("interval", json(interval), json(c.getRange()));
+        if (interval!=null) {
+           assertTrue("interval", AmMixins.of(c.getConstraint().get(0)).isEqualTo(interval));
+        }
         assertEquals("assumed value", assumed, c.getAssumedValue());
-        assertEquals("pattern wrong", pattern, c.getPattern());
+        assertEquals("pattern wrong", pattern, c.getPatternConstraint());
     }
 
 

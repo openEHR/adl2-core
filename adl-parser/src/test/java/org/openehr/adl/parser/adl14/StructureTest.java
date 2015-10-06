@@ -105,7 +105,7 @@ public class StructureTest extends ParserTestBase {
         // primitive constraint of leaf object
         CString str = (CString) attr.getChildren().get(0);
         assertEquals("pattern", null, str.getPattern());
-        assertEquals("set.size", 1, str.getList().size());
-        assertTrue("set has", str.getList().contains("self"));
+        assertEquals("set.size", 1, str.getConstraint().size());
+        assertTrue("set has", str.getConstraint().contains("self"));
     }
 }

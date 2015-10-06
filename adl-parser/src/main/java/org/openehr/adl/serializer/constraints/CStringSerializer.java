@@ -41,11 +41,11 @@ public class CStringSerializer extends ConstraintSerializer<CString> {
             builder.append(patternChar).append(cobj.getPattern()).append(patternChar);
             constrained = true;
         }
-        if (!cobj.getList().isEmpty()) {
-            for (int i = 0; i < cobj.getList().size(); i++) {
-                String item = cobj.getList().get(i);
+        if (!cobj.getConstraint().isEmpty()) {
+            for (int i = 0; i < cobj.getConstraint().size(); i++) {
+                String item = cobj.getConstraint().get(i);
                 builder.text(item);
-                if (i < cobj.getList().size() - 1) {
+                if (i < cobj.getConstraint().size() - 1) {
                     builder.append(", ");
                 }
             }

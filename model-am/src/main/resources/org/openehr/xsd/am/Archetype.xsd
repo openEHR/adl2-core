@@ -297,7 +297,7 @@
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
                     <xs:element name="pattern" type="xs:string" minOccurs="0"/>
-                    <xs:element name="list" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="constraint" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="list_open" type="xs:boolean" minOccurs="0"/>
                     <xs:element name="assumed_value" type="xs:string" minOccurs="0"/>
                     <xs:element name="default_value" type="xs:string" minOccurs="0"/>

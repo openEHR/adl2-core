@@ -265,7 +265,7 @@ public class AmObjectFactory {
     public static CString newCString(String pattern, List<String> list, String assumed) {
         CString result = new CString();
         result.setPattern(pattern);
-        result.getList().addAll(emptyIfNull(list));
+        result.getConstraint().addAll(emptyIfNull(list));
         result.setAssumedValue(assumed);
         return result;
     }

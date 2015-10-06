@@ -336,7 +336,7 @@ public class ParserTestBase {
         } else {
             assertEquals("pattern", pattern, c.getPattern());
         }
-        assertEquals("list", values == null ? Collections.emptyList() : Arrays.asList(values), c.getList());
+        assertEquals("list", values == null ? Collections.emptyList() : Arrays.asList(values), c.getConstraint());
         assertEquals("unexpected CString assumed value", assumedValue, c.getAssumedValue());
     }
 

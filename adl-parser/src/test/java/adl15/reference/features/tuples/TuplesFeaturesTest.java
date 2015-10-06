@@ -80,12 +80,12 @@ public class TuplesFeaturesTest {
         CTerminologyCode cq1 = AmQuery.get(archetype, "clinical_quantity_attr_2[id4]/property");
         assertThat(cq1.getCodeList()).containsExactly("at4");
         CString cq2 = AmQuery.get(archetype, "clinical_quantity_attr_2[id4]/units");
-        assertThat(cq2.getList()).containsExactly("C", "F");
+        assertThat(cq2.getConstraint()).containsExactly("C", "F");
 
         cq1 = AmQuery.get(archetype, "clinical_quantity_attr_2[id5]/property");
         assertThat(cq1.getCodeList()).containsExactly("at5");
         cq2 = AmQuery.get(archetype, "clinical_quantity_attr_2[id5]/units");
-        assertThat(cq2.getList()).containsExactly("K", "F");
+        assertThat(cq2.getConstraint()).containsExactly("K", "F");
     }
 
     @Test
@@ -130,7 +130,7 @@ public class TuplesFeaturesTest {
     }
 
     private void assertQuantityTuple(CObjectTuple cot, String units, IntervalOfReal expectedRange) {
-        assertThat(((CString) (cot.getMembers().get(0))).getList()).containsExactly(units);
+        assertThat(((CString) (cot.getMembers().get(0))).getConstraint()).containsExactly(units);
 
         IntervalOfReal actualRange = ((CReal) (cot.getMembers().get(1))).getRange();
         assertThat(AmMixins.of(actualRange).isEqualTo(expectedRange));

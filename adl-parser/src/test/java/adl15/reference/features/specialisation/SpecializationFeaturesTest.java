@@ -91,7 +91,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
         assertThat(ctuple.getChildren()).hasSize(1);
         final CObjectTuple cObjectTuple = ctuple.getChildren().get(0);
         assertThat(cObjectTuple.getMembers()).hasSize(2);
-        assertThat(((CString) cObjectTuple.getMembers().get(0)).getList()).containsExactly("°C");
+        assertThat(((CString) cObjectTuple.getMembers().get(0)).getConstraint()).containsExactly("°C");
         assertThat(((CInteger) cObjectTuple.getMembers().get(1)).getList()).containsExactly(1);
     }
 
@@ -107,7 +107,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
         CReal cr = (CReal) (tuple.getChildren().get(0).getMembers().get(0));
         assertThat(AmMixins.of(cr.getRange()).isEqualTo(newIntervalOfReal(0.0, null))).isTrue();
         CString cs = (CString) (tuple.getChildren().get(0).getMembers().get(1));
-        assertThat(cs.getList()).containsExactly("cm[H20]");
+        assertThat(cs.getConstraint()).containsExactly("cm[H20]");
         CInteger ci = (CInteger) (tuple.getChildren().get(0).getMembers().get(2));
         assertThat(ci.getList()).containsExactly(2);
     }

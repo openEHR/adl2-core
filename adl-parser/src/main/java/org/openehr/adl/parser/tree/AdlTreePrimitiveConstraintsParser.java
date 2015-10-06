@@ -331,7 +331,7 @@ abstract class AdlTreePrimitiveConstraintsParser  {
         CString result = new CString();
         result.setRmTypeName(RmTypes.STRING);
         if (context.stringList() != null) {
-            result.getList().addAll(collectStringList(context.stringList()));
+            result.getConstraint().addAll(collectStringList(context.stringList()));
         }
         if (context.regularExpression() != null) {
             result.setPattern(collectRegularExpression(context.regularExpression()));

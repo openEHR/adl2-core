@@ -56,11 +56,11 @@ public class BasicFeaturesTest {
 
         assertThat(archetype.getDefinition().getRmTypeName()).isEqualTo("BOOK");
 
-        assertThat(((CString)AmQuery.find(archetype, "title")).getList()).containsExactly("Devils");
-        assertThat(((CString)AmQuery.find(archetype, "author")).getList()).containsExactly("Fyodor Dostoyevsky");
-        assertThat(((CString)AmQuery.find(archetype, "chapters[id2]/title")).getList()).containsExactly("By way of introductoin");
-        assertThat(((CString)AmQuery.find(archetype, "chapters[id3]/title")).getList()).containsExactly("Prince Harry, matchmaking");
-        assertThat(((CString)AmQuery.find(archetype, "chapters[id4]/title")).getList()).containsExactly("Another man's sins");
+        assertThat(((CString)AmQuery.find(archetype, "title")).getConstraint()).containsExactly("Devils");
+        assertThat(((CString)AmQuery.find(archetype, "author")).getConstraint()).containsExactly("Fyodor Dostoyevsky");
+        assertThat(((CString)AmQuery.find(archetype, "chapters[id2]/title")).getConstraint()).containsExactly("By way of introductoin");
+        assertThat(((CString)AmQuery.find(archetype, "chapters[id3]/title")).getConstraint()).containsExactly("Prince Harry, matchmaking");
+        assertThat(((CString)AmQuery.find(archetype, "chapters[id4]/title")).getConstraint()).containsExactly("Another man's sins");
 
     }
 

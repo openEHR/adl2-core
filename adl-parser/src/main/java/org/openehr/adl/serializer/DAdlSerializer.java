@@ -22,6 +22,7 @@ package org.openehr.adl.serializer;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang.StringUtils;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
 
@@ -55,7 +56,7 @@ public class DAdlSerializer {
 
     public void serializePlain(Object obj) {
         if (obj == null) {
-
+            // do nothing
         } else if (obj instanceof String) {
             builder.text((String) obj);
         } else if (obj instanceof List) {
@@ -114,7 +115,14 @@ public class DAdlSerializer {
     }
 
     private void serializeCodePhrase(CodePhrase cp) {
-        builder.append("[").append(cp.getTerminologyId().getValue()).append("::").append(cp.getCodeString()).append("]");
+        builder.append("[").append(cp.getTerminologyId().getValue());
+        if (StringUtils.isNotEmpty(cp.getCodeString())) {
+            if (!StringUtils.isEmpty(cp.getTerminologyId().getValue())) {
+                builder.append("::");
+            }
+            builder.append(cp.getCodeString());
+        }
+        builder.append("]");
     }
 
     private void serializeListMap(List list) {
@@ -151,7 +159,7 @@ public class DAdlSerializer {
     }
 
     private void serializeItem(Object item) {
-     //   System.out.println("serializeItem:" + item);
+        //   System.out.println("serializeItem:" + item);
         if (item instanceof TranslationDetails) {
             TranslationDetails td = (TranslationDetails) item;
             serializeKey(td.getLanguage().getCodeString());
@@ -214,7 +222,7 @@ public class DAdlSerializer {
         } else if (item instanceof TermBindingItem) {
             TermBindingItem t = (TermBindingItem) item;
             serializeKey(t.getCode());
-            serialize(t.getValue());
+            builder.append("<").append(t.getValue()).append(">");
         } else {
             throw new IllegalArgumentException(item.getClass().getName());
         }

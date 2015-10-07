@@ -52,17 +52,7 @@ definition
 			ELEMENT[at0003] matches {
 				value matches {
 					DV_CODED_TEXT matches {
-						defining_code matches {
-							[local::
-							at0.15, 	-- Falls
-							at0.16, 	-- Skin breakdown
-							at0.17, 	-- Seizures
-							at0.18, 	-- Communicable disease
-							at0.19, 	-- Aspiration
-							at0.20, 	-- Hypo-hyperglycaemia
-							at0.21, 	-- Harm to self
-							at0.22]	-- Harm to others
-						}
+						defining_code matches {*}
 					}
 				}
 			}

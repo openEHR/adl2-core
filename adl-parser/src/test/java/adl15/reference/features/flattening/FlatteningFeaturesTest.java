@@ -46,7 +46,7 @@ public class FlatteningFeaturesTest {
         Archetype flattened = flattener.flatten(flatParent, specialized);
 
         CTerminologyCode cr = AmQuery.get(flattened, "/data[id2]/events[id3]/data[id4]/items[id5]/value/defining_code");
-        assertThat(cr.getCodeList().get(0)).isEqualTo("at0.2");
+        assertThat(cr.getConstraint()).isEqualTo("at0.2");
     }
 
     @Test

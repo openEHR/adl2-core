@@ -270,9 +270,9 @@ abstract class AdlTreeConstraintParser {
         if (context.primitiveValueConstraint() != null) {
             return parsePrimitiveValue(context.primitiveValueConstraint());
         }
-        if (context.codePhraseConstraint() != null) {
-            return parseCodePhrase(context.codePhraseConstraint());
-        }
+//        if (context.codePhraseConstraint() != null) {
+//            return parseCodePhrase(context.codePhraseConstraint());
+//        }
         if (context.ordinalConstraint() != null) {
             return parseCDvOrdinalConstraint(context.ordinalConstraint());
         }
@@ -310,20 +310,20 @@ abstract class AdlTreeConstraintParser {
         return newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.code));
     }
 
-    private static CTerminologyCode parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
-        CTerminologyCode result = new CTerminologyCode();
-        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
-
-        result.setTerminologyId(collectText(context.tid));
-        if (context.assumed!=null) {
-            result.setAssumedValue(collectText(context.assumed));
-        }
-        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
-            result.getCodeList().add(collectText(cCodeIdentifier));
-        }
-
-        return result;
-    }
+//    private static CTerminologyCode parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
+//        CTerminologyCode result = new CTerminologyCode();
+//        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
+//
+//        result.setTerminologyId(collectText(context.tid));
+//        if (context.assumed!=null) {
+//            result.setAssumedValue(collectText(context.assumed));
+//        }
+//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
+//            result.getCodeList().add(collectText(cCodeIdentifier));
+//        }
+//
+//        return result;
+//    }
 
     private static Cardinality parseCardinality(adlParser.CardinalityContext context) {
         if (context == null) return null;

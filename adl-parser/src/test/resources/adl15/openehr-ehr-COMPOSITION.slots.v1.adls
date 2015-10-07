@@ -30,7 +30,7 @@ definition
 	COMPOSITION[at0000] matches {	-- Problem list
 		category matches {
 			DV_CODED_TEXT matches {
-				defining_code matches {[openehr::431]}
+				defining_code matches {[at12]}
 			}
 		}
 		content matches {

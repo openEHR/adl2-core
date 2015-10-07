@@ -320,8 +320,7 @@ public class AmObjectFactory {
         CTerminologyCode result = new CTerminologyCode();
         // CTerminologyCode should be modified to have a 'constraint' field instead of this.
         if (constraint!=null) {
-//            result.getCodeList().add(constraint);
-            result.setTerminologyId(constraint);
+            result.setConstraint(constraint);
         }
         result.setAssumedValue(assumedValue);
         return result;

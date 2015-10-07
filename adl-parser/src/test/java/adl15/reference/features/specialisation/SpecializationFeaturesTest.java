@@ -41,7 +41,7 @@ public class SpecializationFeaturesTest extends AbstractSpecializationTest {
     public void testListConstrained() {
         Archetype archetype = getArchetype("openEHR-EHR-EVALUATION.code_list_constrained.v1");
         CTerminologyCode cr = AmQuery.get(archetype, "/data[id2]/items[id3]/value/defining_code");
-        assertThat(cr.getCodeList().get(0)).isEqualTo("ac1.1");
+        assertThat(cr.getConstraint()).isEqualTo("ac1.1");
     }
 
     // should be updated one openEHR-EHR-OBSERVATION.spec_test_parent.v1 is fixed

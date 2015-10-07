@@ -34,70 +34,12 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
 
     @Override
     public void serialize(CTerminologyCode cobj) {
-        boolean multiline = cobj.getCodeList().size() > 1;
-
-        if (multiline) {
-            serializeMultiline(cobj);
-        } else {
-            serializeSingleLine(cobj);
-        }
-    }
-
-    private void serializeSingleLine(CTerminologyCode cobj) {
         builder.append("[");
-        if (cobj.getTerminologyId() != null) {
-            builder.append(cobj.getTerminologyId());
-        }
-        if (!cobj.getCodeList().isEmpty()) {
-            if (cobj.getTerminologyId() != null) {
-                builder.append("::");
-            }
-            builder.append(cobj.getCodeList().get(0));
-        }
+        builder.append(cobj.getConstraint());
         if (cobj.getAssumedValue() != null) {
             builder.append("; ").append(cobj.getAssumedValue());
         }
         builder.append("]");
     }
 
-    private void serializeMultiline(CTerminologyCode cobj) {
-        builder.newIndentedline();
-        builder.append("[");
-        if (cobj.getTerminologyId() != null) {
-            builder.append(cobj.getTerminologyId()).append("::");
-        }
-        for (int i = 0; i < cobj.getCodeList().size(); i++) {
-            String code = cobj.getCodeList().get(i);
-            builder.newline();
-            builder.append(code);
-            if (i < cobj.getCodeList().size() - 1) {
-                builder.append(",");
-            } else {
-                builder.append(cobj.getAssumedValue() != null ? ";" : "]");
-            }
-            builder.lineComment(serializer.getArchetypeWrapper().getTermText(code));
-        }
-        if (cobj.getAssumedValue() != null) {
-            builder.newline();
-            builder.append(cobj.getAssumedValue()).append("]");
-        }
-        builder.unindent().newline();
-    }
-
-    @Override
-    public boolean isEmpty(CTerminologyCode cobj) {
-        return cobj.getCodeList().isEmpty() && cobj.getAssumedValue() == null && cobj.getTerminologyId() == null;
-    }
-
-    @Override
-    public String getSimpleCommentText(CTerminologyCode cobj) {
-        if (cobj.getCodeList().size() != 1) {
-            return super.getSimpleCommentText(cobj);
-        }
-        String text = serializer.getArchetypeWrapper().getConstraintDefinitionText(cobj.getCodeList().get(0));
-        if (text == null) {
-            text = serializer.getArchetypeWrapper().getTermText(cobj.getCodeList().get(0));
-        }
-        return text;
-    }
 }

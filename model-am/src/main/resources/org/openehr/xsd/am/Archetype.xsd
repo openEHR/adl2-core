@@ -344,9 +344,7 @@
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
                 <xs:sequence>
-                    <xs:element name="terminology_id" type="xs:string"/>
-                    <xs:element name="terminology_version" type="xs:string" minOccurs="0"/>
-                    <xs:element name="code_list" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="constraint" type="xs:string"/>
                     <xs:element name="assumed_value" type="TERMINOLOGY_CODE" minOccurs="0"/>
                     <xs:element name="default_value" type="TERMINOLOGY_CODE" minOccurs="0"/>
                 </xs:sequence>

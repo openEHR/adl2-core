@@ -110,7 +110,7 @@ multiValueConstraint
 valueConstraint
 	: typeConstraint
 	| primitiveValueConstraint
-	| codePhraseConstraint
+//	| codePhraseConstraint
 	| ordinalConstraint
 	;
 
@@ -129,8 +129,12 @@ primitiveValueConstraint
 	| dateConstraint (';' ISO_DATE)?
 	| timeConstraint (';' ISO_TIME)?
 	| durationConstraint (';' DURATION)?
-	| '[' codeIdentifierList (';' codeIdentifier)?  ']'
+	| terminologyCodeConstraint
+//	| '[' codeIdentifierList (';' codeIdentifier)?  ']'
 	;
+
+terminologyCodeConstraint:
+	'[' constraint=AT_CODE_VALUE (';' assumedValue=AT_CODE_VALUE)? ']';
 
 archetypeSlotConstraint
 	: ALLOW_ARCHETYPE typeIdentifierWithGenerics atCode? occurrences? ( MATCHES '{' archetypeSlotValueConstraint '}' )?
@@ -170,8 +174,8 @@ durationConstraint
 	;
 
 
-codePhraseConstraint:
-	'[' tid=codeIdentifier '::' codes=codeIdentifierList (';' assumed=codeIdentifier)? ']' ;
+//codePhraseConstraint:
+//	'[' tid=codeIdentifier '::' codes=codeIdentifierList (';' assumed=codeIdentifier)? ']' ;
 
 codeIdentifierList:
 	codeIdentifier? (',' codeIdentifier)* ;

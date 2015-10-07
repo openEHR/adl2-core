@@ -38,20 +38,7 @@ definition
 			ELEMENT[at0001] occurrences matches {0..*} matches {	-- Rdečina
 				value matches {
 					DV_CODED_TEXT matches {
-						defining_code matches {
-							[local::
-							at0006, 	-- Črna
-							at0007, 	-- Modra
-							at0008, 	-- Oranžna
-							at0009, 	-- Rumena
-							at0010, 	-- Siva
-							at0011, 	-- Srebrna
-							at0012, 	-- Vijolična
-							at0013, 	-- Zelena
-							at0014, 	-- Bela
-							at0015, 	-- Temnejša
-							at0016]	-- Svetlejša
-						}
+						defining_code matches {*}
 					}
 					0|[local::at0002], 	-- Ni prisotna
 					1|[local::at0003], 	-- Malo rdeče

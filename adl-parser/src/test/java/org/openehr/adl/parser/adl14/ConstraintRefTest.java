@@ -41,6 +41,6 @@ public class ConstraintRefTest extends ParserTestBase {
                 node instanceof CTerminologyCode);
 
         CTerminologyCode ref = (CTerminologyCode) node;
-        assertEquals("reference wrong", "ac0001", ref.getCodeList().get(0));
+        assertEquals("reference wrong", "ac0001", ref.getConstraint());
     }
 }

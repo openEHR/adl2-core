@@ -28,11 +28,10 @@ import org.openehr.jaxb.rm.IntervalOfInteger;
 import org.openehr.jaxb.rm.IntervalOfReal;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -76,17 +75,19 @@ public class TuplesFeaturesTest {
         assertOrdinalTuple(cat.getChildren().get(1), 1, "at12");
         assertOrdinalTuple(cat.getChildren().get(2), 2, "at13");
     }
+
     @Test
     public void testQuantityNodeIds() {
         Archetype archetype = TestAdlParser.parseAdl(
                 "adl15/reference/features/tuples/openehr-test_pkg-SOME_TYPE.dv_quantity_node_ids.v1.adls");
         CTerminologyCode cq1 = AmQuery.get(archetype, "clinical_quantity_attr_2[id4]/property");
-        assertThat(cq1.getCodeList()).containsExactly("at4");
+
+        assertThat(cq1.getConstraint()).isEqualTo("at4");
         CString cq2 = AmQuery.get(archetype, "clinical_quantity_attr_2[id4]/units");
         assertThat(cq2.getConstraint()).containsExactly("C", "F");
 
         cq1 = AmQuery.get(archetype, "clinical_quantity_attr_2[id5]/property");
-        assertThat(cq1.getCodeList()).containsExactly("at5");
+        assertThat(cq1.getConstraint()).isEqualTo("at5");
         cq2 = AmQuery.get(archetype, "clinical_quantity_attr_2[id5]/units");
         assertThat(cq2.getConstraint()).containsExactly("K", "F");
     }
@@ -126,14 +127,13 @@ public class TuplesFeaturesTest {
     }
 
 
-
-    private void assertOrdinalTuple(CObjectTuple cot, int value, String... symbols) {
+    private void assertOrdinalTuple(CObjectTuple cot, int value, String constraint) {
         List<IntervalOfInteger> intervals = ((CInteger) (cot.getMembers().get(0))).getConstraint();
         assertThat(intervals).isNotEmpty();
         assertTrue("interval", AmMixins.of(intervals.get(0)).isSingleValued(value));
 
         assertTrue("value", AmMixins.of(intervals.get(0)).isSingleValued(value));
-        assertThat(((CTerminologyCode) (cot.getMembers().get(1))).getCodeList()).containsExactly(symbols);
+        assertThat(((CTerminologyCode) (cot.getMembers().get(1))).getConstraint()).isEqualTo(constraint);
     }
 
     private void assertQuantityTuple(CObjectTuple cot, String units, IntervalOfReal expectedRange) {
@@ -144,11 +144,11 @@ public class TuplesFeaturesTest {
 
     }
 
-    private void assertStandardOrdinalAttr(CComplexObject cord, String nodeId, int value, String... symbol) {
+    private void assertStandardOrdinalAttr(CComplexObject cord, String nodeId, int value, String constraint) {
         assertThat(cord.getNodeId()).isEqualTo(nodeId);
         CInteger c = AmQuery.get(cord, "value");
 
         assertTrue("value", AmMixins.of(c.getConstraint().get(0)).isSingleValued(value));
-        assertThat(((CTerminologyCode) AmQuery.get(cord, "symbol/defining_code")).getCodeList()).containsExactly(symbol);
+        assertThat(((CTerminologyCode) AmQuery.get(cord, "symbol/defining_code")).getConstraint()).isEqualTo(constraint);
     }
 }

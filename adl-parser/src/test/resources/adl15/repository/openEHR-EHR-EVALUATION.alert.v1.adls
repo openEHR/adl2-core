@@ -69,24 +69,14 @@ definition
 					ELEMENT[at0005] occurrences matches {0..1} matches {	-- Certainty
 						value matches {
 							DV_CODED_TEXT matches {
-								defining_code matches {
-									[local::
-									at0006, 	-- Confirmed
-									at0007, 	-- Suspected
-									at0008]	-- Discounted
-								}
+								defining_code matches {*}
 							}
 						}
 					}
 					ELEMENT[at0009] occurrences matches {0..1} matches {	-- Status
 						value matches {
 							DV_CODED_TEXT matches {
-								defining_code matches {
-									[local::
-									at0011, 	-- Active
-									at0012, 	-- Inactive
-									at0013]	-- Resolved
-								}
+								defining_code matches {*}
 							}
 						}
 					}

@@ -276,7 +276,7 @@ public class ParserTestBase {
     }
 
     protected void assertCTerminologyCode(ArchetypeConstraint actual,
-                                          String terminologyId, @Nullable String[] codes, @Nullable String assumedValue) {
+                                          String constraint, @Nullable String assumedValue) {
 
         // check type
         assertTrue("CTerminologyCode expected, got " + actual.getClass(),
@@ -284,20 +284,8 @@ public class ParserTestBase {
         CTerminologyCode cTerminologyCode = (CTerminologyCode) actual;
 
         // check terminology
-        assertEquals("terminology", terminologyId,
-                cTerminologyCode.getTerminologyId());
-
-        // check code list
-        if (codes == null) {
-            assertTrue("codeList expected empty", cTerminologyCode.getCodeList().isEmpty());
-        } else {
-            List<String> codeList = cTerminologyCode.getCodeList();
-            assertEquals("codes.size wrong", codes.length, codeList.size());
-            for (int i = 0; i < codes.length; i++) {
-                Object c = codeList.get(i);
-                assertEquals("code wrong, got: " + c, codes[i], c);
-            }
-        }
+        assertEquals("constraint", constraint,
+                cTerminologyCode.getConstraint());
 
         // check assumed value
         assertEquals("assumed value wrong", assumedValue,

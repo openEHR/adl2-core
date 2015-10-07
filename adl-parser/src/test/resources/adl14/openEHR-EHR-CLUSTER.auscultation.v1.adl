@@ -16,13 +16,7 @@ definition
 							ELEMENT[at0074] occurrences matches {0..*} matches {	-- Specific Findings
 								value matches {
 									DV_CODED_TEXT matches {
-										defining_code matches {
-											[local::
-											at0078, 	-- Absent bowel sounds
-											at0079, 	-- Decreased bowel sounds
-											at0080, 	-- Increased bowel sounds
-											at0081]	-- Tinkling bowel sounds
-										}
+										defining_code matches {*}
 									}
 								}
 							}

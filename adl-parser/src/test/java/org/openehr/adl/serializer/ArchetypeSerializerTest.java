@@ -43,34 +43,34 @@ public class ArchetypeSerializerTest {
         write(serialized, "TestSerialize-Alert-v1.adls");
     }
 
-    @Test
-    public void testSerializeCodedText() throws Exception {
-        Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-composition.dv_coded_text.test.adl");
-        String serialized = ArchetypeSerializer.serialize(archetype);
-        assertNotNull(serialized);
-    }
+//    @Test
+//    public void testSerializeCodedText() throws Exception {
+//        Archetype archetype = TestAdlParser.parseAdl("adl14/adl-test-composition.dv_coded_text.test.adl");
+//        String serialized = ArchetypeSerializer.serialize(archetype);
+//        assertNotNull(serialized);
+//    }
 
-    @Test
-    public void testSerializeBloodPressure() {
-        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
-        String adl = ArchetypeSerializer.serialize(archetype);
-        write(adl, "openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
-        Archetype result = TestAdlParser.parseAdlFromString(adl);
-        assertThat(result).isNotNull();
+//    @Test
+//    public void testSerializeBloodPressure() {
+//        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+//        String adl = ArchetypeSerializer.serialize(archetype);
+//        write(adl, "openEHR-EHR-OBSERVATION.blood_pressure.v1.adl");
+//        Archetype result = TestAdlParser.parseAdlFromString(adl);
+//        assertThat(result).isNotNull();
+//
+//    }
 
-    }
-
-    @Test
-    public void testSerializeDemoArchetype() {
-        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
-        String serialized = ArchetypeSerializer.serialize(archetype);
-        assertNotNull(serialized);
-        write(serialized, "TestDemoArchetype.adl");
-        Archetype result = TestAdlParser.parseAdlFromString(serialized);
-        assertThat(result).isNotNull();
-
-
-    }
+//    @Test
+//    public void testSerializeDemoArchetype() {
+//        Archetype archetype = TestAdlParser.parseAdl("adl14/openEHR-EHR-OBSERVATION.demo.v1.adl");
+//        String serialized = ArchetypeSerializer.serialize(archetype);
+//        assertNotNull(serialized);
+//        write(serialized, "TestDemoArchetype.adl");
+//        Archetype result = TestAdlParser.parseAdlFromString(serialized);
+//        assertThat(result).isNotNull();
+//
+//
+//    }
 
 
     @Test

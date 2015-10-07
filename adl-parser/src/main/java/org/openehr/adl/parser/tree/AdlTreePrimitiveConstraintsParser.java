@@ -60,24 +60,37 @@ abstract class AdlTreePrimitiveConstraintsParser {
         if (context.durationConstraint() != null) {
             return parseDuration(context.durationConstraint(), context.DURATION());
         }
-        if (context.codeIdentifierList() != null) {
-            return parseCodeIdentifierList(context.codeIdentifierList());
+        if (context.terminologyCodeConstraint()!=null) {
+            return parseTerminologyCode(context.terminologyCodeConstraint());
         }
+//        if (context.codeIdentifierList() != null) {
+//            return parseCodeIdentifierList(context.codeIdentifierList());
+//        }
         throw new AssertionError();
     }
 
-    static CPrimitiveObject parseCodeIdentifierList(adlParser.CodeIdentifierListContext context) {
+    private static CTerminologyCode parseTerminologyCode(adlParser.TerminologyCodeConstraintContext context) {
         CTerminologyCode result = new CTerminologyCode();
-        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
-        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifier()) {
-            result.getCodeList().add(parseCodeIdentifier(cCodeIdentifier));
+        result.setConstraint(context.constraint.getText());
+        if (context.assumedValue!=null) {
+            result.setAssumedValue(context.assumedValue.getText());
         }
         return result;
     }
 
-    static String parseCodeIdentifier(adlParser.CodeIdentifierContext context) {
-        return collectNonNullText(context);
-    }
+//    static CPrimitiveObject parseCodeIdentifierList(adlParser.CodeIdentifierListContext context) {
+//        CTerminologyCode result = new CTerminologyCode();
+//        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
+//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifier()) {
+//
+//            result.getCodeList().add(parseCodeIdentifier(cCodeIdentifier));
+//        }
+//        return result;
+//    }
+
+//    static String parseCodeIdentifier(adlParser.CodeIdentifierContext context) {
+//        return collectNonNullText(context);
+//    }
 
     static CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
         CDate result = new CDate();

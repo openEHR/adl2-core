@@ -29,20 +29,7 @@ definition
 					ELEMENT[at0002] occurrences matches {1..*} matches {
 						value matches {
 							DV_CODED_TEXT matches {
-								defining_code matches {
-									[local::
-									at0003, 	-- No significant illness
-									at0004, 	-- No significant past history
-									at0005, 	-- No significant family history
-									at0006, 	-- No known adverse reactions
-									at0009, 	-- No relevant past history
-									at0012, 	-- No relevant family history
-									at0013, 	-- No known allergies
-									at0010, 	-- No hospitalisations
-									at0011, 	-- No major surgery
-									at0007, 	-- No known sensitivities
-									at0008]	-- No known intolerances
-								}
+								defining_code matches {*}
 							}
 						}
 					}

@@ -32,7 +32,7 @@ definition
 									ELEMENT[at0004] matches {	-- Weight
 										value matches {
 											DV_QUANTITY matches {
-												property matches {[openehr::124]}
+												property matches {[at12]}
 												[units, magnitude] matches {
 													[{"kg"}, {|0.0..1000.0|}],
 													[{"lb"}, {|0.0..2000.0|}]

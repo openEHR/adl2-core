@@ -27,13 +27,13 @@ import org.testng.annotations.Test;
  * @author markopi
  */
 public class AdlWorkbenchEqualityTest extends FlattenerTestBase {
-    @Test
-    public void testAdlWorkbenchConstraintsEquality() {
-
-        Archetype flattened = parseAndFlattenArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn.v1.adls");
-        Archetype workbenchFlattened = parseArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn.v1.adlf");
-
-//        assertEquals("archetype constraints differ", json(workbenchFlattened.getDefinition()), json(flattened.getDefinition()));
-    }
+//    @Test
+//    public void testAdlWorkbenchConstraintsEquality() {
+//
+//        Archetype flattened = parseAndFlattenArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn.v1.adls");
+//        Archetype workbenchFlattened = parseArchetype("adl15/openEHR-EHR-EVALUATION.alert-zn.v1.adlf");
+//
+////        assertEquals("archetype constraints differ", json(workbenchFlattened.getDefinition()), json(flattened.getDefinition()));
+//    }
 
 }

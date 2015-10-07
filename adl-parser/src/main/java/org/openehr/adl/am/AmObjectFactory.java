@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static org.openehr.adl.rm.RmObjectFactory.newStringDictionaryItem;
 import static org.openehr.adl.util.AdlUtils.doubleToFloat;
 import static org.openehr.adl.util.AdlUtils.emptyIfNull;
 
@@ -124,6 +125,39 @@ public class AmObjectFactory {
         result.setValue(value);
         return result;
     }
+
+    public static ArchetypeTerm newArchetypeTerm(String nodeId, String text) {
+        return newArchetypeTerm(nodeId, text, null, null);
+    }
+
+
+    public static ArchetypeTerm newArchetypeTerm(String nodeId, String text, String description) {
+        return newArchetypeTerm(nodeId, text, description, null);
+    }
+
+    public static ArchetypeTerm newArchetypeTerm(String nodeId, String text, String description, String comment) {
+        ArchetypeTerm result = new ArchetypeTerm();
+        result.setCode(nodeId);
+        if (text!=null) {
+            result.getItems().add(newStringDictionaryItem("text", text));
+        }
+        if (description!=null) {
+            result.getItems().add(newStringDictionaryItem("description", description));
+        }
+        if (comment!=null) {
+            result.getItems().add(newStringDictionaryItem("text", text));
+        }
+        return result;
+        
+    }
+
+    public static ValueSetItem newValueSetItem(String id, List<String> members) {
+        ValueSetItem result = new ValueSetItem();
+        result.setId(id);
+        result.getMembers().addAll(members);
+        return result;
+    }
+
 
     public static ConstraintBindingSet newConstraintBindingSet(String terminology, List<ConstraintBindingItem> bindings) {
         ConstraintBindingSet result = new ConstraintBindingSet();
@@ -252,7 +286,7 @@ public class AmObjectFactory {
         return result;
     }
 
-    public static CDuration newCDuration(String pattern, DvDuration value, IntervalOfDuration interval, String assumed) {
+    public static CDuration newCDuration(String pattern, IntervalOfDuration interval, String assumed) {
         CDuration result = new CDuration();
         result.setPatternConstraint(pattern);
         if (interval!=null) {
@@ -281,6 +315,17 @@ public class AmObjectFactory {
         result.setAssumedValue(assumedValue);
         return result;
     }
+
+    public static CTerminologyCode newCTerminologyCode(String constraint, String assumedValue) {
+        CTerminologyCode result = new CTerminologyCode();
+        // CTerminologyCode should be modified to have a 'constraint' field instead of this.
+        if (constraint!=null) {
+            result.getCodeList().add(constraint);
+        }
+        result.setAssumedValue(assumedValue);
+        return result;
+    }
+
 
 
     public static ExprLeaf newExprPathConstant(String path) {
@@ -334,6 +379,7 @@ public class AmObjectFactory {
         result.setSiblingNodeId(siblingNodeId);
         return result;
     }
+
 
     public static Class<? extends RmObject> getRmClass(@Nonnull String rmTypeName) throws ClassNotFoundException {
         int genericsTypeIndex = rmTypeName.indexOf('<');

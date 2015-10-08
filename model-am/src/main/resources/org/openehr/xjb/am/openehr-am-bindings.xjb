@@ -249,6 +249,9 @@
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE']">
             <jxb:class name="Archetype" implClass="Archetype"/>
         </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='AUTHORED_ARCHETYPE']" abstract="true">
+            <jxb:class name="AuthoredArchetype" implClass="AuthoredArchetype"/>
+        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_CONSTRAINT']" abstract="true">
             <jxb:class name="ArchetypeConstraint" implClass="ArchetypeConstraint"/>
         </jxb:bindings>
@@ -400,28 +403,31 @@
 
     <jxb:bindings schemaLocation="../../xsd/am/Template.xsd" node="/xsd:schema">
         <jxb:bindings node="//xsd:complexType[@name='OPERATIONAL_TEMPLATE']">
+            <jxb:class name="OperationalTemplate" implClass="OperationalTemplate"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='TEMPLATE']">
             <jxb:class name="Template" implClass="Template"/>
         </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='C_ARCHETYPE_ROOT']">
             <jxb:class name="CArchetypeRoot" implClass="CArchetypeRoot"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='T_VIEW']">
-            <jxb:class name="TView" implClass="TView"/>
-        </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='T_CONSTRAINT']">
-            <jxb:class name="TConstraints" implClass="TConstraints"/>
-        </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='T_ATTRIBUTE']">
-            <jxb:class name="TAttribute" implClass="TAttribute"/>
-        </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='T_COMPLEX_OBJECT']">
-            <jxb:class name="TComplexObject" implClass="TComplexObject"/>
-        </jxb:bindings>
+        <!--<jxb:bindings node="//xsd:complexType[@name='T_VIEW']">-->
+            <!--<jxb:class name="TView" implClass="TView"/>-->
+        <!--</jxb:bindings>-->
+        <!--<jxb:bindings node="//xsd:complexType[@name='T_CONSTRAINT']">-->
+            <!--<jxb:class name="TConstraints" implClass="TConstraints"/>-->
+        <!--</jxb:bindings>-->
+        <!--<jxb:bindings node="//xsd:complexType[@name='T_ATTRIBUTE']">-->
+            <!--<jxb:class name="TAttribute" implClass="TAttribute"/>-->
+        <!--</jxb:bindings>-->
+        <!--<jxb:bindings node="//xsd:complexType[@name='T_COMPLEX_OBJECT']">-->
+            <!--<jxb:class name="TComplexObject" implClass="TComplexObject"/>-->
+        <!--</jxb:bindings>-->
         <jxb:bindings node="//xsd:complexType[@name='C_CODE_REFERENCE']">
             <jxb:class name="CCodeReference" implClass="CCodeReference"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='FLAT_ARCHETYPE_ONTOLOGY']">
-            <jxb:class name="FlatArchetypeOntology" implClass="FlatArchetypeOntology"/>
+        <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_TERMINOLOGY_ITEM']">
+            <jxb:class name="ArchetypeTerminologyItem" implClass="ArchetypeTerminologyItem"/>
         </jxb:bindings>
     </jxb:bindings>
 

@@ -26,26 +26,22 @@
 
     <xs:element name="template" type="OPERATIONAL_TEMPLATE"/>
 
+    <xs:complexType name="TEMPLATE">
+        <xs:complexContent>
+            <xs:extension base="AUTHORED_ARCHETYPE">
+                <xs:sequence>
+                    <xs:element name="overlays" type="ARCHETYPE" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="OPERATIONAL_TEMPLATE">
         <xs:complexContent>
-            <xs:extension base="ARCHETYPE">
+            <xs:extension base="AUTHORED_RESOURCE">
                 <xs:sequence>
-                    <xs:annotation id="annotations_added_20100503">
-                        <xs:documentation>Element 'annotations' added 3 May 2010 to provide a location for
-                            annotations on any template node. The location of the annotations is intended to be
-                            forwardly compatible with the upcoming Template specification (and Template Object Model)
-                            which adds an annotations attribute to the AUTHORED_RESOURCE class (from which
-                            the operational template as represented in this schema will inherit).
-
-                            OPERATIONAL_TEMPLATE now extends FLAT_ARCHETYPE and annotations was moved to AUTHORED_RESOURCE
-                            (and indirectly inherited).
-                        </xs:documentation>
-                    </xs:annotation>
-
-                    <xs:element name="component_ontologies" type="FLAT_ARCHETYPE_ONTOLOGY" minOccurs="0" maxOccurs="unbounded"/>
-
-                    <xs:element name="constraints" type="T_CONSTRAINT" minOccurs="0"/>
-                    <xs:element name="view" type="T_VIEW" minOccurs="0"/>
+                    <xs:element name="terminology_extracts" type="ARCHETYPE_TERMINOLOGY_ITEM"
+                                minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -57,75 +53,70 @@
                 <xs:sequence>
                     <xs:element name="archetype_ref" type="xs:string"/>
                     <xs:element name="slot_node_id" type="xs:string"/>
-                    <!--<xs:element name="template_id" type="TEMPLATE_ID" minOccurs="0"/>-->
-                    <!--<xs:element name="default_values" type="DEFAULT_VALUE" minOccurs="0" maxOccurs="unbounded"/>-->
-                    <!--<xs:element name="term_definitions" type="ARCHETYPE_TERM" minOccurs="0" maxOccurs="unbounded"/>-->
-                    <!--<xs:element name="term_bindings" type="TermBindingSet" minOccurs="0" maxOccurs="unbounded"/>-->
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="FLAT_ARCHETYPE_ONTOLOGY">
-        <xs:complexContent>
-            <xs:extension base="ARCHETYPE_TERMINOLOGY">
-                <xs:attribute name="archetype_id" type="xs:string" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-
-    <xs:complexType name="T_VIEW">
+    <xs:complexType name="ARCHETYPE_TERMINOLOGY_ITEM">
         <xs:sequence>
-            <xs:element name="constraints" minOccurs="0" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="items" maxOccurs="unbounded">
-                            <xs:complexType>
-                                <xs:sequence>
-                                    <xs:element name="value" type="xs:anySimpleType"/>
-                                </xs:sequence>
-                                <xs:attribute name="id" type="xs:string" use="required"/>
-                            </xs:complexType>
-                        </xs:element>
-                    </xs:sequence>
-                    <xs:attribute name="path" type="xs:string" use="required"/>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="value" type="xs:anyURI"/>
         </xs:sequence>
+        <xs:attribute name="code" type="xs:string" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="T_CONSTRAINT">
-        <!--<xs:complexContent>
-                  <xs:extension base="C_COMPLEX_OBJECT"/>
-              </xs:complexContent>-->
-        <xs:sequence>
-            <xs:element name="attributes" type="T_ATTRIBUTE" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
 
-    <xs:complexType name="T_ATTRIBUTE">
-        <!--<xs:complexContent>
-                  <xs:extension base="C_ATTRIBUTE">-->
-        <xs:sequence>
-            <xs:element name="rm_attribute_name" type="xs:string"/>
-            <xs:element name="children" minOccurs="0" maxOccurs="unbounded" type="T_COMPLEX_OBJECT"/>
-            <!-- parent object path -->
-            <xs:element name="differential_path" type="xs:string"/>
-        </xs:sequence>
-        <!--</xs:extension>
-              </xs:complexContent>-->
-    </xs:complexType>
+    <!--<xs:complexType name="T_VIEW">-->
+        <!--<xs:sequence>-->
+            <!--<xs:element name="constraints" minOccurs="0" maxOccurs="unbounded">-->
+                <!--<xs:complexType>-->
+                    <!--<xs:sequence>-->
+                        <!--<xs:element name="items" maxOccurs="unbounded">-->
+                            <!--<xs:complexType>-->
+                                <!--<xs:sequence>-->
+                                    <!--<xs:element name="value" type="xs:anySimpleType"/>-->
+                                <!--</xs:sequence>-->
+                                <!--<xs:attribute name="id" type="xs:string" use="required"/>-->
+                            <!--</xs:complexType>-->
+                        <!--</xs:element>-->
+                    <!--</xs:sequence>-->
+                    <!--<xs:attribute name="path" type="xs:string" use="required"/>-->
+                <!--</xs:complexType>-->
+            <!--</xs:element>-->
+        <!--</xs:sequence>-->
+    <!--</xs:complexType>-->
 
-    <xs:complexType name="T_COMPLEX_OBJECT">
-        <xs:complexContent>
-            <xs:extension base="C_COMPLEX_OBJECT">
-                <xs:sequence>
-                    <xs:element name="default_value" minOccurs="0" type="DATA_VALUE"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+    <!--<xs:complexType name="T_CONSTRAINT">-->
+        <!--&lt;!&ndash;<xs:complexContent>-->
+                  <!--<xs:extension base="C_COMPLEX_OBJECT"/>-->
+              <!--</xs:complexContent>&ndash;&gt;-->
+        <!--<xs:sequence>-->
+            <!--<xs:element name="attributes" type="T_ATTRIBUTE" minOccurs="0" maxOccurs="unbounded"/>-->
+        <!--</xs:sequence>-->
+    <!--</xs:complexType>-->
+
+    <!--<xs:complexType name="T_ATTRIBUTE">-->
+        <!--&lt;!&ndash;<xs:complexContent>-->
+                  <!--<xs:extension base="C_ATTRIBUTE">&ndash;&gt;-->
+        <!--<xs:sequence>-->
+            <!--<xs:element name="rm_attribute_name" type="xs:string"/>-->
+            <!--<xs:element name="children" minOccurs="0" maxOccurs="unbounded" type="T_COMPLEX_OBJECT"/>-->
+            <!--&lt;!&ndash; parent object path &ndash;&gt;-->
+            <!--<xs:element name="differential_path" type="xs:string"/>-->
+        <!--</xs:sequence>-->
+        <!--&lt;!&ndash;</xs:extension>-->
+              <!--</xs:complexContent>&ndash;&gt;-->
+    <!--</xs:complexType>-->
+
+    <!--<xs:complexType name="T_COMPLEX_OBJECT">-->
+        <!--<xs:complexContent>-->
+            <!--<xs:extension base="C_COMPLEX_OBJECT">-->
+                <!--<xs:sequence>-->
+                    <!--<xs:element name="default_value" minOccurs="0" type="DATA_VALUE"/>-->
+                <!--</xs:sequence>-->
+            <!--</xs:extension>-->
+        <!--</xs:complexContent>-->
+    <!--</xs:complexType>-->
 
     <xs:complexType name="C_CODE_REFERENCE">
         <xs:complexContent>
@@ -136,122 +127,5 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-    <!--<xs:complexType name="DEFAULT_VALUE" abstract="true">
-      <xs:sequence>
-        <xs:element name="path" type="xs:string"/>
-      </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="DEFAULT_BOOLEAN">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="xs:boolean"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_STRING">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="xs:string"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_INTEGER">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="xs:int"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_REAL">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="xs:float"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DATE">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="Iso8601Date"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DATE_TIME">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="Iso8601DateTime"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_TIME">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="Iso8601Time"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DURATION">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="Iso8601Duration"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
-
-    <!-- OpenEHR Template Default Values-->
-    <!--<xs:complexType name="DEFAULT_CODE_PHRASE">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="CODE_PHRASE"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DV_ORDINAL">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="DV_ORDINAL"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DV_QUANTITY">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="DV_QUANTITY"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="DEFAULT_DV_STATE">
-      <xs:complexContent>
-        <xs:extension base="DEFAULT_VALUE">
-          <xs:sequence>
-            <xs:element name="value" type="DV_STATE"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
 
 </xs:schema>

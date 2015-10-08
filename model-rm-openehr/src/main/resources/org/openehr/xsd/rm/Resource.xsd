@@ -31,6 +31,7 @@
             <xs:element name="translations" type="TRANSLATION_DETAILS" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="revision_history" type="REVISION_HISTORY" minOccurs="0"/>
             <xs:element name="annotations" type="RESOURCE_ANNOTATIONS" minOccurs="0"/>
+            <xs:element name="uid" type="HIER_OBJECT_ID" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="TRANSLATION_DETAILS">

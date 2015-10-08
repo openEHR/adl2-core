@@ -105,20 +105,13 @@ public class AdlUtils {
         return result;
     }
 
-    public static Template createTemplateClone(Archetype source) {
-        checkArgument(!source.isIsDifferential(), "source archetype must be a flat archetype");
-        Template result = new Template();
-        fillArchetypeFields(result, source);
-
-        return makeClone(result);
-    }
 
 
     private static void fillArchetypeFields(Archetype target, Archetype source) {
         target.setDefinition(source.getDefinition());
         target.setIsControlled(source.isIsControlled());
         target.setArchetypeId(source.getArchetypeId());
-        target.setUid(source.getUid());
+        target.setBuildUid(source.getBuildUid());
         target.setIsDifferential(source.isIsDifferential());
         target.setAdlVersion(source.getAdlVersion());
         target.setConcept(source.getConcept());

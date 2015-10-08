@@ -27,13 +27,9 @@
     <xs:element name="archetype" type="ARCHETYPE"/>
     <xs:complexType name="ARCHETYPE">
         <xs:complexContent>
-            <xs:extension base="AUTHORED_RESOURCE">
+            <xs:extension base="AUTHORED_ARCHETYPE">
                 <xs:sequence>
-                    <xs:element name="uid" type="HIER_OBJECT_ID" minOccurs="0"/>
                     <xs:element name="archetype_id" type="ARCHETYPE_ID"/>
-                    <xs:element name="adl_version" type="xs:string" minOccurs="0"/>
-                    <xs:element name="rm_release" type="xs:string" minOccurs="1"/>
-                    <xs:element name="is_generated" type="xs:boolean" minOccurs="1"/>
                     <xs:element name="is_differential" type="xs:boolean" minOccurs="1"/>
                     <xs:element name="concept" type="xs:string"/>
                     <xs:element name="parent_archetype_id" type="ARCHETYPE_ID" minOccurs="0"/>
@@ -42,11 +38,24 @@
                     <xs:element name="terminology" type="ARCHETYPE_TERMINOLOGY"/>
                     <xs:element name="is_template" type="xs:boolean"/>
                     <xs:element name="is_overlay" type="xs:boolean"/>
-
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="AUTHORED_ARCHETYPE">
+        <xs:complexContent>
+            <xs:extension base="AUTHORED_RESOURCE">
+                <xs:sequence>
+                    <xs:element name="adl_version" type="xs:string" minOccurs="0"/>
+                    <xs:element name="build_uid" type="HIER_OBJECT_ID" minOccurs="0"/>
+                    <xs:element name="rm_release" type="xs:string" minOccurs="1"/>
+                    <xs:element name="is_generated" type="xs:boolean" minOccurs="1"/>
+                    <xs:element name="other_metadata" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="ARCHETYPE_CONSTRAINT" abstract="true">
         <xs:sequence/>
     </xs:complexType>

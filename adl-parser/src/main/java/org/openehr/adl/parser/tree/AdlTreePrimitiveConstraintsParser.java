@@ -31,7 +31,8 @@ import org.openehr.jaxb.rm.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openehr.adl.parser.tree.AdlTreeParserUtils.*;
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.collectText;
+import static org.openehr.adl.parser.tree.AdlTreeParserUtils.unescapeString;
 import static org.openehr.adl.rm.RmObjectFactory.*;
 
 /**
@@ -60,46 +61,28 @@ abstract class AdlTreePrimitiveConstraintsParser {
         if (context.durationConstraint() != null) {
             return parseDuration(context.durationConstraint(), context.DURATION());
         }
-        if (context.terminologyCodeConstraint()!=null) {
+        if (context.terminologyCodeConstraint() != null) {
             return parseTerminologyCode(context.terminologyCodeConstraint());
         }
-//        if (context.codeIdentifierList() != null) {
-//            return parseCodeIdentifierList(context.codeIdentifierList());
-//        }
         throw new AssertionError();
     }
 
     private static CTerminologyCode parseTerminologyCode(adlParser.TerminologyCodeConstraintContext context) {
         CTerminologyCode result = new CTerminologyCode();
         result.setConstraint(context.constraint.getText());
-        if (context.assumedValue!=null) {
+        if (context.assumedValue != null) {
             result.setAssumedValue(context.assumedValue.getText());
         }
         return result;
     }
 
-//    static CPrimitiveObject parseCodeIdentifierList(adlParser.CodeIdentifierListContext context) {
-//        CTerminologyCode result = new CTerminologyCode();
-//        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
-//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifier()) {
-//
-//            result.getCodeList().add(parseCodeIdentifier(cCodeIdentifier));
-//        }
-//        return result;
-//    }
-
-//    static String parseCodeIdentifier(adlParser.CodeIdentifierContext context) {
-//        return collectNonNullText(context);
-//    }
 
     static CDate parseDate(adlParser.DateConstraintContext context, TerminalNode assumedValue) {
         CDate result = new CDate();
         result.setRmTypeName(RmTypes.DATE);
         result.setPatternConstraint(collectText(context.DATE_PATTERN()));
         if (context.ISO_DATE() != null) {
-            // should go to list attribute, but there is none on CDate class
-//            String dateStr = collectText(context.ISO_DATE());
-//            result.setRange(newIntervalOfDate(dateStr, dateStr));
+            result.getConstraint().add(newIntervalOfDate(context.ISO_DATE().getText(), context.ISO_DATE().getText()));
         }
         for (adlParser.DateIntervalConstraintContext ctx : context.dateIntervalConstraint()) {
             result.getConstraint().add(parseDateInterval(ctx));
@@ -113,8 +96,8 @@ abstract class AdlTreePrimitiveConstraintsParser {
         result.setRmTypeName(RmTypes.DATE_TIME);
         result.setPatternConstraint(collectText(context.DATE_TIME_PATTERN()));
         if (context.ISO_DATE_TIME() != null) {
-            // should go to list attribute, but there is none on CDate class
-//            result.setPattern(collectText(context.ISO_DATE_TIME()));
+            result.getConstraint().add(newIntervalOfDateTime(
+                    context.ISO_DATE_TIME().getText(), context.ISO_DATE_TIME().getText()));
         }
 
         for (adlParser.DateTimeIntervalConstraintContext ctx : context.dateTimeIntervalConstraint()) {
@@ -147,8 +130,7 @@ abstract class AdlTreePrimitiveConstraintsParser {
         result.setRmTypeName(RmTypes.TIME);
         result.setPatternConstraint(collectText(context.TIME_PATTERN()));
         if (context.ISO_TIME() != null) {
-            // should go to list attribute, but there is none on CTime class
-//            result.setPattern(collectText(context.ISO_TIME()));
+            result.getConstraint().add(newIntervalOfTime(context.ISO_TIME().getText(), context.ISO_TIME().getText()));
         }
 
         for (adlParser.TimeIntervalConstraintContext ctx : context.timeIntervalConstraint()) {

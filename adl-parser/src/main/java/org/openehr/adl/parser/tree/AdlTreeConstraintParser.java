@@ -268,9 +268,6 @@ abstract class AdlTreeConstraintParser {
         if (context.primitiveValueConstraint() != null) {
             return parsePrimitiveValue(context.primitiveValueConstraint());
         }
-//        if (context.codePhraseConstraint() != null) {
-//            return parseCodePhrase(context.codePhraseConstraint());
-//        }
         if (context.ordinalConstraint() != null) {
             return parseCDvOrdinalConstraint(context.ordinalConstraint());
         }

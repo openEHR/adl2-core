@@ -261,9 +261,6 @@
         <jxb:bindings node="//xsd:complexType[@name='C_ATTRIBUTE']">
             <jxb:class name="CAttribute" implClass="CAttribute"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='C_OBJECT_GROUP']">
-            <jxb:class name="CObjectGroup" implClass="CObjectGroup"/>
-        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='CARDINALITY']">
             <jxb:class name="Cardinality" implClass="Cardinality"/>
         </jxb:bindings>
@@ -320,6 +317,9 @@
         </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='C_REAL']">
             <jxb:class name="CReal" implClass="CReal"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xsd:complexType[@name='C_TEMPORAL']" abstract="true">
+            <jxb:class name="CTemporal" implClass="CTemporal"/>
         </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='C_DATE']">
             <jxb:class name="CDate" implClass="CDate"/>

@@ -191,7 +191,7 @@ regularExpressionInner2: ( ~'^')*;
 
 
 attributeConstraint
-	: attributeIdentifier existence? cardinality? ((negatedMatches='~')? MATCHES '{' multiValueConstraint '}' )?
+	: attributeIdentifier existence? cardinality? (MATCHES '{' multiValueConstraint '}' )?
 	|  tupleAttributeIdentifier existence? MATCHES '{' tupleChildConstraints '}'
 	;
 

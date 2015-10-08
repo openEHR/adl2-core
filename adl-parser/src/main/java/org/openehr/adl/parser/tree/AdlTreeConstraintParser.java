@@ -235,8 +235,6 @@ abstract class AdlTreeConstraintParser {
         }
         result.setCardinality(parseCardinality(context.cardinality()));
 
-        result.setMatchNegated(context.negatedMatches != null);
-
         if (context.attributeIdentifier() != null) {
             String rmPath = collectNonNullText(context.attributeIdentifier());
             if (rmPath.startsWith("/")) {
@@ -310,20 +308,6 @@ abstract class AdlTreeConstraintParser {
         return newCodePhrase(newTerminologyId(collectText(context.tid)), collectText(context.code));
     }
 
-//    private static CTerminologyCode parseCodePhrase(adlParser.CodePhraseConstraintContext context) {
-//        CTerminologyCode result = new CTerminologyCode();
-//        result.setRmTypeName(RmTypes.TERMINOLOGY_CODE);
-//
-//        result.setTerminologyId(collectText(context.tid));
-//        if (context.assumed!=null) {
-//            result.setAssumedValue(collectText(context.assumed));
-//        }
-//        for (adlParser.CodeIdentifierContext cCodeIdentifier : context.codeIdentifierList().codeIdentifier()) {
-//            result.getCodeList().add(collectText(cCodeIdentifier));
-//        }
-//
-//        return result;
-//    }
 
     private static Cardinality parseCardinality(adlParser.CardinalityContext context) {
         if (context == null) return null;

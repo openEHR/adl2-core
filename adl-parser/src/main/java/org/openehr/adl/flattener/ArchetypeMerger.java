@@ -234,7 +234,6 @@ class ArchetypeMerger {
             }
         }
 
-        specialized.setMatchNegated(false);
         specialized.getChildren().clear();
         specialized.getChildren().addAll(result);
     }
@@ -317,30 +316,8 @@ class ArchetypeMerger {
             }
         }
 
-        if (container != null && container.isMatchNegated()) {
-            negateCObject(parent, specialized);
-        }
-
     }
 
-    private void negateCObject(CObject parent, CObject specialized) {
-
-        // todo how to do negation in aom2?
-//        if (specialized instanceof CTerminologyCode) {
-//            CTerminologyCode target = (CTerminologyCode) specialized;
-//            List<String> newCodeList = Lists.newArrayList(((CTerminologyCode) parent).getCodeList());
-//            for (ListIterator<String> iterator = newCodeList.listIterator(); iterator.hasNext(); ) {
-//                String code = iterator.next();
-//                if (target.getCodeList().contains(code)) {
-//                    iterator.remove();
-//                }
-//            }
-//            target.getCodeList().clear();
-//            target.getCodeList().addAll(newCodeList);
-//        } else {
-//            throw new AdlFlattenerException("Could not negate CObject of type " + specialized.getClass());
-//        }
-    }
 
 
     private <T> T first(@Nullable T first, @Nullable T second) {

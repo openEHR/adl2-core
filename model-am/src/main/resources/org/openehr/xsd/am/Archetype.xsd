@@ -76,21 +76,8 @@
                     <xs:element name="existence" type="MultiplicityInterval"/>
                     <xs:element name="differential_path" type="xs:string" minOccurs="0"/>
                     <xs:element name="is_multiple" type="xs:boolean"/>
-                    <xs:element name="match_negated" type="xs:boolean"/>
                     <xs:element name="children" type="C_OBJECT" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="cardinality" type="CARDINALITY"/>
-                    <xs:element name="groups" type="C_OBJECT_GROUP" minOccurs="0" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="C_OBJECT_GROUP">
-        <xs:complexContent>
-            <xs:extension base="ARCHETYPE_CONSTRAINT">
-                <xs:sequence>
-                    <xs:element name="range" type="IntervalOfInteger"/>
-                    <xs:element name="cardinality" type="CARDINALITY"/>
-                    <xs:element name="occurrences" type="MultiplicityInterval"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -327,9 +314,17 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="C_DATE">
+    <xs:complexType name="C_TEMPORAL">
         <xs:complexContent>
             <xs:extension base="C_PRIMITIVE_OBJECT">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="C_DATE">
+        <xs:complexContent>
+            <xs:extension base="C_TEMPORAL">
                 <xs:sequence>
                     <xs:element name="pattern_constraint" type="DateConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
@@ -359,7 +354,7 @@
 
     <xs:complexType name="C_DATE_TIME">
         <xs:complexContent>
-            <xs:extension base="C_PRIMITIVE_OBJECT">
+            <xs:extension base="C_TEMPORAL">
                 <xs:sequence>
                     <xs:element name="pattern_constraint" type="DateTimeConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
@@ -378,7 +373,7 @@
 
     <xs:complexType name="C_TIME">
         <xs:complexContent>
-            <xs:extension base="C_PRIMITIVE_OBJECT">
+            <xs:extension base="C_TEMPORAL">
                 <xs:sequence>
                     <xs:element name="pattern_constraint" type="TimeConstraintPattern" minOccurs="0"/>
                     <xs:element name="timezone_validity" type="VALIDITY_KIND" minOccurs="0"/>
@@ -396,7 +391,7 @@
     </xs:simpleType>
     <xs:complexType name="C_DURATION">
         <xs:complexContent>
-            <xs:extension base="C_PRIMITIVE_OBJECT">
+            <xs:extension base="C_TEMPORAL">
                 <xs:sequence>
                     <xs:element name="pattern_constraint" type="DurationConstraintPattern" minOccurs="0"/>
                     <xs:element name="constraint" type="IntervalOfDuration" minOccurs="0" maxOccurs="unbounded"/>

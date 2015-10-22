@@ -34,15 +34,13 @@ public class ArchetypeSerializer {
     private final AdlStringBuilder builder;
     private final Archetype archetype;
     private final ArchetypeWrapper archetypeWrapper;
-    private final String defaultLanguage;
     private final Map<Class, ConstraintSerializer> constraintSerializers;
 
 
-    private ArchetypeSerializer(Archetype archetype) {
+    private ArchetypeSerializer(Archetype archetype, Options options) {
         this.builder = new AdlStringBuilder();
         this.archetype = archetype;
         this.archetypeWrapper = new ArchetypeWrapper(archetype);
-        this.defaultLanguage = archetype.getOriginalLanguage().getCodeString();
 
 
         constraintSerializers = new HashMap<>();
@@ -66,7 +64,11 @@ public class ArchetypeSerializer {
 
 
     public static String serialize(Archetype archetype) {
-        return new ArchetypeSerializer(archetype).serialize();
+        return serialize(archetype, new Options());
+    }
+
+    public static String serialize(Archetype archetype, Options options) {
+        return new ArchetypeSerializer(archetype, options).serialize();
     }
 
     private String serialize() {
@@ -89,26 +91,27 @@ public class ArchetypeSerializer {
                     .append(archetype.getParentArchetypeId().getValue())
                     .unindent().newline();
         }
-
-        if (archetype.getConcept() != null) {
-            String comment = archetypeWrapper.getTermText(defaultLanguage, archetype.getConcept());
-            builder.newline().append("concept").newIndentedline()
-                    .append("[").append(archetype.getConcept()).append("]").lineComment(comment)
-                    .unindent().newline();
-        }
-
-        if (archetype.getOriginalLanguage() != null) {
-            builder.newline().append("language").newIndentedline();
-            builder.append("original_language = ").dadl(archetype.getOriginalLanguage()).newline();
-            if (!archetype.getTranslations().isEmpty()) {
-                builder.append("translations = ").dadl(archetype.getTranslations()).newline();
+        if (!archetype.isIsOverlay()) {
+            if (archetype.getConcept() != null) {
+                String comment = archetypeWrapper.getTermText( archetype.getConcept());
+                builder.newline().append("concept").newIndentedline()
+                        .append("[").append(archetype.getConcept()).append("]").lineComment(comment)
+                        .unindent().newline();
             }
-            builder.unindent();
-        }
 
-        if (archetype.getDescription() != null) {
-            builder.newline().append("description");
-            builder.dadlBean(archetype.getDescription());
+            if (archetype.getOriginalLanguage() != null) {
+                builder.newline().append("language").newIndentedline();
+                builder.append("original_language = ").dadl(archetype.getOriginalLanguage()).newline();
+                if (!archetype.getTranslations().isEmpty()) {
+                    builder.append("translations = ").dadl(archetype.getTranslations()).newline();
+                }
+                builder.unindent();
+            }
+
+            if (archetype.getDescription() != null) {
+                builder.newline().append("description");
+                builder.dadlBean(archetype.getDescription());
+            }
         }
 
         if (archetype.getDefinition() != null) {
@@ -118,7 +121,6 @@ public class ArchetypeSerializer {
         }
 
         if (archetype.getTerminology() != null) {
-            //builder.newline().append("terminology").dadlBean(archetype.getOntology());
             builder.newline().append("terminology").dadlBean(archetype.getTerminology());
             builder.newline();
         }
@@ -159,9 +161,10 @@ public class ArchetypeSerializer {
 
     public boolean isEmpty(CObject cobj) {
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
-        return serializer!=null?serializer.isEmpty(cobj):false;
+        return serializer != null ? serializer.isEmpty(cobj) : false;
 
     }
+
     public void buildCObject(CObject cobj) {
 
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
@@ -190,7 +193,17 @@ public class ArchetypeSerializer {
         return archetypeWrapper;
     }
 
-    public String getDefaultLanguage() {
-        return defaultLanguage;
+    public static class Options {
+        private String preferredLanguage;
+        public Options() {
+        }
+
+        public String getPreferredLanguage() {
+            return preferredLanguage;
+        }
+
+        public void setPreferredLanguage(String preferredLanguage) {
+            this.preferredLanguage = preferredLanguage;
+        }
     }
 }

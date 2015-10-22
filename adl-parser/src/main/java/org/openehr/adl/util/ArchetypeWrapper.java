@@ -35,6 +35,7 @@ import java.util.Map;
  */
 public class ArchetypeWrapper {
     private final Archetype archetype;
+    private final String defaultLanguage;
     // terminology, code -> value
     private final Map<String, Map<String, String>> terminologyBindings;
     // language, code, id(text/description) -> value
@@ -43,11 +44,25 @@ public class ArchetypeWrapper {
     private final Map<String, List<String>> valueSets;
 
     public ArchetypeWrapper(Archetype archetype) {
+        this(archetype, null);
+    }
+
+    public ArchetypeWrapper(Archetype archetype, @Nullable String preferredLanguage) {
         this.archetype = archetype;
         terminologyBindings = parseTerminologyBindings(archetype.getTerminology());
         terminologyDefinitions = parseCodeDefinitionSet(archetype.getTerminology().getTermDefinitions());
         constraintDefinitions = parseCodeDefinitionSet(archetype.getTerminology().getConstraintDefinitions());
         valueSets = parseValueSets(archetype.getTerminology().getValueSets());
+
+        if (preferredLanguage!=null && terminologyDefinitions.containsKey(preferredLanguage)) {
+            defaultLanguage=preferredLanguage;
+        } else if (archetype.getOriginalLanguage()!=null) {
+            defaultLanguage = archetype.getOriginalLanguage().getCodeString();
+        } else if (archetype.getTerminology()!=null && !archetype.getTerminology().getTermDefinitions().isEmpty()){
+            defaultLanguage=archetype.getTerminology().getTermDefinitions().get(0).getLanguage();
+        } else {
+            defaultLanguage=null;
+        }
 
     }
 
@@ -109,7 +124,7 @@ public class ArchetypeWrapper {
 
     @Nullable
     public String getTermText(String code) {
-        return getTermText(archetype.getOriginalLanguage().getCodeString(), code);
+        return getTermText(defaultLanguage, code);
     }
 
 
@@ -129,7 +144,7 @@ public class ArchetypeWrapper {
 
     @Nullable
     public String getConstraintDefinitionText(String code) {
-        return getConstraintDefinitionText(archetype.getOriginalLanguage().getCodeString(), code);
+        return getConstraintDefinitionText(defaultLanguage, code);
     }
 
     public List<String> getValueSet(String code) {

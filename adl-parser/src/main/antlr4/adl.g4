@@ -151,7 +151,7 @@ archetypeSlotSingleConstraint:
 
 
 archetypeReferenceConstraint
-	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' (AT_CODE_VALUE ',')? archetypeId ']' occurrences?
+	: (start=USE_ARCHETYPE|start=USE_TEMPLATE) typeIdentifier '[' AT_CODE_VALUE ',' archetypeId ']' occurrences?
 	;
 
 

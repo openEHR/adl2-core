@@ -46,13 +46,11 @@ public class ArchetypeReferenceTest extends ParserTestBase {
     @Test
     public void testFilledSlot() {
         Archetype archetype = parseArchetype("adl15/openEHR-EHR-COMPOSITION.slots-filled.v1.adls");
-        CArchetypeRoot root = AmQuery.get(archetype, "/content[openEHR-EHR-EVALUATION.substance_use_summary.v1]");
+        CArchetypeRoot root = AmQuery.get(archetype, "/content[at0001]");
 
         assertThat(root.getRmTypeName()).isEqualTo("EVALUATION");
         assertThat(root.getArchetypeRef()).isEqualTo("openEHR-EHR-EVALUATION.substance_use_summary.v1");
-        assertThat(root.getNodeId()).isEqualTo("openEHR-EHR-EVALUATION.substance_use_summary.v1");
-        assertThat(root.getArchetypeRef()).isEqualTo("openEHR-EHR-EVALUATION.substance_use_summary.v1");
-        assertThat(root.getSlotNodeId()).isEqualTo("at0001");
+        assertThat(root.getNodeId()).isEqualTo("at0001");
 
     }
 

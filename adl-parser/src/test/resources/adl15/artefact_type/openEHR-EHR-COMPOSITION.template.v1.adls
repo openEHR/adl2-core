@@ -25,7 +25,7 @@ description
 definition
 	COMPOSITION[at0000] matches {
 		/content matches {
-			use_archetype EVALUATION[openEHR-EHR-EVALUATION.alert.v1] occurrences matches {0..1}
+			use_archetype EVALUATION[at0001, openEHR-EHR-EVALUATION.alert.v1] occurrences matches {0..1}
 		}
 	}
 

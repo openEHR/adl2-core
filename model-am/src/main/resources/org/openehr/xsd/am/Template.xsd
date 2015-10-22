@@ -52,7 +52,6 @@
             <xs:extension base="C_COMPLEX_OBJECT">
                 <xs:sequence>
                     <xs:element name="archetype_ref" type="xs:string"/>
-                    <xs:element name="slot_node_id" type="xs:string"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

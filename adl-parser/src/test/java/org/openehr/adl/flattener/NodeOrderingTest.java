@@ -23,7 +23,13 @@ package org.openehr.adl.flattener;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.am.CComplexObject;
+import org.openehr.jaxb.am.CObject;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * @author markopi
@@ -36,16 +42,12 @@ public class NodeOrderingTest extends FlattenerTestBase {
 
         CAttribute attr = ((CComplexObject) flattened.getDefinition().getAttributes().get(0).getChildren().get(0)).getAttributes().get(0);
 
-        assertEquals(attr.getChildren().get(0).getNodeId(), "at0.7");
-        assertEquals(attr.getChildren().get(1).getNodeId(), "at0002");
-        assertEquals(attr.getChildren().get(2).getNodeId(), "at0.1");
-        assertEquals(attr.getChildren().get(3).getNodeId(), "at0.5");
-        assertEquals(attr.getChildren().get(4).getNodeId(), "at0003");
-        assertEquals(attr.getChildren().get(5).getNodeId(), "at0.2");
-        assertEquals(attr.getChildren().get(6).getNodeId(), "at0.3");
-        assertEquals(attr.getChildren().get(7).getNodeId(), "at0.4");
-        assertEquals(attr.getChildren().get(8).getNodeId(), "at0004");
-        assertEquals(attr.getChildren().get(9).getNodeId(), "at0.6");
+        List<String> nodeids = new ArrayList<>();
+        for (CObject cObject : attr.getChildren()) {
+            nodeids.add(cObject.getNodeId());
+        }
+        assertThat(nodeids).containsExactly("at0.7", "at0002", "at0.1", "at0.5", "at0003", "at0.2", "at0.4", "at0.3", "at0004", "at0.6");
+
 
     }
 

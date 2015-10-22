@@ -20,8 +20,8 @@
 
 package org.openehr.adl.flattener;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
+import org.openehr.adl.AdlException;
 import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.adl.rm.RmType;
@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.openehr.adl.util.AdlUtils.*;
 
 /**
@@ -171,6 +170,7 @@ class ArchetypeMerger {
             if (parentAttribute != null) {
                 flattenCAttribute(attributePath, parentAttribute, specializedAttribute);
             }
+
             if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
                 iterator.remove();
             }
@@ -219,24 +219,114 @@ class ArchetypeMerger {
 
         mergeAttribute(parent, specialized);
 
-        List<Pair<CObject>> childPairs = getChildPairs(path, parent, specialized);
+//        List<Pair<CObject>> childPairs = getChildPairs(path, parent, specialized);
 
-        List<CObject> result = new ArrayList<>();
-        for (Pair<CObject> pair : childPairs) {
-            if (pair.specialized != null) {
-                final RmPath childPath = path.constrain(first(pair.parent, pair.specialized).getNodeId());
-                if (pair.parent != null) {
-                    flattenCObject(childPath, specialized, pair.parent, pair.specialized);
+        List<CObject> conses = Lists.newArrayList(parent.getChildren());
+        Set<CObject> specializedConses = ImmutableSet.copyOf(specialized.getChildren());
+        addSpecializedChildren(conses, specialized.getChildren());
+
+        Set<CObject> parentConsesToRemove = Sets.newHashSet();
+
+        for (CObject specializedCons : conses) {
+            if (!specializedConses.contains(specializedCons)) continue;
+
+            if (specializedCons.getNodeId() != null) {
+                CObject parentCons = findParentConstraintOfSpecializedNode(parent, specializedCons.getNodeId());
+
+                if (parentCons != null) {
+                    if (specializedCons instanceof CArchetypeRoot) {
+                        // do not replace slot parent
+                    } else {
+                        final RmPath childPath = path.constrain(first(parentCons, specializedCons).getNodeId());
+                        flattenCObject(childPath, specialized, parentCons, specializedCons);
+                        parentConsesToRemove.add(parentCons);
+                    }
                 }
-                result.add(pair.specialized);
-            } else {
-                result.add(makeClone(checkNotNull(pair.parent)));
+            } else if (specializedCons.getRmTypeName() != null) {
+                CObject parentCons = findParentConstraintWithRmType(parent, specializedCons.getRmTypeName());
+                if (parentCons != null) {
+                    final RmPath childPath = path.constrain(first(parentCons, specializedCons).getNodeId());
+                    flattenCObject(childPath, specialized, parentCons, specializedCons);
+                    parentConsesToRemove.add(parentCons);
+
+                }
+            } else if (parent.getChildren().size() == 1) {
+                CObject parentCons = parent.getChildren().get(0);
+                parentConsesToRemove.add(parentCons);
             }
         }
 
+        for (ListIterator<CObject> iterator = conses.listIterator(); iterator.hasNext(); ) {
+            CObject cons = iterator.next();
+            if (specializedConses.contains(cons)) continue;
+
+            if (parentConsesToRemove.contains(cons)) {
+                iterator.remove();
+            } else {
+                iterator.set(makeClone(cons));
+            }
+        }
         specialized.getChildren().clear();
-        specialized.getChildren().addAll(result);
+        specialized.getChildren().addAll(conses);
+
+
+//        List<CObject> result = new ArrayList<>();
+//        for (Pair<CObject> pair : childPairs) {
+//            if (pair.specialized != null) {
+//                final RmPath childPath = path.constrain(first(pair.parent, pair.specialized).getNodeId());
+//                if (pair.parent != null) {
+//                    flattenCObject(childPath, specialized, pair.parent, pair.specialized);
+//                }
+//                if (pair.specialized instanceof CArchetypeRoot) {
+//                    result.add(pair.parent);
+//                }
+//                result.add(pair.specialized);
+//            } else {
+//                result.add(makeClone(checkNotNull(pair.parent)));
+//            }
+//        }
+
+//        specialized.getChildren().clear();
+//        specialized.getChildren().addAll(result);
     }
+
+    private void addSpecializedChildren(List<CObject> conses, List<CObject> children) {
+        Multimap<String, CObject> moveOnParent = ArrayListMultimap.create();
+        Multimap<String, CObject> moveOnAfter = ArrayListMultimap.create();
+        for (CObject child : children) {
+            if (child.getNodeId() != null) {
+                if (child.getSiblingOrder() != null) {
+                    int anchorIndex = findParentConstraintOfSpecializedNodeIndex(conses, child.getSiblingOrder().getSiblingNodeId());
+                    if (anchorIndex < 0)
+                        throw new AdlException("Node " + child.getNodeId() + " has an nonexisting sibling order node: " + child.getSiblingOrder().getSiblingNodeId());
+                    if (child.getSiblingOrder().isIsBefore()) {
+                        conses.add(anchorIndex, child);
+                    } else {
+                        conses.add(anchorIndex + 1 + moveOnAfter.get(child.getSiblingOrder().getSiblingNodeId()).size(), child);
+                        moveOnAfter.put(child.getSiblingOrder().getSiblingNodeId(), child);
+                    }
+                } else {
+                    int anchorIndex = findParentConstraintOfSpecializedNodeIndex(conses, child.getNodeId());
+                    if (anchorIndex >= 0) {
+                        String parentNodeId = unspecializeNodeId(child.getNodeId());
+                        conses.add(anchorIndex + 1 + moveOnParent.get(parentNodeId).size(), child);
+                        moveOnParent.put(parentNodeId, child);
+                    } else {
+                        conses.add(child);
+                    }
+                }
+            } else {
+                conses.add(child);
+            }
+        }
+    }
+
+    private String unspecializeNodeId(String nodeId) {
+        int lastPeriod = nodeId.lastIndexOf('.');
+        if (lastPeriod<0) return nodeId;
+        return nodeId.substring(0, lastPeriod);
+    }
+
 
     /* Returns matching (parent,specialized) pairs of children of an attribute, in the order they should be present in
      the flattened model. One of the element may be null in case of no specialization or extension.  */
@@ -319,7 +409,6 @@ class ArchetypeMerger {
     }
 
 
-
     private <T> T first(@Nullable T first, @Nullable T second) {
         if (first != null) return first;
         if (second != null) return second;
@@ -337,9 +426,29 @@ class ArchetypeMerger {
     }
 
     @Nullable
+    private CObject findParentConstraintOfSpecializedNode(List<CObject> parentConses, @Nullable String nodeId) {
+        int index = findParentConstraintOfSpecializedNodeIndex(parentConses, nodeId);
+        return index >= 0 ? parentConses.get(index) : null;
+    }
+
+    private int findParentConstraintOfSpecializedNodeIndex(List<CObject> parentConses, @Nullable String nodeId) {
+        for (int i = 0; i < parentConses.size(); i++) {
+            CObject candidate = parentConses.get(i);
+            if (atCodeMatchesOrSpecializes(nodeId, candidate.getNodeId())) return i;
+        }
+        return -1;
+    }
+
     private CObject findParentConstraintOfSpecializedNode(CAttribute parent, @Nullable String nodeId) {
-        for (CObject candidate : parent.getChildren()) {
-            if (atCodeMatchesOrSpecializes(nodeId, candidate.getNodeId())) return candidate;
+        return findParentConstraintOfSpecializedNode(parent.getChildren(), nodeId);
+    }
+
+    @Nullable
+    private CObject findParentConstraintWithRmType(CAttribute parent, String rmType) {
+        for (CObject object : parent.getChildren()) {
+            if (object.getRmTypeName().equals(rmType)) {
+                return object;
+            }
         }
         return null;
     }

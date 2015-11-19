@@ -64,7 +64,7 @@ public class AdlTreeParser {
         if (context.terminology() != null) {
             result.setTerminology(parseTerminology(context.terminology()));
         }
-        if (context.annotations()!=null) {
+        if (context.annotations() != null) {
             result.setAnnotations(parseAnnotations(context.annotations()));
         }
 
@@ -74,9 +74,9 @@ public class AdlTreeParser {
     private ResourceAnnotations parseAnnotations(adlParser.AnnotationsContext context) {
         ResourceAnnotations result = new ResourceAnnotations();
         OdinObject dAnnotations = OdinObject.parse(context.odinObjectValue());
-        
+
         adlParser.OdinValueContext cLanguages = skipItems(dAnnotations.tryGet("items"));
-        if (cLanguages==null || cLanguages.odinMapValue()==null) return result;
+        if (cLanguages == null || cLanguages.odinMapValue() == null) return result;
         for (adlParser.OdinMapValueEntryContext cLanguageEntry : cLanguages.odinMapValue().odinMapValueEntry()) {
             ResourceAnnotationNodes nodes = new ResourceAnnotationNodes();
             nodes.setLanguage(collectText(cLanguageEntry.key));
@@ -88,7 +88,7 @@ public class AdlTreeParser {
     }
 
     private void parseResourceAnnotationNodeItems(List<ResourceAnnotationNodeItems> target, adlParser.OdinValueContext context) {
-        if (context==null || context.odinMapValue()==null) return;
+        if (context == null || context.odinMapValue() == null) return;
         for (adlParser.OdinMapValueEntryContext cEntry : context.odinMapValue().odinMapValueEntry()) {
             ResourceAnnotationNodeItems item = new ResourceAnnotationNodeItems();
             item.setPath(collectText(cEntry.key));
@@ -194,7 +194,7 @@ public class AdlTreeParser {
 
 
     private adlParser.OdinValueContext skipItems(adlParser.OdinValueContext context) {
-        if (context==null || context.odinObjectValue() == null) return context;
+        if (context == null || context.odinObjectValue() == null) return context;
         OdinObject odinObject = OdinObject.parse(context.odinObjectValue());
         adlParser.OdinValueContext result = odinObject.tryGet("items");
         if (result != null) return result;
@@ -255,19 +255,25 @@ public class AdlTreeParser {
         adlParser.OdinObjectValueContext description = context.odinObjectValue();
         result.setCopyright(collectString(getAdlPropertyOrNull(description, "copyright")));
         result.setLifecycleState(collectString(getAdlPropertyOrNull(description, "lifecycle_state")));
-        adlParser.OdinValueContext property = getAdlPropertyOrNull(description, "original_author");
-        if (property != null) {
-            parseStringDictionaryItems(result.getOriginalAuthor(), property.odinMapValue());
-        }
+        parseStringDictionaryItems(result.getOriginalAuthor(), getAdlPropertyOrNull(description, "original_author"));
+
+        adlParser.OdinValueContext property;
         property = getAdlPropertyOrNull(description, "details");
         if (property != null) {
             parseResourceDescriptionItems(result.getDetails(), property.odinMapValue());
         }
-
         adlParser.OdinValueContext otherContributors = getAdlPropertyOrNull(description, "other_contributors");
         if (otherContributors != null) {
             result.getOtherContributors().addAll(collectStringList(otherContributors.openStringList()));
         }
+        result.setOriginalNamespace(collectString(getAdlPropertyOrNull(description, "original_namespace")));
+        result.setOriginalPublisher(collectString(getAdlPropertyOrNull(description, "original_publisher")));
+        result.setLicence(collectString(getAdlPropertyOrNull(description, "licence")));
+        result.setCustodianNamespace(collectString(getAdlPropertyOrNull(description, "custodian_namespace")));
+        result.setCustodianOrganisation(collectString(getAdlPropertyOrNull(description, "custodian_organisation")));
+
+        parseStringDictionaryItems(result.getReferences(), getAdlPropertyOrNull(description, "references"));
+
 
         return result;
     }
@@ -277,7 +283,6 @@ public class AdlTreeParser {
 
         for (adlParser.OdinMapValueEntryContext entry : entries) {
             adlParser.OdinObjectValueContext itemContext = entry.odinValue().odinObjectValue();
-            adlParser.OdinValueContext property;
             ResourceDescriptionItem item = new ResourceDescriptionItem();
             //item.setCopyright(collectString(objItem.tryGet("copyright")));
             for (adlParser.OdinObjectPropertyContext propertyContext : itemContext.odinObjectProperty()) {
@@ -313,10 +318,11 @@ public class AdlTreeParser {
     }
 
     private void parseStringDictionaryItems(List<StringDictionaryItem> target, @Nullable adlParser.OdinValueContext context) {
-        if (context==null) return;
+        if (context == null) return;
         parseStringDictionaryItems(target, context.odinMapValue());
         parseStringDictionaryItems(target, context.odinObjectValue());
     }
+
     private void parseStringDictionaryItems(List<StringDictionaryItem> target, @Nullable adlParser.OdinMapValueContext context) {
         if (context == null) return;
         List<adlParser.OdinMapValueEntryContext> entries = context.odinMapValueEntry();
@@ -363,27 +369,26 @@ public class AdlTreeParser {
     }
 
     private Map<String, String> toStringMap(adlParser.OdinValueContext context) {
-        if (context==null) return ImmutableMap.of();
+        if (context == null) return ImmutableMap.of();
         return toStringMap(context.odinMapValue());
     }
+
     private Map<String, String> toStringMap(adlParser.OdinMapValueContext context) {
-        if (context==null) return ImmutableMap.of();
+        if (context == null) return ImmutableMap.of();
         Map<String, String> result = new LinkedHashMap<>();
         for (adlParser.OdinMapValueEntryContext cEntry : context.odinMapValueEntry()) {
             String key = collectText(cEntry.STRING());
-            String value=null;
-            if (cEntry.odinValue().openStringList()!=null) {
+            String value = null;
+            if (cEntry.odinValue().openStringList() != null) {
                 value = collectString(cEntry.odinValue().openStringList());
             }
-            if (cEntry.odinValue().url()!=null) {
+            if (cEntry.odinValue().url() != null) {
                 value = collectText(cEntry.odinValue().url());
             }
             result.put(key, value);
         }
         return result;
     }
-
-
 
 
     private void parseArchetypeHeader(Archetype target, adlParser.HeaderContext context) {

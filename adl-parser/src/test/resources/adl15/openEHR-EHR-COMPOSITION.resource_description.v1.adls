@@ -1,0 +1,47 @@
+﻿archetype (adl_version=2.0.4; rm_release=1.0.2; generated)
+	openEHR-EHR-COMPOSITION.resource_description.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"23/03/2006">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"The serialize/deserialize header attributes">
+			use = <"For testing">
+			keywords = <"attributes", ...>
+			misuse = <"not for testing">
+			copyright = <"copyright (c) 2010 openEHR foundation">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	original_namespace = <"Original Namespace">
+	original_publisher = <"Original Publisher">
+	copyright = <"copyright">
+	licence = <"licence">
+	custodian_namespace = <"Custodian Namespace">
+	custodian_organisation = <"Custodian Organisation">
+	references = <
+		["one"] = <"first">
+		["two"] = <"second">
+	>
+
+
+definition
+	COMPOSITION[id1] matches {*}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Attributes">
+				description = <"Attributes">
+			>
+		>
+	>

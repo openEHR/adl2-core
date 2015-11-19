@@ -82,7 +82,9 @@ public class ArchetypeSerializer {
             }
         }
 
-        appendHeaderAttributes();
+        if (!archetype.isIsOverlay()) {
+            appendHeaderAttributes();
+        }
 
         builder.newIndentedline().append(archetype.getArchetypeId().getValue()).unindent().newline();
 

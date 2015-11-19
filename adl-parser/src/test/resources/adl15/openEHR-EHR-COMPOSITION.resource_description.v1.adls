@@ -31,6 +31,14 @@ description
 		["one"] = <"first">
 		["two"] = <"second">
 	>
+	conversion_details = <
+		["one"] = <"first A">
+		["two"] = <"second A">
+	>
+	ip_acknowledgements = <
+		["one"] = <"first B">
+		["two"] = <"second B">
+	>
 
 
 definition

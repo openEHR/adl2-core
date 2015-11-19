@@ -36,6 +36,12 @@ public class ResourceDescriptionTest extends ParserTestBase {
         assertThat(dictToMap(desc.getReferences())).isEqualTo(ImmutableMap.of(
                 "one", "first",
                 "two", "second"));
+        assertThat(dictToMap(desc.getConversionDetails())).isEqualTo(ImmutableMap.of(
+                "one", "first A",
+                "two", "second A"));
+        assertThat(dictToMap(desc.getIpAcknowledgements())).isEqualTo(ImmutableMap.of(
+                "one", "first B",
+                "two", "second B"));
 
     }
 

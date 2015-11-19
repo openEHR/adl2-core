@@ -273,6 +273,8 @@ public class AdlTreeParser {
         result.setCustodianOrganisation(collectString(getAdlPropertyOrNull(description, "custodian_organisation")));
 
         parseStringDictionaryItems(result.getReferences(), getAdlPropertyOrNull(description, "references"));
+        parseStringDictionaryItems(result.getConversionDetails(), getAdlPropertyOrNull(description, "conversion_details"));
+        parseStringDictionaryItems(result.getIpAcknowledgements(), getAdlPropertyOrNull(description, "ip_acknowledgements"));
 
 
         return result;

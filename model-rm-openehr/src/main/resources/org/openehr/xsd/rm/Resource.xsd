@@ -45,19 +45,21 @@
     <xs:complexType name="RESOURCE_DESCRIPTION">
         <xs:sequence>
             <xs:element name="original_author" type="StringDictionaryItem" maxOccurs="unbounded"/>
-            <xs:element name="other_contributors" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="copyright" type="xs:string" minOccurs="0"/>
-            <xs:element name="lifecycle_state" type="xs:string"/>
-            <xs:element name="resource_package_uri" type="xs:string" minOccurs="0"/>
-            <xs:element name="other_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="details" type="RESOURCE_DESCRIPTION_ITEM" maxOccurs="unbounded"/>
-            <xs:element name="parent_resource" type="AUTHORED_RESOURCE" minOccurs="0"/>
             <xs:element name="original_namespace" type="xs:string" minOccurs="0"/>
             <xs:element name="original_publisher" type="xs:string" minOccurs="0"/>
-            <xs:element name="licence" type="xs:string" minOccurs="0"/>
+            <xs:element name="other_contributors" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="lifecycle_state" type="xs:string"/>
+            <xs:element name="parent_resource" type="AUTHORED_RESOURCE" minOccurs="0"/>
+            <xs:element name="details" type="RESOURCE_DESCRIPTION_ITEM" maxOccurs="unbounded"/>
             <xs:element name="custodian_namespace" type="xs:string" minOccurs="0"/>
             <xs:element name="custodian_organisation" type="xs:string" minOccurs="0"/>
+            <xs:element name="copyright" type="xs:string" minOccurs="0"/>
+            <xs:element name="licence" type="xs:string" minOccurs="0"/>
+            <xs:element name="ip_acknowledgements" type="StringDictionaryItem" maxOccurs="unbounded"/>
             <xs:element name="references" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="resource_package_uri" type="xs:string" minOccurs="0"/>
+            <xs:element name="conversion_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="other_details" type="StringDictionaryItem" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="RESOURCE_DESCRIPTION_ITEM">

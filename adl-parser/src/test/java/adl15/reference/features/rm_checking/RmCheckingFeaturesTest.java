@@ -38,7 +38,7 @@ public class RmCheckingFeaturesTest {
         Archetype sourceArchetype = TestAdlParser.parseAdl(
                 "adl15/reference/features/rm_checking/openEHR-EHR-OBSERVATION.rm_conforming_rm_subtype.v1.adls");
         final OpenEhrRmModel rmModel = OpenEhrRmModel.getInstance();
-        Archetype flatArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype flatArchetype = new ArchetypeFlattener().flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, flatArchetype);
         validator.validate();
@@ -49,7 +49,7 @@ public class RmCheckingFeaturesTest {
         Archetype sourceArchetype = TestAdlParser.parseAdl(
                 "adl15/reference/features/rm_checking/openEHR-EHR-OBSERVATION.rm_correct_non_generic.v1.adls");
         final OpenEhrRmModel rmModel = OpenEhrRmModel.getInstance();
-        Archetype flatArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype flatArchetype = new ArchetypeFlattener().flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, flatArchetype);
         validator.validate();

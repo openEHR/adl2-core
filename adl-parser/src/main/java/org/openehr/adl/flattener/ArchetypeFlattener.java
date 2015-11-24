@@ -35,11 +35,9 @@ import static org.openehr.adl.util.AdlUtils.createFlatArchetypeClone;
  */
 public class ArchetypeFlattener {
     private final ArchetypeMerger merger;
-    private final RmModel rmModel;
 
-    public ArchetypeFlattener(RmModel rmModel) {
-        merger = new ArchetypeMerger(rmModel);
-        this.rmModel = rmModel;
+    public ArchetypeFlattener() {
+        merger = new ArchetypeMerger();
     }
 
     /**

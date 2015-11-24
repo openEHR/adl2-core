@@ -54,7 +54,7 @@ public class ArchetypeValidatorTest extends ParserTestBase {
     @Test
     public void testCheckInternalReferences() throws Exception {
         Archetype sourceArchetype = parseArchetype("adl15/validation/adl-test-car.use_node.test.adls");
-        Archetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype useNodeArchetype = new ArchetypeFlattener().flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, useNodeArchetype);
 
@@ -75,7 +75,7 @@ public class ArchetypeValidatorTest extends ParserTestBase {
     @Test
     public void testCheckRmModelConformance() throws Exception {
         Archetype sourceArchetype = parseArchetype("adl15/validation/adl-test-ENTRY.bad_rm_model.v1.adls");
-        Archetype useNodeArchetype = new ArchetypeFlattener(rmModel).flatten(null, sourceArchetype);
+        Archetype useNodeArchetype = new ArchetypeFlattener().flatten(null, sourceArchetype);
 
         ArchetypeValidator validator = new ArchetypeValidator(rmModel, useNodeArchetype);
         validator.validate();

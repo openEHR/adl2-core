@@ -37,7 +37,7 @@ public class MetadataFeaturesTest {
 
     @BeforeClass
     public void init() {
-        flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+        flattener = new ArchetypeFlattener();
     }
 
     @Test

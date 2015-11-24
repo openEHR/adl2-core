@@ -45,7 +45,7 @@ public class ParentChildWithChoiceElementTest extends FlattenerTestBase {
 
         final OpenEhrRmModel rmModel = OpenEhrRmModel.getInstance();
         deserializer = new AdlDeserializer();
-        flattener = new ArchetypeFlattener(rmModel);
+        flattener = new ArchetypeFlattener();
     }
 
     protected String readArchetype(String file) throws IOException {

@@ -21,6 +21,7 @@
 package org.openehr.adl.util;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang.SerializationUtils;
 import org.openehr.jaxb.am.Archetype;
 import org.openehr.jaxb.am.CObject;
@@ -106,28 +107,44 @@ public class AdlUtils {
     }
 
 
-
-    private static void fillArchetypeFields(Archetype target, Archetype source) {
-        target.setDefinition(source.getDefinition());
+    public static void fillArchetypeFields(Archetype target, Archetype source) {
         target.setIsControlled(source.isIsControlled());
-        target.setArchetypeId(source.getArchetypeId());
         target.setBuildUid(source.getBuildUid());
-        target.setIsDifferential(source.isIsDifferential());
         target.setAdlVersion(source.getAdlVersion());
-        target.setConcept(source.getConcept());
         target.setDescription(source.getDescription());
-        target.setTerminology(source.getTerminology());
         target.setOriginalLanguage(source.getOriginalLanguage());
-        target.setParentArchetypeId(source.getParentArchetypeId());
         target.setRevisionHistory(source.getRevisionHistory());
         target.setAnnotations(source.getAnnotations());
         target.setIsGenerated(source.isIsGenerated());
         target.setRmRelease(source.getRmRelease());
 
-        target.getInvariants().addAll(source.getInvariants());
+        target.getOtherMetadata().addAll(source.getOtherMetadata());
+
         target.getTranslations().addAll(source.getTranslations());
+
+        target.setDefinition(source.getDefinition());
+        target.setArchetypeId(source.getArchetypeId());
+        target.setIsDifferential(source.isIsDifferential());
+        target.setConcept(source.getConcept());
+        target.setTerminology(source.getTerminology());
+        target.setParentArchetypeId(source.getParentArchetypeId());
+
+        target.getInvariants().addAll(source.getInvariants());
         target.setIsOverlay(source.isIsOverlay());
         target.setIsTemplate(source.isIsTemplate());
+    }
+
+
+    public static Template buildTemplate(List<Archetype> archetypes) {
+        Template result = new Template();
+        Archetype first = archetypes.get(0);
+
+        AdlUtils.fillArchetypeFields(result, first);
+        for (Archetype archetype : Iterables.skip(archetypes, 1)) {
+            result.getOverlays().add(archetype);
+        }
+
+        return result;
     }
 
 

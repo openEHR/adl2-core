@@ -27,7 +27,7 @@
     <xs:element name="archetype" type="ARCHETYPE"/>
     <xs:complexType name="ARCHETYPE">
         <xs:complexContent>
-            <xs:extension base="AUTHORED_ARCHETYPE">
+            <xs:extension base="AUTHORED_RESOURCE">
                 <xs:sequence>
                     <xs:element name="archetype_id" type="ARCHETYPE_ID"/>
                     <xs:element name="is_differential" type="xs:boolean" minOccurs="1"/>
@@ -38,14 +38,10 @@
                     <xs:element name="terminology" type="ARCHETYPE_TERMINOLOGY"/>
                     <xs:element name="is_template" type="xs:boolean"/>
                     <xs:element name="is_overlay" type="xs:boolean"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="AUTHORED_ARCHETYPE">
-        <xs:complexContent>
-            <xs:extension base="AUTHORED_RESOURCE">
-                <xs:sequence>
+
+                    <!-- should actually be in AUTHORED_ARCHETYPE, but whatever.
+                    AUTHORED_ARCHETYPE, extends both ARCHETYPE and AUTHORED_RESOURCE, which is impossible to  do
+                    in java, so don't bother -->
                     <xs:element name="adl_version" type="xs:string" minOccurs="0"/>
                     <xs:element name="build_uid" type="HIER_OBJECT_ID" minOccurs="0"/>
                     <xs:element name="rm_release" type="xs:string" minOccurs="1"/>

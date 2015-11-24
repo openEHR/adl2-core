@@ -40,7 +40,7 @@ public class FlatteningFeaturesTest {
         Archetype parent = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.flattening_parent_1.v1.adls");
         Archetype specialized = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.override_to_multiple.v1.adls");
 
-        ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+        ArchetypeFlattener flattener = new ArchetypeFlattener();
 
         Archetype flatParent = flattener.flatten(null, parent);
         Archetype flattened = flattener.flatten(flatParent, specialized);
@@ -53,7 +53,7 @@ public class FlatteningFeaturesTest {
     public void testOccurrences() {
         Archetype specialized = TestAdlParser.parseAdl("adl15/reference/features/flattening/openEHR-EHR-OBSERVATION.demo.v1.adls");
 
-        ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+        ArchetypeFlattener flattener = new ArchetypeFlattener();
 
         Archetype flat = flattener.flatten(null, specialized);
 

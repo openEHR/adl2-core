@@ -1,0 +1,101 @@
+archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
+	openEHR-EHR-COMPOSITION.encounter.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			author = <
+				["name"] = <"?">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["organisation"] = <"Ocean Informatics">
+		["name"] = <"Thomas Beale">
+		["date"] = <"2005-10-10">
+	>
+	copyright = <"copyright (c) 2010 openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Record of encounter as a progress note.">
+			use = <"">
+			keywords = <"progress", "note", "encounter">
+			misuse = <"">
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			purpose = <"Record of encounter as a progress note.">
+			use = <"">
+			keywords = <"progress", "note", "encounter">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"406AC9810216464C188E2EA6810C2BE6">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Encounter
+		category matches {
+			DV_CODED_TEXT[id4] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT[id5] matches {
+				other_context matches {
+					ITEM_TREE[id2] matches {
+						items matches {
+							allow_archetype CLUSTER[id3] matches {	-- Context detail
+								include
+									archetype_id/value matches {/.*/}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Encounter">
+				description = <"Generic encounter or progress note composition">
+			>
+			["id3"] = <
+				text = <"Context detail">
+				description = <"Local context detail.">
+			>
+			["at1"] = <
+				text = <"event">
+				description = <"event">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"Encounter">
+				description = <"Generic encounter or progress note composition">
+			>
+			["id3"] = <
+				text = <"Context detail">
+				description = <"Local context detail">
+			>
+			["at1"] = <
+				text = <"*event (en)">
+				description = <"*event (en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/433>
+		>
+	>

@@ -1,0 +1,191 @@
+template (adl_version=2.0.5; rm_release=1.0.2; generated)
+    openEHR-EHR-COMPOSITION.mini_vitals.v1.0.0
+
+specialize
+    openEHR-EHR-COMPOSITION.encounter.v1
+
+language
+    original_language = <[ISO_639-1::en]>
+    translations = <
+        ["sl"] = <
+            author = <
+                ["name"] = <"?">
+            >
+            language = <[ISO_639-1::sl]>
+        >
+    >
+
+description
+    copyright = <"copyright (c) 2010 openEHR Foundation">
+    details = <
+        ["en"] = <
+            keywords = <"progress", "note", "encounter">
+            language = <[ISO_639-1::en]>
+            misuse = <"">
+            purpose = <"Record of encounter as a progress note.">
+            use = <"">
+        >
+        ["sl"] = <
+            keywords = <"progress", "note", "encounter">
+            language = <[ISO_639-1::sl]>
+            misuse = <"">
+            purpose = <"Record of encounter as a progress note.">
+            use = <"">
+        >
+    >
+    lifecycle_state = <"unmanaged">
+    original_author = <
+        ["organisation"] = <"Ocean Informatics">
+        ["name"] = <"Thomas Beale">
+        ["date"] = <"2005-10-10">
+    >
+
+definition
+    COMPOSITION[id1.1] matches {    -- Encounter
+        content matches {
+            use_archetype OBSERVATION[id0.2, openEHR-EHR-OBSERVATION.ovl-a-blood_pressure-001.v1.0.0]
+            use_archetype OBSERVATION[id0.3, openEHR-EHR-OBSERVATION.ovl-a-respiration-001.v1.0.0]
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["en"] = <
+            ["id1.1"] = <
+                text = <"Encounter">
+                description = <"Generic encounter or progress note composition">
+            >
+        >
+        ["sl"] = <
+            ["id1.1"] = <
+                text = <"Encounter">
+                description = <"Generic encounter or progress note composition">
+            >
+        >
+    >
+
+
+---------------------------------------------------------------------------------
+template_overlay
+    openEHR-EHR-OBSERVATION.ovl-a-blood_pressure-001.v1.0.0
+
+specialize
+    openEHR-EHR-OBSERVATION.blood_pressure.v1
+
+definition
+    OBSERVATION[id1.1] matches {    -- *Blood Pressure(en)
+        /data[id2]/events[id7]/data[id4]/items matches {
+            ELEMENT[id5.1] occurrences matches {0..1} matches {    -- Sistolični
+                value matches {
+                    DV_QUANTITY[id1054.1] matches {
+                        [units, magnitude, precision] matches {
+                            [{"mm[Hg]"}, {|0.0..<900.0|}, {|>=0|}]
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["sl"] = <
+            ["id1.1"] = <
+                text = <"*Blood Pressure(en)">
+                description = <"*The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.(en)">
+            >
+            ["id5.1"] = <
+                text = <"Sistolični">
+                description = <"*Peak systemic arterial blood pressure  - measured in systolic or contraction phase of the heart cycle.(en)">
+            >
+        >
+        ["zh-cn"] = <
+            ["id1.1"] = <
+                text = <"*Blood Pressure(en)">
+                description = <"*The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.(en)">
+            >
+            ["id5.1"] = <
+                text = <"收缩压">
+                description = <"一个血液循环周期中，系统性动脉血压高峰值。 收缩期血压">
+            >
+        >
+        ["de"] = <
+            ["id1.1"] = <
+                text = <"*Blood Pressure(en)">
+                description = <"*The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.(en)">
+            >
+            ["id5.1"] = <
+                text = <"Systolisch">
+                description = <"Der höchste arterielle Blutdruck eines Zyklus - gemessen in der systolischen oder Kontraktionsphase des Herzens.">
+            >
+        >
+        ["en"] = <
+            ["id1.1"] = <
+                text = <"Blood Pressure">
+                description = <"The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.">
+            >
+            ["id5.1"] = <
+                text = <"Systolic">
+                description = <"Peak systemic arterial blood pressure  - measured in systolic or contraction phase of the heart cycle.">
+            >
+        >
+        ["ja"] = <
+            ["id1.1"] = <
+                text = <"*Blood Pressure(en)">
+                description = <"*The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.(en)">
+            >
+            ["id5.1"] = <
+                text = <"収縮期">
+                description = <"1つ以上の脈の間で最高値を示す全身の動脈圧 - 心機図の収縮期で測定される">
+            >
+        >
+        ["nl"] = <
+            ["id1.1"] = <
+                text = <"*Blood Pressure(en)">
+                description = <"*The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.(en)">
+            >
+            ["id5.1"] = <
+                text = <"Systole">
+                description = <"De maximale (piek) systemische arteriele bloeddruk - gemeten in de systolische of samentrekkingsfase van de hartslag">
+            >
+        >
+    >
+
+
+---------------------------------------------------------------------------------
+template_overlay
+    openEHR-EHR-OBSERVATION.ovl-a-respiration-001.v1.0.0
+
+specialize
+    openEHR-EHR-OBSERVATION.respiration.v1
+
+definition
+    OBSERVATION[id1.1]     -- Dihanje
+
+terminology
+    term_definitions = <
+        ["sl"] = <
+            ["id1.1"] = <
+                text = <"Dihanje">
+                description = <"Opazovanje spontanega dihanja pacienta">
+            >
+        >
+        ["nl"] = <
+            ["id1.1"] = <
+                text = <"Ademhaling">
+                description = <"Observaties van de spontane ademhaling, zoals deze meestal geregistreerd worden als onderdeel van de observatie van de vitale functies">
+            >
+        >
+        ["en"] = <
+            ["id1.1"] = <
+                text = <"Respirations">
+                description = <"The observed characteristics of spontaneous breathing as would commonly be recorded as part of a 'vital signs' examination.">
+            >
+        >
+        ["de"] = <
+            ["id1.1"] = <
+                text = <"*Respirations(en)">
+                description = <"*The observed characteristics of spontaneous breathing as would commonly be recorded as part of a 'vital signs' examination.(en)">
+            >
+        >
+    >

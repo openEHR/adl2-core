@@ -53,7 +53,7 @@ public class TestingArchetypeProvider implements FlatArchetypeProvider {
 
     public TestingArchetypeProvider(String baseClasspath) throws IOException {
         archetypeIdToClasspathMap = buildArchetypeIdToClasspathMap(baseClasspath);
-        flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+        flattener = new ArchetypeFlattener();
 
     }
 

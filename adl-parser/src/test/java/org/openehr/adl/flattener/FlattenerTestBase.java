@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  */
 abstract public class FlattenerTestBase extends ParserTestBase {
     private static final Pattern CLASSPATH_PATTERN = Pattern.compile("(.*/)[^/]+(\\.adls?)");
-    private final ArchetypeFlattener flattener = new ArchetypeFlattener(OpenEhrRmModel.getInstance());
+    private final ArchetypeFlattener flattener = new ArchetypeFlattener();
 
     protected Archetype parseAndFlattenArchetype(String classpathResource) {
         Archetype differential = TestAdlParser.parseAdl(classpathResource);

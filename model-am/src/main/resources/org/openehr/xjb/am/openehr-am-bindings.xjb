@@ -249,9 +249,6 @@
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE']">
             <jxb:class name="Archetype" implClass="Archetype"/>
         </jxb:bindings>
-        <jxb:bindings node="//xsd:complexType[@name='AUTHORED_ARCHETYPE']" abstract="true">
-            <jxb:class name="AuthoredArchetype" implClass="AuthoredArchetype"/>
-        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='ARCHETYPE_CONSTRAINT']" abstract="true">
             <jxb:class name="ArchetypeConstraint" implClass="ArchetypeConstraint"/>
         </jxb:bindings>

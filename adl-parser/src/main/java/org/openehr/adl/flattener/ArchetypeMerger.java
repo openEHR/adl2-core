@@ -43,10 +43,10 @@ import static org.openehr.adl.util.AdlUtils.*;
  */
 class ArchetypeMerger {
     private final AnnotationsMerger annotationsMerger = new AnnotationsMerger();
-    private final RmModel rmModel;
+//    private final RmModel rmModel;
 
-    ArchetypeMerger(RmModel rmModel) {
-        this.rmModel = rmModel;
+    ArchetypeMerger() {
+//        this.rmModel = rmModel;
     }
 
 
@@ -389,16 +389,16 @@ class ArchetypeMerger {
 
         // todo what to do on bad rm type?
         if (specialized instanceof CComplexObject) {
-            if (!rmModel.rmTypeExists(parent.getRmTypeName())) {
-                return;
-            }
-
-            RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
-            RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
-
-
-            require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
-                    specialized.getRmTypeName(), parent.getRmTypeName());
+//            if (!rmModel.rmTypeExists(parent.getRmTypeName())) {
+//                return;
+//            }
+//
+//            RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
+//            RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
+//
+//
+//            require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
+//                    specialized.getRmTypeName(), parent.getRmTypeName());
 
 
             if (parent instanceof CComplexObject) {
@@ -461,10 +461,10 @@ class ArchetypeMerger {
             // rm type on the specialized constraint can only be null on intermediate nodes on differential path.
             // Just accept the parent constraint, since differential paths are only allowed on aom 1.5, where node_id
             // (already checked above) is always required.
-            if (candidate.getRmTypeName() != null && candidate instanceof CComplexObject) {
-                RmType specializedRmType = rmModel.getRmType(candidate.getRmTypeName());
-                if (!specializedRmType.isSubclassOf(parentConstraint.getRmTypeName())) continue;
-            }
+//            if (candidate.getRmTypeName() != null && candidate instanceof CComplexObject) {
+//                RmType specializedRmType = rmModel.getRmType(candidate.getRmTypeName());
+//                if (!specializedRmType.isSubclassOf(parentConstraint.getRmTypeName())) continue;
+//            }
             return candidate;
         }
         return null;

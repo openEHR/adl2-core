@@ -28,7 +28,7 @@
 
     <xs:complexType name="TEMPLATE">
         <xs:complexContent>
-            <xs:extension base="AUTHORED_ARCHETYPE">
+            <xs:extension base="ARCHETYPE">
                 <xs:sequence>
                     <xs:element name="overlays" type="ARCHETYPE" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -38,8 +38,10 @@
 
     <xs:complexType name="OPERATIONAL_TEMPLATE">
         <xs:complexContent>
-            <xs:extension base="AUTHORED_RESOURCE">
+            <xs:extension base="ARCHETYPE">
                 <xs:sequence>
+                    <xs:element name="component_terminologies" type="ARCHETYPE_TERMINOLOGY_ITEM"
+                                minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="terminology_extracts" type="ARCHETYPE_TERMINOLOGY_ITEM"
                                 minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -59,7 +61,7 @@
 
     <xs:complexType name="ARCHETYPE_TERMINOLOGY_ITEM">
         <xs:sequence>
-            <xs:element name="value" type="xs:anyURI"/>
+            <xs:element name="value" type="ARCHETYPE_TERMINOLOGY"/>
         </xs:sequence>
         <xs:attribute name="code" type="xs:string" use="required"/>
     </xs:complexType>

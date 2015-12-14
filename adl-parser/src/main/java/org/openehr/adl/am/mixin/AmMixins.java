@@ -20,8 +20,7 @@
 
 package org.openehr.adl.am.mixin;
 
-import org.openehr.jaxb.am.CAttribute;
-import org.openehr.jaxb.am.Cardinality;
+import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.Interval;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 
@@ -45,6 +44,16 @@ public class AmMixins {
     }
 
     public static CardinalityMixin of(Cardinality from) {
+        return create(from);
+    }
+
+    public static CPrimitiveObjectMixin of(CPrimitiveObject from) {
+        return create(from);
+    }
+    public static CTerminologyCodeMixin of(CTerminologyCode from) {
+        return create(from);
+    }
+    public static OperationalTemplateMixin of(OperationalTemplate from) {
         return create(from);
     }
 

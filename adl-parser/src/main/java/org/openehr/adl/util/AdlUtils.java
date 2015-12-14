@@ -30,6 +30,7 @@ import org.openehr.jaxb.am.Template;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -143,6 +144,17 @@ public class AdlUtils {
         for (Archetype archetype : Iterables.skip(archetypes, 1)) {
             result.getOverlays().add(archetype);
         }
+
+        return result;
+    }
+
+    public static List<Archetype> demolishTemplate(Template template) {
+        List<Archetype> result = new ArrayList<>();
+        Archetype first = new Archetype();
+        AdlUtils.fillArchetypeFields(first, template);
+        result.add(first);
+
+        result.addAll(template.getOverlays());
 
         return result;
     }

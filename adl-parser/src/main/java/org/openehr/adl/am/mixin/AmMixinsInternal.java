@@ -22,7 +22,9 @@ package org.openehr.adl.am.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import org.openehr.jaxb.am.CAttribute;
+import org.openehr.jaxb.am.CTerminologyCode;
 import org.openehr.jaxb.am.Cardinality;
+import org.openehr.jaxb.am.OperationalTemplate;
 import org.openehr.jaxb.rm.*;
 
 import java.lang.reflect.Constructor;
@@ -47,6 +49,8 @@ class AmMixinsInternal {
                 .put(CAttribute.class, CAttributeMixin.class)
                 .put(IntervalOfDuration.class, IntervalOfDurationMixin.class)
                 .put(Cardinality.class, CardinalityMixin.class)
+                .put(CTerminologyCode.class, CTerminologyCodeMixin.class)
+                .put(OperationalTemplate.class, OperationalTemplateMixin.class)
                 .build();
 
         configuration = ImmutableMap.copyOf(conf);

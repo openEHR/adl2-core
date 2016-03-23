@@ -50,7 +50,7 @@ public class OperationalTemplateBuilder {
         if (cobj instanceof CArchetypeRoot) {
             CArchetypeRoot car = (CArchetypeRoot) cobj;
             Archetype a = flatArchetypeProvider.getFlatArchetype(((CArchetypeRoot) cobj).getArchetypeRef());
-            car.getAttributes().addAll(a.getDefinition().getAttributes());
+//            car.getAttributes().addAll(a.getDefinition().getAttributes());
             String aid = a.getArchetypeId().getValue();
             if (!presentTerminologies.contains(aid)) {
                 result.getComponentTerminologies().add(newArchetypeTerminologyItem(aid, a.getTerminology()));

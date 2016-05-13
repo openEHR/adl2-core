@@ -47,6 +47,9 @@ class ArchetypeMerger {
 //        this.rmModel = rmModel;
     }
 
+    private static boolean isEmptyInterval(MultiplicityInterval interval) {
+        return Integer.valueOf(0).equals(interval.getLower()) && Integer.valueOf(0).equals(interval.getUpper());
+    }
 
     /**
      * Merges a specialized archetype with its parent. Merge will be done in-place on the specialized parameter.
@@ -69,11 +72,9 @@ class ArchetypeMerger {
         }
     }
 
-
     private void mergeOntologies(ArchetypeTerminology parent, ArchetypeTerminology specialized) {
         new OntologyFlattener(parent, specialized).flatten();
     }
-
 
     /* expands differential paths into actual nodes */
     private void expandAttributeNodes(CComplexObject sourceObject) {
@@ -206,9 +207,9 @@ class ArchetypeMerger {
                 flattenCAttribute(attributePath, parentAttribute, specializedAttribute);
             }
 
-            if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
-                iterator.remove();
-            }
+//            if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
+//                iterator.remove();
+//            }
         }
     }
 
@@ -219,7 +220,6 @@ class ArchetypeMerger {
         }
         return result;
     }
-
 
     private void mergeAttribute(CAttribute parent, CAttribute result) {
         result.setExistence(first(result.getExistence(), parent.getExistence()));
@@ -334,10 +334,9 @@ class ArchetypeMerger {
 
     private String unspecializeNodeId(String nodeId) {
         int lastPeriod = nodeId.lastIndexOf('.');
-        if (lastPeriod<0) return nodeId;
+        if (lastPeriod < 0) return nodeId;
         return nodeId.substring(0, lastPeriod);
     }
-
 
     /* Returns matching (parent,specialized) pairs of children of an attribute, in the order they should be present in
      the flattened model. One of the element may be null in case of no specialization or extension.  */
@@ -418,7 +417,6 @@ class ArchetypeMerger {
         }
 
     }
-
 
     private <T> T first(@Nullable T first, @Nullable T second) {
         if (first != null) return first;
@@ -512,10 +510,6 @@ class ArchetypeMerger {
         }
     }
 
-    private static boolean isEmptyInterval(MultiplicityInterval interval) {
-        return Integer.valueOf(0).equals(interval.getLower()) && Integer.valueOf(0).equals(interval.getUpper());
-    }
-
     private static class CAttributeComparator implements Comparator<CAttribute> {
         private final Map<String, Integer> parentAttributeSortOrder;
 
@@ -531,9 +525,9 @@ class ArchetypeMerger {
         public int compare(CAttribute o1, CAttribute o2) {
             Integer firstIndex = parentAttributeSortOrder.get(o1.getRmAttributeName());
             Integer secondIndex = parentAttributeSortOrder.get(o2.getRmAttributeName());
-            if (firstIndex==null && secondIndex==null) return 0;
-            if (firstIndex==null) return 1;
-            if (secondIndex==null) return -1;
+            if (firstIndex == null && secondIndex == null) return 0;
+            if (firstIndex == null) return 1;
+            if (secondIndex == null) return -1;
 
             return Integer.compare(firstIndex, secondIndex);
         }

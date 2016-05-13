@@ -22,9 +22,7 @@ package org.openehr.adl.flattener;
 
 import com.google.common.collect.*;
 import org.openehr.adl.AdlException;
-import org.openehr.adl.rm.RmModel;
 import org.openehr.adl.rm.RmPath;
-import org.openehr.adl.rm.RmType;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.MultiplicityInterval;
 import org.openehr.jaxb.rm.ResourceAnnotations;
@@ -161,31 +159,11 @@ class ArchetypeMerger {
     }
 
     private void flattenCComplexObject(RmPath path, CComplexObject flatParent, CComplexObject specialized) {
-        List<CAttribute> proginalSpecializedAttributes = ImmutableList.copyOf(specialized.getAttributes());
-        // add specialized attributes
-        for (Iterator<CAttribute> iterator = specialized.getAttributes().iterator(); iterator.hasNext(); ) {
-            CAttribute specializedAttribute = iterator.next();
-            CAttribute parentAttribute = findAttribute(flatParent.getAttributes(), specializedAttribute.getRmAttributeName());
-            final RmPath attributePath = path.resolve(specializedAttribute.getRmAttributeName(), null);
-            if (parentAttribute != null) {
-                flattenCAttribute(attributePath, parentAttribute, specializedAttribute);
-            }
+        flattenCComplexObjectAttributes(path, flatParent, specialized);
+        flattenCComplexObjectTuples(flatParent, specialized);
+    }
 
-            if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
-                iterator.remove();
-            }
-        }
-
-
-        // add parent attributes that are not specialized
-        for (CAttribute parentAttribute : flatParent.getAttributes()) {
-            CAttribute specializedAttribute = findAttribute(proginalSpecializedAttributes, parentAttribute.getRmAttributeName());
-            if (specializedAttribute == null) {
-                specialized.getAttributes().add(makeClone(parentAttribute));
-            }
-        }
-
-
+    private void flattenCComplexObjectTuples(CComplexObject flatParent, CComplexObject specialized) {
         // merge tuples
         Set<TreeSet<String>> tupleAttributes = new HashSet<>();
         for (CAttributeTuple attributeTuple : specialized.getAttributeTuples()) {
@@ -198,7 +176,40 @@ class ArchetypeMerger {
             // add from parent
             specialized.getAttributeTuples().add(makeClone(attributeTuple));
         }
+    }
 
+    private void flattenCComplexObjectAttributes(RmPath path, CComplexObject flatParent, CComplexObject specialized) {
+        List<CAttribute> originalSpecializedAttributes = ImmutableList.copyOf(specialized.getAttributes());
+
+        addCComplexObjectSpecializedAttributes(path, flatParent, specialized);
+        addParentAttributesThatWereNotSpecialized(flatParent, specialized, originalSpecializedAttributes);
+
+        Collections.sort(specialized.getAttributes(), new CAttributeComparator(flatParent));
+    }
+
+    private void addParentAttributesThatWereNotSpecialized(CComplexObject flatParent, CComplexObject specialized,
+                                                           List<CAttribute> originalSpecializedAttributes) {
+        for (CAttribute parentAttribute : flatParent.getAttributes()) {
+            CAttribute specializedAttribute = findAttribute(originalSpecializedAttributes, parentAttribute.getRmAttributeName());
+            if (specializedAttribute == null) {
+                specialized.getAttributes().add(makeClone(parentAttribute));
+            }
+        }
+    }
+
+    private void addCComplexObjectSpecializedAttributes(RmPath path, CComplexObject flatParent, CComplexObject specialized) {
+        for (Iterator<CAttribute> iterator = specialized.getAttributes().iterator(); iterator.hasNext(); ) {
+            CAttribute specializedAttribute = iterator.next();
+            CAttribute parentAttribute = findAttribute(flatParent.getAttributes(), specializedAttribute.getRmAttributeName());
+            final RmPath attributePath = path.resolve(specializedAttribute.getRmAttributeName(), null);
+            if (parentAttribute != null) {
+                flattenCAttribute(attributePath, parentAttribute, specializedAttribute);
+            }
+
+            if (specializedAttribute.getExistence() != null && isEmptyInterval(specializedAttribute.getExistence())) {
+                iterator.remove();
+            }
+        }
     }
 
     private TreeSet<String> makeTupleAttributeSet(List<CAttribute> members) {
@@ -505,4 +516,26 @@ class ArchetypeMerger {
         return Integer.valueOf(0).equals(interval.getLower()) && Integer.valueOf(0).equals(interval.getUpper());
     }
 
+    private static class CAttributeComparator implements Comparator<CAttribute> {
+        private final Map<String, Integer> parentAttributeSortOrder;
+
+        public CAttributeComparator(CComplexObject flatParent) {
+            parentAttributeSortOrder = Maps.newHashMap();
+            List<CAttribute> attributes = flatParent.getAttributes();
+            for (int i = 0; i < attributes.size(); i++) {
+                parentAttributeSortOrder.put(attributes.get(i).getRmAttributeName(), i);
+            }
+        }
+
+        @Override
+        public int compare(CAttribute o1, CAttribute o2) {
+            Integer firstIndex = parentAttributeSortOrder.get(o1.getRmAttributeName());
+            Integer secondIndex = parentAttributeSortOrder.get(o2.getRmAttributeName());
+            if (firstIndex==null && secondIndex==null) return 0;
+            if (firstIndex==null) return 1;
+            if (secondIndex==null) return -1;
+
+            return Integer.compare(firstIndex, secondIndex);
+        }
+    }
 }

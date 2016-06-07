@@ -20,7 +20,6 @@
 
 package org.openehr.adl.serializer;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -96,6 +95,14 @@ public class AdlStringBuilder {
     }
     public AdlStringBuilder dadlBean(Object obj) {
         dAdlSerializer.serializeBean(obj);
+        return this;
+    }
+
+    public int mark() {
+        return builder.length();
+    }
+    public AdlStringBuilder revert(int previousMark) {
+        builder.setLength(previousMark);
         return this;
     }
 

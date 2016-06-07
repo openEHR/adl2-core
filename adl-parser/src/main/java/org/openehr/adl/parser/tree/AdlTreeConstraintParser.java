@@ -153,6 +153,9 @@ abstract class AdlTreeConstraintParser {
             result.getIncludes().addAll(parseAssertions(cValue.include));
             result.getExcludes().addAll(parseAssertions(cValue.exclude));
         }
+        if (context.CLOSED()!=null) {
+            result.setIsClosed(true);
+        }
         return result;
     }
 

@@ -52,6 +52,9 @@ public class ArchetypeReferenceTest extends ParserTestBase {
         assertThat(root.getArchetypeRef()).isEqualTo("openEHR-EHR-EVALUATION.substance_use_summary.v1");
         assertThat(root.getNodeId()).isEqualTo("at0001");
 
+        ArchetypeSlot slot = (ArchetypeSlot) archetype.getDefinition().getAttributes().get(0).getChildren().get(1);
+        assertThat(slot.isIsClosed()).isTrue();
+
     }
 
 }

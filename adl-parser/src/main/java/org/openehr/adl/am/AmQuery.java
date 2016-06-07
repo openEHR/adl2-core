@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @author markopi
  */
@@ -42,7 +43,7 @@ public class AmQuery {
      *
      * @param obj  Root object from which to search, Must be either an Archetype or CComplexObject
      * @param path path identifying the object to return.
-     * @param <T> type to remove required casting
+     * @param <T>  type to remove required casting
      * @return The object matching the path relative to obj
      * @throws IllegalStateException if no object is found
      */
@@ -61,7 +62,7 @@ public class AmQuery {
      *
      * @param obj  Root object from which to search, Must be either an Archetype or CComplexObject
      * @param path path identifying the object to return.
-     * @param <T> type to remove required casting
+     * @param <T>  type to remove required casting
      * @return The object matching the path relative to obj, or null if not found
      */
     @Nullable
@@ -80,6 +81,44 @@ public class AmQuery {
         }
         return (T) node;
     }
+
+    public static CAttribute getAttribute(final Object obj, String path) {
+        return getAttribute(obj, RmPath.valueOf(path).segments());
+    }
+
+    public static CAttribute getAttribute(final Object obj, List<RmPath> path) {
+        CAttribute attribute = findAttribute(obj, path);
+        if (attribute == null) {
+            throw new AmObjectNotFoundException("Object " + obj + " has no attribute on path " + path);
+        }
+        return attribute;
+    }
+
+    @Nullable
+    public static CAttribute findAttribute(final Object obj, String path) {
+        return findAttribute(obj, RmPath.valueOf(path).segments());
+    }
+
+    @Nullable
+    public static CAttribute findAttribute(final Object obj, List<RmPath> path) {
+        if (path.isEmpty()) {
+            throw new IllegalArgumentException("Bad rm path: " + path);
+        }
+        RmPath last = path.get(path.size() - 1);
+        if (last.getNodeId() != null) {
+            throw new IllegalArgumentException("Last path segment must not have nodeId: " + path);
+        }
+
+        CObject parent = find(obj, path.subList(0, path.size() - 1));
+
+        if (parent instanceof CComplexObject) {
+            return findAttribute(((CComplexObject) parent).getAttributes(), last.getAttribute());
+        } else {
+            return null;
+        }
+
+    }
+
 
     public static List<Segment> segments(Object obj, String path) {
         return segments(obj, RmPath.valueOf(path).segments());
@@ -119,15 +158,23 @@ public class AmQuery {
     }
 
     @Nullable
+    private static CAttribute findAttribute(List<CAttribute> attributes, String attributeName) {
+        for (CAttribute attribute : attributes) {
+            if (attribute.getRmAttributeName().equals(attributeName)) {
+                return attribute;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     private static Segment findChildInAttributes(List<CAttribute> attributes, String attribute,
-            @Nullable String nodeId) {
-        for (CAttribute cAttribute : attributes) {
-            if (cAttribute.getRmAttributeName().equals(attribute)) {
-                for (CObject cObject : cAttribute.getChildren()) {
-                    if (nodeIdMatches(cObject.getNodeId(), nodeId)) {
-                        return new Segment(cAttribute, cObject);
-                    }
-                }
+                                                 @Nullable String nodeId) {
+        CAttribute cAttribute = findAttribute(attributes, attribute);
+        if (cAttribute == null) return null;
+        for (CObject cObject : cAttribute.getChildren()) {
+            if (nodeIdMatches(cObject.getNodeId(), nodeId)) {
+                return new Segment(cAttribute, cObject);
             }
         }
         return null;
@@ -135,8 +182,8 @@ public class AmQuery {
 
     private static boolean nodeIdMatches(String candidateNodeId, String nodeId) {
         return nodeId == null
-               || nodeId.equals(candidateNodeId)
-               || candidateNodeId != null && candidateNodeId.startsWith(nodeId + ".");
+                || nodeId.equals(candidateNodeId)
+                || candidateNodeId != null && candidateNodeId.startsWith(nodeId + ".");
     }
 
     public static class Segment {
@@ -156,5 +203,4 @@ public class AmQuery {
             return object;
         }
     }
-
 }

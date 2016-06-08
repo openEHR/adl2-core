@@ -52,10 +52,17 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
         }
         if (cobj.isIsClosed()!=null && cobj.isIsClosed()) {
             builder.append(" closed");
+        } else {
+            appendMatches(cobj);
         }
+        builder.unindent();
+    }
+
+    private void appendMatches(ArchetypeSlot cobj) {
         int mark = builder.mark();
         builder.append(" matches { ");
         boolean hasContent=false;
+
         if (cobj.getIncludes() != null && cobj.getIncludes().size() > 0) {
             hasContent=true;
             builder.indent().newline()
@@ -82,6 +89,5 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
         } else {
             builder.revert(mark);
         }
-        builder.unindent();
     }
 }

@@ -21,6 +21,7 @@
 package org.openehr.adl.flattener;
 
 import com.google.common.collect.*;
+import org.apache.commons.lang.SerializationUtils;
 import org.openehr.adl.AdlException;
 import org.openehr.adl.rm.RmPath;
 import org.openehr.jaxb.am.*;
@@ -396,26 +397,33 @@ class ArchetypeMerger {
         if (specialized.getNodeId() != null && specialized.getNodeId().equals(parent.getNodeId())) {
             specialized.setOccurrences(first(specialized.getOccurrences(), parent.getOccurrences()));
         }
+        if (specialized instanceof ArchetypeSlot) {
+            flattenCArchetypeSlot((ArchetypeSlot)parent, (ArchetypeSlot)specialized);
+        }
 
         // todo what to do on bad rm type?
         if (specialized instanceof CComplexObject) {
-//            if (!rmModel.rmTypeExists(parent.getRmTypeName())) {
-//                return;
-//            }
-//
-//            RmType parentRmType = rmModel.getRmType(parent.getRmTypeName());
-//            RmType specializedRmType = rmModel.getRmType(specialized.getRmTypeName());
-//
-//
-//            require(specializedRmType.isSubclassOf(parentRmType), "Rm type %s is not a subclass of %s",
-//                    specialized.getRmTypeName(), parent.getRmTypeName());
-
 
             if (parent instanceof CComplexObject) {
                 flattenCComplexObject(path, (CComplexObject) parent, (CComplexObject) specialized);
             }
         }
 
+    }
+
+    private void flattenCArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
+        if (specialized.isIsClosed()) {
+            if (specialized.getIncludes().isEmpty()) {
+                for (Assertion assertion : parent.getIncludes()) {
+                    specialized.getIncludes().add((Assertion)SerializationUtils.clone(assertion));
+                }
+            }
+            if (specialized.getExcludes().isEmpty()) {
+                for (Assertion assertion : parent.getExcludes()) {
+                    specialized.getExcludes().add((Assertion)SerializationUtils.clone(assertion));
+                }
+            }
+        }
     }
 
     private <T> T first(@Nullable T first, @Nullable T second) {

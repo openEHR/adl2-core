@@ -306,6 +306,9 @@
         <jxb:bindings node="//xsd:complexType[@name='EXPR_BINARY_OPERATOR']">
             <jxb:class name="ExprBinaryOperator" implClass="ExprBinaryOperator"/>
         </jxb:bindings>
+        <jxb:bindings node="//xsd:simpleType[@name='OPERATOR_KIND']">
+            <jxb:typesafeEnumClass name="OperatorKind" />
+        </jxb:bindings>
         <jxb:bindings node="//xsd:complexType[@name='C_BOOLEAN']">
             <jxb:class name="CBoolean" implClass="CBoolean"/>
         </jxb:bindings>

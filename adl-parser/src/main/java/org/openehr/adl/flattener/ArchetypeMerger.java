@@ -398,7 +398,7 @@ class ArchetypeMerger {
             specialized.setOccurrences(first(specialized.getOccurrences(), parent.getOccurrences()));
         }
         if (specialized instanceof ArchetypeSlot) {
-            flattenCArchetypeSlot((ArchetypeSlot)parent, (ArchetypeSlot)specialized);
+            flattenCArchetypeSlot((ArchetypeSlot) parent, (ArchetypeSlot) specialized);
         }
 
         // todo what to do on bad rm type?
@@ -412,16 +412,14 @@ class ArchetypeMerger {
     }
 
     private void flattenCArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
-        if (specialized.isIsClosed()) {
-            if (specialized.getIncludes().isEmpty()) {
-                for (Assertion assertion : parent.getIncludes()) {
-                    specialized.getIncludes().add((Assertion)SerializationUtils.clone(assertion));
-                }
+        if (specialized.getIncludes().isEmpty()) {
+            for (Assertion assertion : parent.getIncludes()) {
+                specialized.getIncludes().add((Assertion) SerializationUtils.clone(assertion));
             }
-            if (specialized.getExcludes().isEmpty()) {
-                for (Assertion assertion : parent.getExcludes()) {
-                    specialized.getExcludes().add((Assertion)SerializationUtils.clone(assertion));
-                }
+        }
+        if (specialized.getExcludes().isEmpty()) {
+            for (Assertion assertion : parent.getExcludes()) {
+                specialized.getExcludes().add((Assertion) SerializationUtils.clone(assertion));
             }
         }
     }

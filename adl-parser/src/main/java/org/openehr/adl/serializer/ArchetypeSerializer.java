@@ -95,7 +95,7 @@ public class ArchetypeSerializer {
         }
         if (!archetype.isIsOverlay()) {
             if (archetype.getConcept() != null) {
-                String comment = archetypeWrapper.getTermText( archetype.getConcept());
+                String comment = archetypeWrapper.getTermText(archetype.getConcept());
                 builder.newline().append("concept").newIndentedline()
                         .append("[").append(archetype.getConcept()).append("]").lineComment(comment)
                         .unindent().newline();
@@ -164,7 +164,6 @@ public class ArchetypeSerializer {
     public boolean isEmpty(CObject cobj) {
         ConstraintSerializer serializer = constraintSerializers.get(cobj.getClass());
         return serializer != null ? serializer.isEmpty(cobj) : false;
-
     }
 
     public void buildCObject(CObject cobj) {
@@ -197,6 +196,7 @@ public class ArchetypeSerializer {
 
     public static class Options {
         private String preferredLanguage;
+
         public Options() {
         }
 

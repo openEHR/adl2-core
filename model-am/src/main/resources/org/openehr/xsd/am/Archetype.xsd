@@ -215,26 +215,26 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:simpleType name="OPERATOR_KIND">
-        <xs:restriction base="xs:integer">
-            <xs:enumeration value="2001" id="equal"/>
-            <xs:enumeration value="2002" id="not_equal"/>
-            <xs:enumeration value="2003" id="less_than_or_equal"/>
-            <xs:enumeration value="2004" id="less_than"/>
-            <xs:enumeration value="2005" id="greater_than_or_equal"/>
-            <xs:enumeration value="2006" id="greater_than"/>
-            <xs:enumeration value="2007" id="matches"/>
-            <xs:enumeration value="2010" id="not"/>
-            <xs:enumeration value="2011" id="and"/>
-            <xs:enumeration value="2012" id="or"/>
-            <xs:enumeration value="2013" id="xor"/>
-            <xs:enumeration value="2014" id="implies"/>
-            <xs:enumeration value="2015" id="for_all"/>
-            <xs:enumeration value="2016" id="exists"/>
-            <xs:enumeration value="2020" id="plus"/>
-            <xs:enumeration value="2021" id="minus"/>
-            <xs:enumeration value="2022" id="multiply"/>
-            <xs:enumeration value="2023" id="divide"/>
-            <xs:enumeration value="2024" id="exponent"/>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="eq" id="equal"/>
+            <xs:enumeration value="ne" id="not_equal"/>
+            <xs:enumeration value="le" id="less_than_or_equal"/>
+            <xs:enumeration value="lt" id="less_than"/>
+            <xs:enumeration value="ge" id="greater_than_or_equal"/>
+            <xs:enumeration value="gt" id="greater_than"/>
+            <xs:enumeration value="matches" id="matches"/>
+            <xs:enumeration value="not" id="not"/>
+            <xs:enumeration value="and" id="and"/>
+            <xs:enumeration value="or" id="or"/>
+            <xs:enumeration value="xor" id="xor"/>
+            <xs:enumeration value="implies" id="implies"/>
+            <xs:enumeration value="for_all" id="for_all"/>
+            <xs:enumeration value="exists" id="exists"/>
+            <xs:enumeration value="plus" id="plus"/>
+            <xs:enumeration value="minus" id="minus"/>
+            <xs:enumeration value="multiply" id="multiply"/>
+            <xs:enumeration value="divide" id="divide"/>
+            <xs:enumeration value="exp" id="exponent"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="VALIDITY_KIND">

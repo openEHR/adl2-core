@@ -22,7 +22,7 @@ package org.openehr.adl.parser.tree;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.NotImplementedException;
-import org.openehr.adl.am.OperatorKind;
+
 import org.openehr.adl.antlr4.generated.adlParser;
 import org.openehr.adl.rm.RmTypes;
 import org.openehr.adl.util.AdlUtils;
@@ -173,7 +173,7 @@ abstract class AdlTreeConstraintParser {
         CPrimitiveObject cPrimitiveObject = parsePrimitiveValue(cAssertion.primitiveValueConstraint());
         ExprBinaryOperator expr = newExprBinaryOperator(
                 RmTypes.ReferenceType.CONSTRAINT.toString(),
-                OperatorKind.OP_MATCHES,
+                OperatorKind.MATCHES,
                 false,
                 newExprLeaf(RmTypes.STRING, RmTypes.ReferenceType.ATTRIBUTE, collectText(cAssertion.rmPath())),
                 newExprLeaf(cPrimitiveObject.getRmTypeName(), RmTypes.ReferenceType.CONSTRAINT,

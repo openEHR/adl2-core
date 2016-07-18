@@ -21,23 +21,19 @@
 package org.openehr.adl.am;
 
 import com.google.common.base.CaseFormat;
-import org.openehr.rm.RmObject;
-import org.openehr.adl.util.AdlUtils;
-import org.openehr.adl.rm.RmTypes;
 import org.apache.commons.lang.ObjectUtils;
+import org.openehr.adl.rm.RmTypes;
+import org.openehr.adl.util.AdlUtils;
 import org.openehr.jaxb.am.*;
 import org.openehr.jaxb.rm.*;
+import org.openehr.rm.RmObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import static org.openehr.adl.rm.RmObjectFactory.newStringDictionaryItem;
-import static org.openehr.adl.util.AdlUtils.doubleToFloat;
 import static org.openehr.adl.util.AdlUtils.emptyIfNull;
 
 
@@ -355,7 +351,8 @@ public class AmObjectFactory {
     public static ExprUnaryOperator newExprUnaryOperator(String type, OperatorKind op, boolean precedenceOverridden, ExprItem operand) {
         ExprUnaryOperator result = new ExprUnaryOperator();
         result.setType(type);
-        result.setOperator(BigInteger.valueOf(op.getValue()));
+
+        result.setOperator(op);
         result.setPrecedenceOverridden(precedenceOverridden);
         result.setOperand(operand);
         return result;
@@ -365,7 +362,7 @@ public class AmObjectFactory {
             ExprItem right) {
         ExprBinaryOperator result = new ExprBinaryOperator();
         result.setType(type);
-        result.setOperator(BigInteger.valueOf(op.getValue()));
+        result.setOperator(op);
         result.setPrecedenceOverridden(precedenceOverridden);
         result.setLeftOperand(left);
         result.setRightOperand(right);

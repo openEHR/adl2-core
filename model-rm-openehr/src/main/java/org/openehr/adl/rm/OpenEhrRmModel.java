@@ -69,7 +69,7 @@ public class OpenEhrRmModel implements RmModel {
     private RmTypeAttribute getRmAttribute(RmType rmType, String attribute) {
         RmTypeAttribute result = rmType.getAttributes().get(attribute);
         if (result == null) {
-            throw new RmModelException("No attribute %s on rm type %s", attribute, rmType.getRmType());
+            throw new RmModelException("No attribute [%s] on rm type [%s]", attribute, rmType.getRmType());
         }
         return result;
     }

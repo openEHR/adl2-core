@@ -50,10 +50,11 @@
         <tag>HEAD</tag>
     </scm>
     <modules>
-        <module>adl-parser</module>
-        <module>model-am</module>
-        <module>model-rm</module>
-        <module>model-rm-openehr</module>
+        <module>adl2core-parser</module>
+        <module>adl2core-common</module>
+        <module>adl2core-model-am</module>
+        <module>adl2core-model-rm</module>
+        <module>adl2core-model-rm-openehr</module>
     </modules>
     <developers>
         <developer>
@@ -67,22 +68,27 @@
         <dependencies>
             <dependency>
                 <groupId>org.openehr.adl2-core</groupId>
-                <artifactId>adl-parser</artifactId>
+                <artifactId>adl2core-parser</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehr.adl2-core</groupId>
-                <artifactId>model-am</artifactId>
+                <artifactId>adl2core-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehr.adl2-core</groupId>
-                <artifactId>model-rm</artifactId>
+                <artifactId>adl2core-model-am</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehr.adl2-core</groupId>
-                <artifactId>model-rm-openehr</artifactId>
+                <artifactId>adl2core-model-rm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehr.adl2-core</groupId>
+                <artifactId>adl2core-model-rm-openehr</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

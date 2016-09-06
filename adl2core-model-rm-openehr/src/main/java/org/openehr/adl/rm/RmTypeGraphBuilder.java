@@ -47,7 +47,7 @@ public class RmTypeGraphBuilder {
     private final Class objectFactoryClass;
 
     public RmTypeGraphBuilder(Class objectFactoryClass) {
-        this.objectFactoryClass=objectFactoryClass;
+        this.objectFactoryClass = objectFactoryClass;
     }
 
     public RmTypeGraph build() {
@@ -78,14 +78,15 @@ public class RmTypeGraphBuilder {
             if (processed.contains(rmType) || nonRmClasses.contains(mainRmClass)) continue;
 
             Iterable<RmBeanReflector.RmAttribute> attributes = RmBeanReflector.listProperties(mainRmClass);
-            List<RmTypeAttribute> resultAttributes = new ArrayList<>();
+            Map<String, RmTypeAttribute> resultAttributes = new LinkedHashMap<>();
             for (RmBeanReflector.RmAttribute attribute : attributes) {
                 RmType type = rmClassMappings.get(attribute.getTargetType());
 
                 String targetType = type != null ? type.getRmType() : null;
-                resultAttributes.add(new RmTypeAttribute(
-                        attribute.getAttribute(), targetType,
-                        buildExistence(attribute.getOccurrences()), buildCardinality(attribute)));
+                resultAttributes.put(attribute.getAttribute(),
+                        new RmTypeAttribute(
+                                attribute.getAttribute(), targetType,
+                                buildExistence(attribute.getOccurrences()), buildCardinality(attribute)));
             }
             rmType.setAttributes(resultAttributes);
             processed.add(rmType);

@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,25 +33,25 @@ import java.util.Map;
  */
 public final class RmType {
     private RmType parent;
-    private List<RmType> children;
+    private List<RmType> children = ImmutableList.of();
     private String rmType;
-    private Map<String, RmTypeAttribute> attributesMap = ImmutableMap.of();
+    private Map<String, RmTypeAttribute> attributes = ImmutableMap.of();
 
     public RmType(String rmType) {
         this.rmType = rmType;
         children = ImmutableList.of();
     }
 
-    void addChild(RmType child) {
-        children = new ImmutableList.Builder<RmType>()
-                .addAll(children)
+    public List<RmType> getChildren() {
+        return children;
+    }
+
+    public void addChild(RmType child) {
+        this.children = ImmutableList.<RmType>builder()
+                .addAll(this.children)
                 .add(child)
                 .build();
         child.parent = this;
-    }
-
-    public List<RmType> getChildren() {
-        return children;
     }
 
     private void buildDescendants(List<RmType> result, boolean includeSelf) {
@@ -81,11 +80,24 @@ public final class RmType {
     }
 
     public Map<String, RmTypeAttribute> getAttributes() {
-        return attributesMap;
+        return attributes;
     }
 
-    public RmTypeAttribute getAttribute(String attributeName) {
-        RmTypeAttribute result = attributesMap.get(attributeName);
+    public void setAttributes(Map<String, RmTypeAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+
+    public RmTypeAttribute findAttribute(String attributeName) {
+        RmTypeAttribute result = attributes.get(attributeName);
+        if (result == null) {
+            RmType p = getParent();
+            while (p != null) {
+                RmTypeAttribute attr = p.attributes.get(attributeName);
+                if (attr != null) return attr;
+                p = p.getParent();
+            }
+        }
         if (result == null) {
             // search for attribute on subclasses
             for (RmType subtype : getChildren()) {
@@ -95,11 +107,18 @@ public final class RmType {
                     // no attribute on this subclass
                 }
             }
+        }
+        return null;
+
+    }
+
+    public RmTypeAttribute getAttribute(String attributeName) {
+        RmTypeAttribute result = findAttribute(attributeName);
+        if (result == null) {
             throw new RmModelException(String.format("Rm type %s has no attribute %s", rmType, attributeName));
         }
         return result;
     }
-
 
     public boolean isSubclassOf(String rmType) {
         RmType type = this;
@@ -112,14 +131,6 @@ public final class RmType {
 
     public boolean isSubclassOf(RmType rmType) {
         return rmType != null && isSubclassOf(rmType.getRmType());
-    }
-
-    void setAttributes(List<RmTypeAttribute> attributes) {
-        Map<String, RmTypeAttribute> attributesMap = new LinkedHashMap<>();
-        for (RmTypeAttribute attribute : attributes) {
-            attributesMap.put(attribute.getAttributeName(), attribute);
-        }
-        this.attributesMap = ImmutableMap.copyOf(attributesMap);
     }
 
 
